@@ -1,0 +1,58 @@
+# Node.js specific
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Logs
+*.log
+logs
+/logs
+*.log.*
+
+# OS generated files
+.DS_Store
+.env
+Thumbs.db
+ehthumbs.db
+*.swp
+._*    # macOS hidden files
+.Spotlight-V100
+.Trashes
+
+# IDE specific files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+.history/
+
+# Coverage directory for testing
+coverage/
+
+# Build directories and compiled files
+dist/
+build/
+*.out
+*.tsbuildinfo
+
+# Environment variable files
+.env
+.env.*.local
+
+# Temporary files
+tmp/
+temp/
+
+# TypeScript
+*.tsbuildinfo
+
+# Miscellaneous
+.lock-wscript
+.npmrc
+.yarnrc
+.pnp.*
+.eslintcache
