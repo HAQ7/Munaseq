@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  username        String   @unique
+  email           String   @unique
+  password        String
+  organizationName String?  // Optional for organizations
+  profilePicture  String?  // Optional profile picture
+  visibleName     String?  // Can default to name or organization
+  gender          String?  // Optional gender field
+  socialAccounts  Json?    // Optional social accounts linked
+  categories      String[] // Array of strings for interests in event categories
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  events          Event[]  // Relation to created events
+}
+
+model Event {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String?  // Optional description
+  category     String[]   // Now a string instead of enum
+  location     String?  // Optional location
+  seatCapacity Int
+  startDate    DateTime
+  endDate      DateTime
+  eventCreator User     @relation(fields: [eventCreatorId], references: [id])
+  eventCreatorId Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
