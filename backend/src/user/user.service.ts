@@ -7,7 +7,11 @@ export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async deleteUser(id: number) {
-    console.log(id);
+    await this.prisma.event.deleteMany({
+      where: {
+        eventCreatorId: id,
+      },
+    });
     return this.prisma.user.delete({
       where: {
         id: id,

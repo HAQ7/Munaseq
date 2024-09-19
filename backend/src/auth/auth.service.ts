@@ -9,7 +9,6 @@ import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import { UserService } from 'src/user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { userSignUpDto } from './dtos/user-signup.dto';
 import { userSignInDto } from './dtos/user-signin.dto';
 import { JwtPayload } from './types/jwtPayload';
@@ -23,6 +22,12 @@ export class AuthService {
   ) {}
 
   async signIn(signInDto: userSignInDto): Promise<any> {
+    if (signInDto.email) {
+      signInDto.email = signInDto.email.toLowerCase();
+    }
+    if (signInDto.username) {
+      signInDto.username = signInDto.username.toLowerCase();
+    }
     let user;
 
     // Check if email or username was provided and find the user accordingly
@@ -47,32 +52,52 @@ export class AuthService {
   }
 
   async register(signUpDto: userSignUpDto) {
-    try {
-      const hash = await argon2.hash(signUpDto.password);
-      await this.prisma.user.create({
-        data: {
-          email: signUpDto.email,
-          password: hash,
-          firstName: signUpDto.firstName,
-          lastName: signUpDto.lastName,
-          username: signUpDto.username,
-        },
-      });
-      const signInDto = new userSignInDto();
-      signInDto.email = signUpDto.email;
-      signInDto.password = signUpDto.password;
-      return this.signIn(signInDto);
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError)
-        throw new HttpException(
-          'This email is already in use',
-          HttpStatus.CONFLICT,
-        );
-      else
-        throw new HttpException(
-          'An unknown error has occurred',
-          HttpStatus.BAD_REQUEST,
-        );
+    signUpDto.email = signUpDto.email.toLowerCase();
+    signUpDto.username = signUpDto.username.toLowerCase();
+
+    // Check if the email is already in use
+    const existingEmailUser = await this.prisma.user.findUnique({
+      where: { email: signUpDto.email },
+    });
+
+    if (existingEmailUser) {
+      throw new HttpException(
+        'This email is already in use',
+        HttpStatus.CONFLICT,
+      );
     }
+
+    // Check if the username is already in use
+    const existingUsernameUser = await this.prisma.user.findUnique({
+      where: { username: signUpDto.username },
+    });
+
+    if (existingUsernameUser) {
+      throw new HttpException(
+        'This username is already in use',
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    // Hash the password
+    const hash = await argon2.hash(signUpDto.password);
+
+    // Create the new user
+    await this.prisma.user.create({
+      data: {
+        email: signUpDto.email,
+        password: hash,
+        firstName: signUpDto.firstName,
+        lastName: signUpDto.lastName,
+        username: signUpDto.username,
+      },
+    });
+
+    // Automatically log the user in after registration
+    const signInDto = new userSignInDto();
+    signInDto.email = signUpDto.email;
+    signInDto.password = signUpDto.password;
+    signInDto.username = signUpDto.username;
+    return this.signIn(signInDto);
   }
 }
