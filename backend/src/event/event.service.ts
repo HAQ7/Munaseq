@@ -31,9 +31,13 @@ export class EventService {
     });
   }
 
-  updateEvent(id: number, updateEventDto: UpdateEventDto) {
+  updateEvent(
+    eventCreatorId: number,
+    id: number,
+    updateEventDto: UpdateEventDto,
+  ) {
     return this.prisma.event.update({
-      where: { id },
+      where: { id, eventCreatorId },
       data: updateEventDto,
     });
   }

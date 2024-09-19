@@ -22,6 +22,7 @@ export class UserService {
   async deleteAll() {
     return this.prisma.user.deleteMany();
   }
+
   async findById(id: number) {
     return this.prisma.user.findUnique({
       where: {

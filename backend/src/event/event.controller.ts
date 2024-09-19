@@ -41,8 +41,12 @@ export class EventController {
 
   @UseGuards(AuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
-    return this.eventService.updateEvent(+id, updateEventDto);
+  update(
+    @GetCurrentUserId() eventCreatorId: number,
+    @Param('id') id: string,
+    @Body() updateEventDto: UpdateEventDto,
+  ) {
+    return this.eventService.updateEvent(eventCreatorId, +id, updateEventDto);
   }
 
   @UseGuards(AuthGuard)

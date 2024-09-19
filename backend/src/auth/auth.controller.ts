@@ -3,8 +3,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpCode,
-  HttpStatus,
   Post,
   Request,
   UseGuards,
@@ -18,7 +16,6 @@ import { userSignInDto } from './dtos/user-signin.dto';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @HttpCode(HttpStatus.OK)
   @Post('signIn')
   signIn(@Body() signInDto: userSignInDto) {
     return this.authService.signIn(signInDto);
@@ -29,6 +26,7 @@ export class AuthController {
     return this.authService.register(signUpDto);
   }
 
+  // probably deleting this route
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
