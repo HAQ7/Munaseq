@@ -23,9 +23,22 @@ export class AuthService {
   ) {}
 
   async signIn(signInDto: userSignInDto): Promise<any> {
-    const user = await this.userService.findByEmail(signInDto.email);
-    if (!(await argon2.verify(user.password, signInDto.password))) {
-      throw new UnauthorizedException();
+    let user;
+
+    // Check if email or username was provided and find the user accordingly
+    if (signInDto.email) {
+      user = await this.userService.findByEmail(signInDto.email);
+    } else if (signInDto.username) {
+      user = await this.userService.findByUsername(signInDto.username);
+    } else {
+      throw new UnauthorizedException(
+        'You must provide either an email or username',
+      );
+    }
+
+    // Check if the user was found and the password matches
+    if (!user || !(await argon2.verify(user.password, signInDto.password))) {
+      throw new UnauthorizedException('Invalid credentials');
     }
     const payload: JwtPayload = { sub: user.id };
     return {
