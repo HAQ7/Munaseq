@@ -7,7 +7,7 @@ export default function Button(props: {
         return (
             <button
                 className={
-                    "relative bg-gradient-to-l h-10 p-[1.5px] from-[#AE00FE] to-[#652BB7] rounded-full grid place-items-center group " +
+                    "relative bg-gradient-to-l h-10 p-[2px] from-[#AE00FE] to-[#652BB7] rounded-full grid place-items-center group " +
                     (props.className ? props.className : "")
                 }
             >
