@@ -4,7 +4,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
     title: "منسق",
-    description: "منسق هي منصة متكاملة لإدارة الفعاليات التعليمية الحضورية و الالكترونية مثل الدورات و ورش العمل و المحاضرات",
+    description:
+        "منسق هي منصة متكاملة لإدارة الفعاليات التعليمية الحضورية و الالكترونية مثل الدورات و ورش العمل و المحاضرات",
 };
 
 const rubik = Rubik({ subsets: ["latin"] });
@@ -15,7 +16,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" dir="rtl">
+        <html dir="rtl">
             <body className={rubik.className}>{children}</body>
         </html>
     );

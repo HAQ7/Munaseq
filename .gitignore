@@ -56,3 +56,4 @@ temp/
 .yarnrc
 .pnp.*
 .eslintcache
+.eslintrc.js

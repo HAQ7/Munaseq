@@ -1,6 +1,6 @@
 # Munasiq - Edu-Activity Management Platform
 
-![Munasiq Logo](./frontend/src/assets/munaseq-logo-dark.svg)
+![Munasiq Logo](./frontend/src/assets/logo/munaseq-logo-dark.svg)
 ### 🏫 Coordinating your Educational Activities, from A to Z
 
 Munasiq is a comprehensive platform designed to streamline the creation, management, and participation in educational events. Whether it's lectures, workshops, or courses, Munasiq makes it easy to coordinate and join activities with ease.

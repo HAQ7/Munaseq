@@ -1,10 +1,7 @@
-import Image from "next/image";
-import Header from "@/components/landing-page/header";
-
-export default function Home() {
+export default function SignUp() {
   return (
     <div>
-      <Header />
+      
     </div>
   );
 }

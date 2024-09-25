@@ -1,6 +1,6 @@
 import Button from "../common/button";
 import Image from "next/image";
-import logo from "@/assets/munaseq-logo.svg";
+import logo from "@/assets/logo/munaseq-logo.svg";
 import Menu from "./menu";
 import Link from "next/link";
 

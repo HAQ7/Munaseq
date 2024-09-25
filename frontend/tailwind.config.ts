@@ -7,7 +7,11 @@ const config: Config = {
         "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     ],
     theme: {
-        extend: {},
+        extend: {
+            boxShadow: {
+                "strong": "0 0 50px 0 #D7D7D7"
+            }
+        },
     },
     plugins: [require("tailwindcss-animate")],
 };

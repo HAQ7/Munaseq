@@ -9,6 +9,7 @@ import {
 import Button from "@/components/common/button";
 import Image from "next/image";
 import bars from "@/assets/icons/bars.svg";
+import Link from "next/link";
 
 export default function Menu() {
     return (
@@ -18,10 +19,14 @@ export default function Menu() {
             </SheetTrigger>
             <SheetContent className="bg-white flex justify-center">
                 <SheetHeader>
-                <SheetTitle className="hidden">Menu</SheetTitle>
+                    <SheetTitle className="hidden">Menu</SheetTitle>
                     <SheetDescription className="flex gap-3 flex-col">
-                        <Button outline>تسجيل دخول</Button>
-                        <Button>انشاء الحساب</Button>
+                        <Link href={"/signin"}>
+                            <Button outline>تسجيل دخول</Button>
+                        </Link>
+                        <Link href={"/signup"}>
+                            <Button>انشاء الحساب</Button>
+                        </Link>
                     </SheetDescription>
                 </SheetHeader>
             </SheetContent>
