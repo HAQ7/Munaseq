@@ -47,4 +47,19 @@ export class EventService {
       where: { id },
     });
   }
+
+  findAllCurrentUserEvents(eventCreatorId: number) {
+    const currentDate = new Date();
+    return this.prisma.event.findMany({
+      where: {
+        eventCreatorId,
+        startDate: {
+          lte: currentDate, // Event has started
+        },
+        endDate: {
+          gte: currentDate, // Event has not ended
+        },
+      },
+    });
+  }
 }
