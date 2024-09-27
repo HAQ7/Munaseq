@@ -25,7 +25,7 @@ export default function Menu() {
                             <Button outline>تسجيل دخول</Button>
                         </Link>
                         <Link href={"/signup"}>
-                            <Button>انشاء الحساب</Button>
+                            <Button gradient>انشاء الحساب</Button>
                         </Link>
                     </SheetDescription>
                 </SheetHeader>

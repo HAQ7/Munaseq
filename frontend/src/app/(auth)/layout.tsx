@@ -1,5 +1,3 @@
-import type { Metadata } from "next";
-import { Rubik } from "next/font/google";
 import Image from "next/image";
 import strange from "@/assets/auth-assets/strange.svg";
 import rightDeco from "@/assets/auth-assets/right-deco.png";
@@ -7,15 +5,7 @@ import leftDeco from "@/assets/auth-assets/left-deco.png";
 import rightGlow from "@/assets/auth-assets/right-glow.png";
 import leftGlow from "@/assets/auth-assets/left-glow.png";
 
-export const metadata: Metadata = {
-    title: "منسق",
-    description:
-        "منسق هي منصة متكاملة لإدارة الفعاليات التعليمية الحضورية و الالكترونية مثل الدورات و ورش العمل و المحاضرات",
-};
-
-const rubik = Rubik({ subsets: ["latin"] });
-
-export default function RootLayout({
+export default function AuthLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
@@ -54,7 +44,9 @@ export default function RootLayout({
                     className="fixed bottom-0 left-0"
                 />
             </div>
-            {children}
+            <section className="w-screen min-h-screen grid place-items-center overflow-hidden">
+                {children}
+            </section>
         </>
     );
 }
