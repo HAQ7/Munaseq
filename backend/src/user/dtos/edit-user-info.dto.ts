@@ -1,5 +1,6 @@
 // src/user/dto/editUser.dto.ts
 
+import { Gender } from '@prisma/client';
 import {
   IsEmail,
   IsOptional,
@@ -8,9 +9,10 @@ import {
   IsArray,
   IsUrl,
   IsJSON,
+  IsEnum,
 } from 'class-validator';
 
-export class EditUserDto {
+export class EditUserInfoDto {
   @IsOptional()
   @IsString()
   firstName?: string;
@@ -28,10 +30,6 @@ export class EditUserDto {
   email?: string;
 
   @IsOptional()
-  @MinLength(8)
-  password?: string;
-
-  @IsOptional()
   @IsString()
   organizationName?: string;
 
@@ -44,13 +42,17 @@ export class EditUserDto {
   visibleName?: string; // Can be name or organization name
 
   @IsOptional()
-  @IsString()
-  gender?: string;
+  @IsEnum(Gender)
+  gender?: Gender;
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   categories?: string[]; // Array of interests
+
+  @IsOptional()
+  @IsString()
+  description?: string; // Biography
 
   @IsOptional()
   @IsJSON()

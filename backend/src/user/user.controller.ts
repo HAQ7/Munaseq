@@ -6,11 +6,13 @@ import {
   Param,
   Delete,
   UseGuards,
+  Post,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { EditUserDto } from './dtos/edit-user-info.dto';
+import { EditUserInfoDto } from './dtos/edit-user-info.dto';
 import { GetCurrentUserId } from 'src/auth/decorators/get-current-user-id.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { userChangePasswordDto } from './dtos/user-change-password.dto';
 
 @Controller('user')
 export class UserController {
@@ -18,7 +20,7 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Patch()
-  async editUserInfo(@GetCurrentUserId() id, @Body() EditUserDto: EditUserDto) {
+  async editUserInfo(@GetCurrentUserId() id, @Body() EditUserDto: EditUserInfoDto) {
     return this.userService.editUserInfo(id, EditUserDto);
   }
 
@@ -31,6 +33,16 @@ export class UserController {
   async findById(@Param('id') id: string) {
     return this.userService.findById(Number(id));
   }
+
+  @UseGuards(AuthGuard)
+  @Post('changePassword')
+  changePassword(
+    @Body() passwordChangeDto: userChangePasswordDto,
+    @GetCurrentUserId() userId,
+  ) {
+    return this.userService.changeUserPassword(passwordChangeDto, +userId);
+  }
+
 
   @UseGuards(AuthGuard)
   @Delete()
