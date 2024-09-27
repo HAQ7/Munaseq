@@ -14,34 +14,53 @@ generator client {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
-  firstName       String
-  lastName        String
-  username        String   @unique
-  email           String   @unique
-  password        String
-  organizationName String?  // Optional for organizations
-  profilePicture  String?  // Optional profile picture
-  visibleName     String?  // Can default to name or organization
-  gender          String?  // Optional gender field
-  socialAccounts  Json?    // Optional social accounts linked
-  categories      String[] // Array of strings for interests in event categories
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  events          Event[]  // Relation to created events
+  id               Int      @id @default(autoincrement())
+  firstName        String
+  lastName         String
+  username         String   @unique
+  email            String   @unique
+  password         String
+  organizationName String? // Optional for organizations
+  profilePicture   String? // Optional profile picture
+  visibleName      String? // Can default to name or organization
+  gender           Gender? // Optional gender field
+  socialAccounts   Json? // Optional social accounts linked
+  categories       String[] // Array of strings for interests in event categories
+  description      String? // New: Optional description field for the user
+  events           Event[]  @relation("UserCreatedEvents") // Relation to created events
+  eventsJoined     Event[]  @relation("UserEventsJoined") // New: Events joined by the user (many-to-many)
+  presenterEvents  Event[]  @relation("EventPresenters") // Relation to events where user is a presenter (many-to-many)
+  moderatorEvents  Event[]  @relation("EventModerators") // Relation to events where user is a moderator (many-to-many)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model Event {
-  id           Int      @id @default(autoincrement())
-  title        String
-  description  String?  // Optional description
-  category     String[]   // Now a string instead of enum
-  location     String?  // Optional location
-  seatCapacity Int
-  startDate    DateTime
-  endDate      DateTime
-  eventCreator User     @relation(fields: [eventCreatorId], references: [id])
+  id             Int      @id @default(autoincrement())
+  title          String
+  description    String? // Optional description
+  category       String[] // Array of event categories (string array)
+  location       String? // Optional location
+  seatCapacity   Int? // New: Optional seat capacity
+  public         Boolean  @default(false) // New: Whether the event is public or private
+  online         Boolean  @default(false) // New: Whether the event is remote or on-site
+  gender         Gender   @default(BOTH) // New: Gender of attendees (male, female, both)
+  targetAudience String[] // New: Array of target audiences
+  startDate      DateTime // Date without time
+  endDate        DateTime // Date without time
+  presenters     User[]   @relation("EventPresenters") // New: List of event presenters (many-to-many)
+  moderators     User[]   @relation("EventModerators") // New: List of event moderators (many-to-many)
+  usersJoined    User[]   @relation("UserEventsJoined") // New: Users who have joined the event (many-to-many)
+  image          String? // New: Optional image string
+  price          Int      @default(0) // New: Price for the event
+  eventCreator   User     @relation("UserCreatedEvents", fields: [eventCreatorId], references: [id])
   eventCreatorId Int
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  BOTH
 }
