@@ -29,16 +29,15 @@ export class EventController {
     return this.eventService.createEvent(createEventDto, eventCreatorId);
   }
 
-  @UseGuards(AuthGuard)
   @Get()
-  findAllUserEvents(@GetCurrentUserId() eventCreatorId: number) {
-    return this.eventService.findAllUserEvents(eventCreatorId);
+  getAllEvents() {
+    return this.eventService.getAllEvents();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.eventService.findOne(+id);
-  }
+//   @Get(':id')
+//   getByID(@Param('id') id: string, @GetCurrentUserId() eventCreatorId: number) {
+//     return this.eventService.getById(+id, eventCreatorId);
+//   }
 
   @UseGuards(AuthGuard)
   @Patch(':id')

@@ -17,19 +17,18 @@ export class EventService {
     });
   }
 
-  findAllUserEvents(eventCreatorId: number) {
-    return this.prisma.event.findMany({
-      where: {
-        eventCreatorId,
-      },
-    });
+  getAllEvents() {
+    return this.prisma.event.findMany();
   }
 
-  findOne(id: number) {
-    return this.prisma.event.findUnique({
-      where: { id },
-    });
-  }
+  // this function needs availabilty attribute from the event table
+//   getById(id: number, userID: number) {
+//     const availablitity = this.prisma.event.findUnique({
+//         where: { id },
+//         data: {
+//             availabilty: 
+//         });
+//   }
 
   updateEvent(
     eventCreatorId: number,
