@@ -4,15 +4,16 @@ import LargeCard from "@/components/common/largeCard";
 import HeroSection from "@/components/landing-page/heroSection";
 import FeaturesSection from "@/components/landing-page/featuresSection";
 import FooterSection from "@/components/landing-page/footerSection";
-import courseImage from "@/assets/icons/Rectangle 45.svg"; // For testing
+import EventSection from "@/components/landing-page/eventSection";
 
 export default function Home() {
   return (
     <div>
       <Header />
-      {/* <HeroSection /> */}
-      {/* <FeaturesSection /> */}
-      {/* <FooterSection /> */}
+      <HeroSection />
+      <FeaturesSection />
+      <EventSection />
+      <FooterSection />
     </div>
   );
 }

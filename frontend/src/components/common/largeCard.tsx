@@ -17,7 +17,7 @@ export default function largeCard({
 }): React.JSX.Element {
   return (
     <>
-      <div className="flex h-screen items-center justify-center">
+      <div className="">
         <div className="max-w-md rounded-2xl border border-gray-200 bg-white p-4 shadow">
           <Image className="rounded-2xl mb-2" src={image} alt="" />
           <div className="p-2">

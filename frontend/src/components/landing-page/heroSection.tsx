@@ -6,7 +6,7 @@ import Button from "../common/button";
 export default function heroSection() {
   return (
     <div className="h-[90vh] flex justify-center items-center">
-      <div className="bg-red-800 text-center max-w-3xl">
+      <div className="text-center max-w-3xl">
         <h1 className="text-gray-900 text-6xl font-bold mb-4">
           ننسق <span className="text-purple-700">فعالياتك التعليمية</span>من
           الاف الى الياء
