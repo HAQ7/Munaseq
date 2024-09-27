@@ -1,8 +1,8 @@
 // src/event/event.service.ts
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateEventDto } from './dtos/update-event.dto';
-import { UpdateEventDto } from './dtos/create-event.dto';
+import { CreateEventDto } from './dtos/create-event.dto';
+import { UpdateEventDto } from './dtos/update-event.dto';
 
 @Injectable()
 export class EventService {
@@ -52,10 +52,10 @@ export class EventService {
     return this.prisma.event.findMany({
       where: {
         eventCreatorId,
-        startDate: {
+        startDateTime: {
           lte: currentDate, // Event has started
         },
-        endDate: {
+        endDateTime: {
           gte: currentDate, // Event has not ended
         },
       },

@@ -42,18 +42,18 @@ model Event {
   category       String[] // Array of event categories (string array)
   location       String? // Optional location
   seatCapacity   Int? // New: Optional seat capacity
-  public         Boolean  @default(false) // New: Whether the event is public or private
-  online         Boolean  @default(false) // New: Whether the event is remote or on-site
+  isPublic         Boolean  @default(true) // New: Whether the event is public or private
+  isOnline         Boolean  @default(true) // New: Whether the event is remote or on-site
   gender         Gender   @default(BOTH) // New: Gender of attendees (male, female, both)
   targetAudience String[] // New: Array of target audiences
-  startDate      DateTime // Date without time
-  endDate        DateTime // Date without time
+  startDateTime      DateTime // Date without time
+  endDateTime        DateTime // Date without time
   presenters     User[]   @relation("EventPresenters") // New: List of event presenters (many-to-many)
   moderators     User[]   @relation("EventModerators") // New: List of event moderators (many-to-many)
   usersJoined    User[]   @relation("UserEventsJoined") // New: Users who have joined the event (many-to-many)
   image          String? // New: Optional image string
   price          Int      @default(0) // New: Price for the event
-  eventCreator   User     @relation("UserCreatedEvents", fields: [eventCreatorId], references: [id])
+  eventCreator   User     @relation("UserCreatedEvents", fields: [eventCreatorId], references: [id], onDelete: Cascade)
   eventCreatorId Int
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

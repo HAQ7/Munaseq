@@ -8,7 +8,7 @@ import {
   IsArray,
 } from 'class-validator';
 
-export class UpdateEventDto {
+export class CreateEventDto {
   @IsString()
   @IsNotEmpty()
   title: string;
@@ -25,10 +25,10 @@ export class UpdateEventDto {
   location: string;
 
   @IsDate()
-  startDate: Date;
+  startDateTime: Date;
 
   @IsDate()
-  endDate: Date;
+  endDateTime: Date;
 
   @IsInt()
   seatCapacity: number;

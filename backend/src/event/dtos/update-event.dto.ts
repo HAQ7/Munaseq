@@ -8,7 +8,7 @@ import {
   IsArray,
 } from 'class-validator';
 
-export class CreateEventDto {
+export class UpdateEventDto {
   @IsString()
   @IsNotEmpty()
   title: string;

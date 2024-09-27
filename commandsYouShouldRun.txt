@@ -7,3 +7,4 @@ TO UPDATE YOUR SCHEMA TO THE LATEST MIGRATION:
         npm install
         npx prisma migrate dev
         npx prisma generate
+

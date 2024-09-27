@@ -3,7 +3,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { EditUserInfoDto } from './dtos/edit-user-info.dto';
 import * as argon2 from 'argon2';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class UserService {
@@ -23,7 +22,12 @@ export class UserService {
   }
 
   async deleteAll() {
-    return this.prisma.user.deleteMany();
+    try {
+      const deletedUsers = await this.prisma.user.deleteMany({});
+      return { count: deletedUsers.count }; // Return the count of deleted users
+    } catch (error) {
+      throw new Error('Error deleting users');
+    }
   }
 
   async findById(id: number) {
