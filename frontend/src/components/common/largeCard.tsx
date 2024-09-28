@@ -14,12 +14,12 @@ export default function largeCard({
   location,
   cost,
   badges = [],
-}): React.JSX.Element {
+}) {
   return (
     <>
       <div className="">
-        <div className="max-w-md rounded-2xl border border-gray-200 bg-white p-4 shadow">
-          <Image className="rounded-2xl mb-2" src={image} alt="" />
+        <div className="max-w-md rounded-3xl border border-gray-200 bg-white p-4 shadow">
+          <Image className="rounded-3xl mb-2" src={image} alt="" />
           <div className="p-2">
             {badges.map((badge, index) => (
               <span
@@ -56,7 +56,7 @@ export default function largeCard({
             </div>
             <div className="flex items-center justify-between mt-6">
               <p className="text-2xl font-bold">{cost}</p>
-              <Button>انضم الان</Button>
+              <Button gradient>انضم الان</Button>
             </div>
           </div>
         </div>

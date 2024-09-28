@@ -6,7 +6,7 @@ import Button from "../common/button";
 export default function eventSection() {
   return (
     <div className="container mx-auto px-4 py-24">
-      <h1 className="text-gray-900 text-4xl font-bold mb-4 text-center">
+      <h1 className="text-gray-900 text-4xl font-bold mb-24 text-center">
         فعاليات <span className="text-purple-700">منسقين</span> المنصة
       </h1>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -52,7 +52,7 @@ export default function eventSection() {
         />
       </div>
       <div className="w-fit mx-auto pt-20">
-        <Button>المزيد..</Button>
+        <Button gradient>المزيد..</Button>
       </div>
     </div>
   );

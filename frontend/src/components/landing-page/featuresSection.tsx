@@ -5,10 +5,10 @@ import computerIcon from "@/assets/icons/undraw_computer_apps_9ssq 1.svg";
 
 export default function featuresSection() {
   return (
-    <div className="flex justify-center items-center">
+    <div className="container mx-auto px-4 pt-24">
       <div>
-        <div className="flex flex-col items-center bg-white border border-gray-200 p-4 mb-6 rounded-lg shadow md:flex-row max-w-96 md:max-w-5xl">
-          <div className="flex flex-col justify-between p-4 md:pl-28 leading-normal text-center md:text-right">
+        <div className="flex flex-col items-center bg-white border border-gray-200 p-4 mb-8 rounded-3xl shadow-xl md:flex-row md:justify-between max-w-full">
+          <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
             <h5 className="mb-8 text-5xl font-bold tracking-tight text-purple-600">
               نسق فعالياتك بسهوله
             </h5>
@@ -18,13 +18,13 @@ export default function featuresSection() {
             </p>
           </div>
           <Image
-            className="w-full rounded-t-lg md:h-auto md:w-[450px] md:rounded-none md:rounded-s-lg"
+            className="w-full md:h-auto md:w-[450px]"
             src={computerIcon}
             alt=""
           />
         </div>
-        <div className="flex flex-col items-center bg-white border border-gray-200 p-4 mb-6 rounded-lg shadow md:flex-row max-w-96 md:max-w-5xl">
-          <div className="flex flex-col justify-between p-4 md:pl-28 leading-normal text-center md:text-right">
+        <div className="flex flex-col items-center bg-white border border-gray-200 p-4 mb-8 rounded-3xl shadow-xl md:flex-row-reverse md:justify-between max-w-full">
+          <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
             <h5 className="mb-8 text-5xl font-bold tracking-tight text-purple-600">
               نسق فعالياتك بسهوله
             </h5>
@@ -34,13 +34,13 @@ export default function featuresSection() {
             </p>
           </div>
           <Image
-            className="w-full rounded-t-lg md:h-auto md:w-[450px] md:rounded-none md:rounded-s-lg"
+            className="w-full md:h-auto md:w-[450px]"
             src={computerIcon}
             alt=""
           />
         </div>
-        <div className="flex flex-col items-center bg-white border border-gray-200 p-4 rounded-lg shadow md:flex-row max-w-96 md:max-w-5xl">
-          <div className="flex flex-col justify-between p-4 md:pl-28 leading-normal text-center md:text-right">
+        <div className="flex flex-col items-center bg-white border border-gray-200 p-4 rounded-3xl shadow-xl md:flex-row md:justify-between max-w-full">
+          <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
             <h5 className="mb-8 text-5xl font-bold tracking-tight text-purple-600">
               نسق فعالياتك بسهوله
             </h5>
@@ -50,7 +50,7 @@ export default function featuresSection() {
             </p>
           </div>
           <Image
-            className="w-full rounded-t-lg md:h-auto md:w-[450px] md:rounded-none md:rounded-s-lg"
+            className="w-full md:h-auto md:w-[450px]"
             src={computerIcon}
             alt=""
           />
