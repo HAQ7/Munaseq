@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Button from "../common/button";
 import Image from "next/image";
@@ -5,13 +6,52 @@ import userIcon from "@/assets/land-assets/user-icon.svg";
 import eventIcon from "@/assets/land-assets/event-icon.svg";
 import effect from "@/assets/land-assets/landing-page-effect.svg";
 import userImage from "@/assets/land-assets/user-testimonial-1.svg";
+import glow from "@/assets/land-assets/glow.svg";
 import { Calendar } from "@/components/common/shadcn-ui/calendar";
+import { motion } from "framer-motion";
+import AnimatedCounter from "../common/animatedCounter";
 
-export default function heroSection() {
+const fadeInUp = {
+  initial: { opacity: 0, y: 50 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.8, ease: "easeOut" },
+};
+
+const slideInLeft = {
+  initial: { opacity: 0, x: -100 },
+  animate: { opacity: 1, x: 0 },
+  transition: { duration: 0.8, ease: "easeOut" },
+};
+
+const slideInRight = {
+  initial: { opacity: 0, x: 100 },
+  animate: { opacity: 1, x: 0 },
+};
+
+const flyingAnimation = {
+  animate: {
+    y: [0, -10, 0, 10, 0],
+  },
+  transition: {
+    duration: 2,
+    ease: "easeInOut",
+    repeat: Infinity,
+  },
+};
+
+export default function HeroSection() {
   return (
     <div className="h-[90vh] relative">
       <div className="flex justify-center items-center h-[80vh] px-8">
-        <div className="text-center max-w-xl">
+        <div className="absolute bottom-[15%] left-[10%] -z-10 hidden md:block">
+          <Image src={glow} alt="" />
+        </div>
+        <motion.div
+          className="text-center max-w-xl"
+          variants={fadeInUp}
+          initial="initial"
+          animate="animate"
+        >
           <h1 className="text-gray-900 text-5xl font-bold mb-4 leading-snug">
             ننسق{" "}
             <span className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
@@ -26,28 +66,57 @@ export default function heroSection() {
           <div className="flex justify-center">
             <Button gradient>انضم الينا</Button>
           </div>
-        </div>
+        </motion.div>
       </div>
-      <div className="absolute top-[10%] left-[10%] hidden md:block">
-        <div className="w-48 h-48 bg-white border border-gray-200 rounded-3xl shadow-xl text-center flex flex-col items-center justify-center">
-          <h5 className=" text-5xl font-semibold tracking-tight text-gray-900">
-            2167+
-          </h5>
+
+      <motion.div
+        className="absolute top-[10%] left-[10%] hidden md:block"
+        variants={slideInLeft}
+        initial="initial"
+        animate="animate"
+        transition={{ delay: 0.4 }}
+      >
+        <motion.div
+          className="w-48 h-48 bg-white border border-gray-200 rounded-3xl shadow-xl text-center flex flex-col items-center justify-center"
+          variants={flyingAnimation}
+          animate="animate"
+        >
+          <AnimatedCounter from={0} to={2874} />
           <p className="font-light text-xl text-gray-500">مستفيد</p>
           <Image src={userIcon} alt={""} />
-        </div>
-      </div>
-      <div className="absolute top-[15%] right-[10%] hidden md:block">
-        <div className="w-48 h-48 bg-white border border-gray-200 rounded-3xl shadow-xl text-center flex flex-col items-center justify-center">
-          <h5 className=" text-5xl font-semibold tracking-tight text-gray-900">
-            361+
-          </h5>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="absolute top-[15%] right-[10%] hidden md:block"
+        variants={slideInRight}
+        initial="initial"
+        animate="animate"
+        transition={{ delay: 0.4 }}
+      >
+        <motion.div
+          className="w-48 h-48 bg-white border border-gray-200 rounded-3xl shadow-xl text-center flex flex-col items-center justify-center"
+          variants={flyingAnimation}
+          animate="animate"
+        >
+          <AnimatedCounter from={0} to={361} />
           <p className="font-light text-xl text-gray-500">فعاليه</p>
           <Image src={eventIcon} alt={""} />
-        </div>
-      </div>
-      <div className="absolute top-[60%] left-[12%] hidden md:block">
-        <div className="w-80 max-w-md p-4 bg-white border border-gray-200 rounded-3xl shadow-xl sm:p-4">
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="absolute top-[60%] left-[12%] hidden md:block"
+        variants={slideInLeft}
+        initial="initial"
+        animate="animate"
+        transition={{ delay: 0.6 }}
+      >
+        <motion.div
+          className="w-80 max-w-md p-4 bg-white border border-gray-200 rounded-3xl shadow-xl sm:p-4"
+          variants={flyingAnimation}
+          animate="animate"
+        >
           <div className="flow-root">
             <ul role="list" className="divide-y divide-gray-200">
               <li className="py-3 sm:py-2">
@@ -90,16 +159,28 @@ export default function heroSection() {
               </li>
             </ul>
           </div>
-        </div>
-      </div>
-      <div className="absolute top-[55%] right-[15%] hidden md:block">
-        <div className="bg-white border border-gray-200 rounded-3xl shadow-xl py-4 px-6">
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="absolute top-[55%] right-[15%] hidden md:block"
+        variants={slideInRight}
+        initial="initial"
+        animate="animate"
+        transition={{ delay: 0.8 }}
+      >
+        <motion.div
+          className="bg-white border border-gray-200 rounded-3xl shadow-xl py-4 px-6"
+          variants={flyingAnimation}
+          animate="animate"
+        >
           <h5 className="text-2xl font-semibold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent text-center mb-2">
             نسق فعالياتك بسهوله
           </h5>
           <Calendar />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
+
       <div className="absolute -top-[10%] left-0 -z-10">
         <Image src={effect} alt="" />
       </div>
