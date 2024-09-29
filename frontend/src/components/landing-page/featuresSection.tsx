@@ -15,7 +15,7 @@ export default function FeaturesSection() {
   const isInView3 = useInView(ref3, { once: true, amount: 0.6 });
 
   return (
-    <div className="container mx-auto px-4 pt-44">
+    <div className="container mx-auto px-4 pt-44 pb-10 overflow-hidden">
       <div>
         <motion.div
           ref={ref1}
