@@ -1,6 +1,6 @@
 import React from "react";
 import LargeCard from "@/components/common/large-card";
-import courseImage from "@/assets/icons/event-image.svg"; // For testing
+import courseImage from "@/assets/land-assets/event-image.svg"; // For testing
 import Button from "../common/button";
 
 export default function eventSection() {

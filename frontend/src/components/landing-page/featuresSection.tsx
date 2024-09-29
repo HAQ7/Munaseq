@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import computerIcon from "@/assets/icons/computer-icon.svg";
+import computerIcon from "@/assets/land-assets/computer-icon.svg";
 
 export default function featuresSection() {
   return (

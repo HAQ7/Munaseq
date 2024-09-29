@@ -27,7 +27,7 @@ export default function SignIn() {
         animate(
             "#card",
             {
-                x: "-50%",
+                x: "50%",
                 opacity: 0,
             },
             { type: "spring", duration: 0.5, bounce: 0 }

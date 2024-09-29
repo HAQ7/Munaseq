@@ -1,12 +1,15 @@
 export default function Button(props: {
+    onClick?: (e: any) => void;
     children: React.ReactNode;
     className?: string;
     outline?: boolean;
     gradient?: boolean;
+    disabled?: boolean;
 }) {
     if (props.outline) {
         return (
             <button
+                disabled={props.disabled}
                 className={
                     "relative bg-gradient-to-l h-10 p-[2px] from-primary to-secondary rounded-full grid place-items-center group " +
                     (props.className ? props.className : "")
@@ -23,6 +26,8 @@ export default function Button(props: {
     if (props.gradient) {
         return (
             <button
+                disabled={props.disabled}
+                onClick={props.onClick}
                 className={
                     "px-4 h-10 bg-[length:120%] hover:bg-right transition-all bg-gradient-to-l from-primary to-secondary rounded-full text-white font-semibold grid place-items-center " +
                     (props.className ? props.className : "")
@@ -35,12 +40,13 @@ export default function Button(props: {
 
     return (
         <button
-        className={
-            "px-4 h-10 bg-[length:120%] hover:bg-right transition-all bg-black rounded-full text-white font-semibold grid place-items-center " +
-            (props.className ? props.className : "")
-        }
-    >
-        {props.children}
-    </button>
-    )
+            onClick={props.onClick}
+            className={
+                "px-4 h-10 bg-[length:120%] hover:bg-right transition-all bg-black rounded-full text-white font-semibold grid place-items-center " +
+                (props.className ? props.className : "")
+            }
+        >
+            {props.children}
+        </button>
+    );
 }

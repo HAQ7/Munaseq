@@ -3,13 +3,16 @@ import Image from "next/image";
 import logoIcon from "@/assets/logo/logo-small-white.svg";
 import munaseq from "@/assets/logo/munaseq-text.svg";
 import Progress from "@/components/auth/progress";
-import TextField from "@/components/common/text-field";
-import Button from "@/components/common/button";
+
 import { motion, useAnimate } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
+import MainForm from "@/components/auth/main-form";
+import ProfileForm from "@/components/auth/profile-form";
 
 export default function SignUp() {
+    const [step, setStep] = useState(1);
     const [scope, animate] = useAnimate();
     const router = useRouter();
     const animation = {
@@ -38,19 +41,38 @@ export default function SignUp() {
         router.push("/signin");
     };
 
+    const nextStepHandler = (e:MouseEvent) => {
+        e.preventDefault();
+        if (step === 4) {
+            return;
+        }
+        setStep(prevStep => prevStep + 1);
+    }
+    const prevStepHandler = (e:MouseEvent) => {
+        e.preventDefault();
+        if (step === 1) {
+            return;
+        }
+        setStep(prevStep => prevStep - 1);
+    }
+
     return (
         <div ref={scope}>
-            <motion.div initial={{x: '50%', opacity: 0}} animate={animation} transition={transition}  id="card" className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] md:p-14 p-8 overflow-hidden grid">
+            <motion.div
+                initial={{ x: "-50%", opacity: 0 }}
+                animate={animation}
+                transition={transition}
+                id="card"
+                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] md:p-14 p-8 overflow-hidden grid"
+            >
                 <div
                     ref={scope}
                     className="grid md:grid-cols-2 md:gap-0 gap-3 h-full place-items-center relative"
                 >
-                    <div className="h-full w-full flex flex-col gap-5">
-                        <Progress />
+                    <div className="h-full w-full flex flex-col gap-5 z">
+                        <Progress step={step} />
                         <Link className="w-full h-full" href={"/"}>
-                            <div
-                                className="w-full h-full rounded-[50px] bg-gradient-to-br from-primary to-secondary overflow-hidden items-center md:flex flex-col justify-center gap-14 hidden "
-                            >
+                            <div className="w-full h-full rounded-[50px] bg-gradient-to-br from-primary to-secondary overflow-hidden items-center md:flex flex-col justify-center gap-14 hidden ">
                                 <Image
                                     src={logoIcon}
                                     className="w-32"
@@ -65,39 +87,13 @@ export default function SignUp() {
                         </Link>
                     </div>
 
-                    <div
-                        className="w-full md:p-10 flex flex-col items-center exit-right"
-                    >
-                        <h1 className="font-bold text-3xl text-center">
-                            {" "}
-                            متحمسين لدخولك ! 🔥
-                        </h1>
-                        <form action="" className="max-w-96 w-full">
-                            <TextField
-                                placeholder="الايميل الالكتروني"
-                                name="email"
-                                className="w-full"
-                            />
-                            <TextField
-                                placeholder="اسم المستخدم"
-                                name="username"
-                                className="w-full"
-                            />
-                            <TextField
-                                placeholder="كلمة المرور"
-                                name="password"
-                                type="password"
-                            />
-                            <TextField
-                                placeholder="تأكيد كلمة المرور"
-                                name="confirmPassword"
-                                type="password"
-                            />
-                            <Button className="mt-10 shadow-xl w-full">
-                                تسجيل الدخول
-                            </Button>
+                    <div className="w-full md:p-10 flex flex-col items-center exit-right overflow-hidden">
+                        
+                        <form action="" className="max-w-96 w-full relative ">
+                            <MainForm step={step} nextStepHandler={nextStepHandler} />
+                            <ProfileForm step={step} nextStepHandler={nextStepHandler} prevStepHandler={prevStepHandler} />
                         </form>
-                        <p className="mt-4 text-[#949494]">
+                        <p className="mt-4 text-[#949494] text-center">
                             لديك حساب؟{" "}
                             <span
                                 onClick={transitionToSignUpHandler}

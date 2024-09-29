@@ -1,10 +1,10 @@
 import React from "react";
 import Button from "../common/button";
 import Image from "next/image";
-import userIcon from "@/assets/icons/user-icon.svg";
-import eventIcon from "@/assets/icons/event-icon.svg";
-import effect from "@/assets/icons/landing-page-effect.svg";
-import userImage from "@/assets/icons/user-testimonial-1.svg";
+import userIcon from "@/assets/land-assets/user-icon.svg";
+import eventIcon from "@/assets/land-assets/event-icon.svg";
+import effect from "@/assets/land-assets/landing-page-effect.svg";
+import userImage from "@/assets/land-assets/user-testimonial-1.svg";
 import { Calendar } from "@/components/common/shadcn-ui/calendar";
 
 export default function heroSection() {

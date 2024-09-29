@@ -25,6 +25,9 @@ const config: Config = {
                 "secondary": "#652bb7",
                 "custom-gray": "#949494",
             },
+            backgroundImage: {
+                "custom-gradient": "linear-gradient(90deg, #ae00fe 0%, #652bb7 100%)",
+            }
         },
     },
     plugins: [require("tailwindcss-animate")],
