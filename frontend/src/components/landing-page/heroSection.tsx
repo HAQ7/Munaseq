@@ -1,12 +1,11 @@
-"use clint";
 import React from "react";
 import Button from "../common/button";
 import Image from "next/image";
-import userIcon from "@/assets/icons/ph_user.svg";
-import eventIcon from "@/assets/icons/medical-icon_i-health-education.svg";
+import userIcon from "@/assets/icons/user-icon.svg";
+import eventIcon from "@/assets/icons/event-icon.svg";
 import effect from "@/assets/icons/landing-page-effect.svg";
 import userImage from "@/assets/icons/user-testimonial-1.svg";
-// import { Calendar } from "@/components/common/shadcn-ui/calendar"
+import { Calendar } from "@/components/common/shadcn-ui/calendar";
 
 export default function heroSection() {
   return (
@@ -14,8 +13,11 @@ export default function heroSection() {
       <div className="flex justify-center items-center h-[80vh] px-8">
         <div className="text-center max-w-xl">
           <h1 className="text-gray-900 text-5xl font-bold mb-4 leading-snug">
-            ننسق <span className="text-purple-700">فعالياتك التعليمية </span>من
-            الاف الى الياء
+            ننسق{" "}
+            <span className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
+              فعالياتك التعليمية{" "}
+            </span>
+            من الاف الى الياء
           </h1>
           <p className="text-gray-500 text-lg font-light mb-4">
             منسق هي منصة متكاملة لإدارة الفعاليات التعليمية الحضورية و
@@ -88,6 +90,14 @@ export default function heroSection() {
               </li>
             </ul>
           </div>
+        </div>
+      </div>
+      <div className="absolute top-[55%] right-[15%] hidden md:block">
+        <div className="bg-white border border-gray-200 rounded-3xl shadow-xl py-4 px-6">
+          <h5 className="text-2xl font-semibold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent text-center mb-2">
+            نسق فعالياتك بسهوله
+          </h5>
+          <Calendar />
         </div>
       </div>
       <div className="absolute -top-[10%] left-0 -z-10">

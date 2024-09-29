@@ -1,9 +1,10 @@
 import React from "react";
-import dateIcon from "@/assets/icons/uiw_date.svg";
-import timeIcon from "@/assets/icons/mingcute_time-line.svg";
-import locationIcon from "@/assets/icons/Frame 39.svg";
+import dateIcon from "@/assets/icons/date-icon.svg";
+import timeIcon from "@/assets/icons/time-icon.svg";
+import locationIcon from "@/assets/icons/location-icon.svg";
 import Image from "next/image";
 import Button from "./button";
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 export default function largeCard({
   image,
@@ -14,6 +15,15 @@ export default function largeCard({
   location,
   cost,
   badges = [],
+}: {
+  image: StaticImport;
+  title: string;
+  description: string;
+  time: string;
+  date: string;
+  location: string;
+  cost: string;
+  badges: string[];
 }) {
   return (
     <>
@@ -41,17 +51,23 @@ export default function largeCard({
               <div className="flex gap-5 mb-3 font-medium">
                 <div className="flex gap-2">
                   <Image src={timeIcon} alt="" />
-                  <p className="text-purple-700 text-base">{time}</p>
+                  <p className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent text-base">
+                    {time}
+                  </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 font-medium">
                   <Image src={dateIcon} alt="" />
-                  <p className="text-purple-700 text-base">{date}</p>
+                  <p className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent text-base">
+                    {date}
+                  </p>
                 </div>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 font-medium">
                 <Image src={locationIcon} alt="" />
-                <p className="text-purple-700 text-base">{location}</p>
+                <p className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent text-base">
+                  {location}
+                </p>
               </div>
             </div>
             <div className="flex items-center justify-between mt-6">

@@ -1,10 +1,10 @@
 import React from "react";
-import logo from "@/assets/logo/Vector.svg";
+import logo from "@/assets/logo/munaseq-logo-dark-white.svg";
 import Image from "next/image";
 export default function footerSection() {
   return (
     <div>
-      <footer className="bg-purple-700">
+      <footer className="bg-gradient-to-l from-primary to-secondary">
         <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
           <div className="sm:flex sm:items-center sm:justify-between">
             <a href="" className="mb-4 sm:mb-0">

@@ -1,13 +1,17 @@
 import React from "react";
-import LargeCard from "@/components/common/largeCard";
-import courseImage from "@/assets/icons/Rectangle 45.svg"; // For testing
+import LargeCard from "@/components/common/large-card";
+import courseImage from "@/assets/icons/event-image.svg"; // For testing
 import Button from "../common/button";
 
 export default function eventSection() {
   return (
     <div className="container mx-auto px-4 py-24">
-      <h1 className="text-gray-900 text-4xl font-bold mb-24 text-center">
-        فعاليات <span className="text-purple-700">منسقين</span> المنصة
+      <h1 className="text-gray-900 text-5xl font-bold mb-24 text-center">
+        فعاليات{" "}
+        <span className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
+          منسقين
+        </span>{" "}
+        المنصة
       </h1>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
         <LargeCard
