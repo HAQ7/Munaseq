@@ -23,28 +23,29 @@ export default function mainForm(props: {
             transition={{ type: "spring", duration: 0.5, bounce: 0 }}
             animate={props.step === 1 ? "active" : "past"}
             variants={variants}
+            className="absolute top-0 w-full"
         >
             <h1 className="font-bold text-3xl text-center">
                 {" "}
                 متحمسين لدخولك ! 🔥
             </h1>
             <TextField
-                placeholder="الايميل الالكتروني"
+                placeholder="الايميل الالكتروني*"
                 name="email"
                 className="w-full"
             />
             <TextField
-                placeholder="اسم المستخدم"
+                placeholder="اسم المستخدم*"
                 name="username"
                 className="w-full"
             />
             <TextField
-                placeholder="كلمة المرور"
+                placeholder="كلمة المرور*"
                 name="password"
                 type="password"
             />
             <TextField
-                placeholder="تأكيد كلمة المرور"
+                placeholder="تأكيد كلمة المرور*"
                 name="confirmPassword"
                 type="password"
             />

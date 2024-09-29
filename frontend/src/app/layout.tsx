@@ -3,7 +3,11 @@ import { Rubik } from "next/font/google";
 import "./globals.css";
 
 export const metadata: Metadata = {
-    title: "منسق",
+    title: {
+        template: "منسق | %s",
+        default: "منسق",
+    },
+    
     description:
         "منسق هي منصة متكاملة لإدارة الفعاليات التعليمية الحضورية و الالكترونية مثل الدورات و ورش العمل و المحاضرات",
 };

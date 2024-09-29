@@ -4,12 +4,18 @@ import rightDeco from "@/assets/auth-assets/right-deco.png";
 import leftDeco from "@/assets/auth-assets/left-deco.png";
 import rightGlow from "@/assets/auth-assets/right-glow.png";
 import leftGlow from "@/assets/auth-assets/left-glow.png";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: 'التسجيل'
+};
 
 export default function AuthLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    
     return (
         <>
             <div className="absolute overflow-hidden w-screen h-screen -z-10">

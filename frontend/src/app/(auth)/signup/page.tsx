@@ -3,17 +3,26 @@ import Image from "next/image";
 import logoIcon from "@/assets/logo/logo-small-white.svg";
 import munaseq from "@/assets/logo/munaseq-text.svg";
 import Progress from "@/components/auth/progress";
-
 import { motion, useAnimate } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import MainForm from "@/components/auth/main-form";
 import ProfileForm from "@/components/auth/profile-form";
+import TagForm from "@/components/auth/tag-form";
+import FinalForm from "@/components/auth/final-form";
+
+
+
+
 
 export default function SignUp() {
+
+    
     const [step, setStep] = useState(1);
     const [scope, animate] = useAnimate();
+    const [tags, setTags] = useState<string[]>([]);
+    const ref = useRef({} as HTMLFormElement);
     const router = useRouter();
     const animation = {
         x: 0,
@@ -56,6 +65,13 @@ export default function SignUp() {
         setStep(prevStep => prevStep - 1);
     }
 
+    let formData: FormData = new FormData();
+
+    if (step === 4) {
+        formData = new FormData(ref.current);
+        console.log(formData.get("gender"));
+    }
+
     return (
         <div ref={scope}>
             <motion.div
@@ -89,9 +105,11 @@ export default function SignUp() {
 
                     <div className="w-full md:p-10 flex flex-col items-center exit-right overflow-hidden">
                         
-                        <form action="" className="max-w-96 w-full relative ">
+                        <form ref={ref} action="" className="max-w-96 w-full relative ">
                             <MainForm step={step} nextStepHandler={nextStepHandler} />
                             <ProfileForm step={step} nextStepHandler={nextStepHandler} prevStepHandler={prevStepHandler} />
+                            <TagForm step={step} nextStepHandler={nextStepHandler} prevStepHandler={prevStepHandler} />
+                            <FinalForm step={step} prevStepHandler={prevStepHandler} formData={formData}/>
                         </form>
                         <p className="mt-4 text-[#949494] text-center">
                             لديك حساب؟{" "}
