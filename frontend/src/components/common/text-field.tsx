@@ -11,7 +11,7 @@ export default function TextField(props: {
     const [inputHasText, setInputHasText] = useState(false);
     return (
         <div className="h-20 relative">
-            <div className="absolute w-full flex justify-center items-center h-10 bottom-0">
+            <div className="absolute w-full flex justify-center items-center h-10 bottom-0 2xl:text-base text-md ">
                 <input
                     autoComplete="on"
                     id={props.name}

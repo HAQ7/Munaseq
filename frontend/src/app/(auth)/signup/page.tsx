@@ -83,7 +83,7 @@ export default function SignUp() {
                 animate={animation}
                 transition={transition}
                 id="card"
-                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] md:p-14 p-8 overflow-hidden grid"
+                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] 2xl:p-14 p-8 overflow-hidden grid"
             >
                 <div
                     ref={scope}
@@ -107,7 +107,7 @@ export default function SignUp() {
                         </Link>
                     </div>
 
-                    <div className="w-full md:p-10 flex flex-col items-center exit-right overflow-hidden">
+                    <div className="w-full 2xl:p-14 p-3 flex flex-col items-center exit-right overflow-hidden">
                         
                         <form ref={ref} action="" className="max-w-96 w-full relative ">
                             <MainForm step={step} nextStepHandler={nextStepHandler} />
