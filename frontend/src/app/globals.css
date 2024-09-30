@@ -2,12 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
-    --primary: #ae00fe;
-    --secondary: #652bb7;
-    --gray: #949494;
+  --primary: #ae00fe;
+  --secondary: #652bb7;
+  --gray: #949494;
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }

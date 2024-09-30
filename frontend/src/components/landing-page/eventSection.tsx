@@ -7,7 +7,7 @@ import Button from "../common/button";
 
 export default function eventSection() {
   return (
-    <div className="container mx-auto px-4 py-24 relative">
+    <div id="events" className="container mx-auto px-4 py-24 relative">
       <h1 className="text-gray-900 text-5xl font-bold mb-24 text-center">
         فعاليات{" "}
         <span className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
