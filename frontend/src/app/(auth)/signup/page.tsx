@@ -5,7 +5,7 @@ import munaseq from "@/assets/logo/munaseq-text.svg";
 import Progress from "@/components/auth/progress";
 import { motion, useAnimate } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { MutableRefObject, useRef, useState } from "react";
 import Link from "next/link";
 import MainForm from "@/components/auth/main-form";
 import ProfileForm from "@/components/auth/profile-form";
@@ -21,7 +21,7 @@ export default function SignUp() {
     
     const [step, setStep] = useState(1);
     const [scope, animate] = useAnimate();
-    const [tags, setTags] = useState<string[]>([]);
+    const tags:MutableRefObject<string[]> = useRef([]);
     const ref = useRef({} as HTMLFormElement);
     const router = useRouter();
     const animation = {
@@ -65,11 +65,15 @@ export default function SignUp() {
         setStep(prevStep => prevStep - 1);
     }
 
+    const submitTags = (selectedTags:string[]) => {
+        tags.current = selectedTags;
+        console.log(tags.current)
+    }
+
     let formData: FormData = new FormData();
 
     if (step === 4) {
         formData = new FormData(ref.current);
-        console.log(formData.get("gender"));
     }
 
     return (
@@ -108,7 +112,7 @@ export default function SignUp() {
                         <form ref={ref} action="" className="max-w-96 w-full relative ">
                             <MainForm step={step} nextStepHandler={nextStepHandler} />
                             <ProfileForm step={step} nextStepHandler={nextStepHandler} prevStepHandler={prevStepHandler} />
-                            <TagForm step={step} nextStepHandler={nextStepHandler} prevStepHandler={prevStepHandler} />
+                            <TagForm step={step} nextStepHandler={nextStepHandler} prevStepHandler={prevStepHandler} submitTags={submitTags} />
                             <FinalForm step={step} prevStepHandler={prevStepHandler} formData={formData}/>
                         </form>
                         <p className="mt-4 text-[#949494] text-center">

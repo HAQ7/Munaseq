@@ -23,7 +23,7 @@ export default function AuthLayout({
                     alt="deco"
                     src={strange}
                     priority
-                    className="absolute w-screen h-screen scale-125 lg:block hidden "
+                    className="fixed w-screen h-screen scale-125 lg:block hidden "
                 />
                 <Image
                     alt="deco"

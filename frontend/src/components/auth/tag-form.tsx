@@ -2,13 +2,17 @@ import Tag from "@/components/common/tag";
 import Button from "@/components/common/button";
 import { motion, Variants } from "framer-motion";
 import { tags } from "@/util/tags";
+import { MutableRefObject, useRef } from "react";
 
 
 export default function TagForm(props: {
     step: number;
     nextStepHandler: (e: MouseEvent) => void;
     prevStepHandler: (e: MouseEvent) => void;
+    submitTags: (tags: string[]) => void;
 }) {
+    const addedTags:MutableRefObject<string[]> = useRef([]);
+    
     const variants: Variants = {
         next: {
             x: "-50%",
@@ -43,7 +47,9 @@ export default function TagForm(props: {
 
             <motion.div className="flex flex-wrap gap-2 mt-10 sm:text-[0.75rem] text-xs">
                 {tags.map((tag,index) => [
-                    <Tag key={index}>{tag}</Tag>,
+                    <Tag active onClick={() => {
+                        addedTags.current.push(tag);
+                    }} key={index}>{tag}</Tag>,
                 ])}
             </motion.div>
 
@@ -57,7 +63,10 @@ export default function TagForm(props: {
                 </Button>
                 <Button
                     disabled={props.step !== 3}
-                    onClick={props.nextStepHandler}
+                    onClick={(e)=> {
+                        props.submitTags(addedTags.current);
+                        props.nextStepHandler(e)
+                    }}
                     className="mt-10 shadow-xl px-10"
                 >
                     التالي
