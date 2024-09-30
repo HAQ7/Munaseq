@@ -5,6 +5,7 @@ import Radio from "../common/radio-group";
 import { Input } from "../common/shadcn-ui/input";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { set } from "date-fns";
 
 export default function ProfileForm(props: {
     step: number;
@@ -12,6 +13,9 @@ export default function ProfileForm(props: {
     prevStepHandler: (e: MouseEvent) => void;
 }) {
     const [image, setImage] = useState("");
+    const [formError, setFormError] = useState([] as string[]);
+    const firstNameRef = useRef({} as HTMLInputElement);
+    const lastNameRef = useRef({} as HTMLInputElement);
     const ref = useRef({} as HTMLInputElement);
 
     const handleImageUpload = (e: any) => {
@@ -37,6 +41,37 @@ export default function ProfileForm(props: {
             visibility: "visible",
         },
     };
+    const checkFirstNameEmpty: () => boolean = () => {
+        if (firstNameRef.current.value.length < 3) {
+            if (!formError.includes("FIRSTNAME_EMPTY")) {
+                setFormError(prev => [...prev, "FIRSTNAME_EMPTY"]);
+            }
+            return false;
+        }
+
+        setFormError(prev => prev.filter(e => e !== "FIRSTNAME_EMPTY"));
+        return true;
+    };
+
+    const checkLastNameEmpty: () => boolean = () => {
+        if (lastNameRef.current.value.length < 3) {
+            if (!formError.includes("LASTNAME_EMPTY")) {
+                setFormError(prev => [...prev, "LASTNAME_EMPTY"]);
+            }
+            return false;
+        }
+
+        setFormError(prev => prev.filter(e => e !== "LASTNAME_EMPTY"));
+        return true;
+    };
+
+    const validateInputs: () => boolean = () => {
+        if (!checkFirstNameEmpty() || !checkLastNameEmpty()) {
+            return false;
+        }
+        return true;
+    };
+
     return (
         <motion.div
             transition={{ type: "spring", duration: 0.5, bounce: 0 }}
@@ -52,8 +87,20 @@ export default function ProfileForm(props: {
                 بيشوفونها الناس 😎
             </h1>
             <div className="grid grid-cols-2 gap-5">
-                <TextField placeholder="الاسم الاول*" name="firstName" />
-                <TextField placeholder="الاسم الاخير*" name="lastName" />
+                <TextField
+                    placeholder="الاسم الاول*"
+                    name="firstName"
+                    ref={firstNameRef}
+                    onBlur={checkFirstNameEmpty}
+                    error={formError.includes("FIRSTNAME_EMPTY")}
+                />
+                <TextField
+                    placeholder="الاسم الاخير*"
+                    name="lastName"
+                    ref={lastNameRef}
+                    onBlur={checkLastNameEmpty}
+                    error={formError.includes("LASTNAME_EMPTY")}
+                />
             </div>
             <TextField placeholder="الاسم المعروض" name="displayName" />
             <div className="grid gap-3 mt-5">
@@ -94,23 +141,40 @@ export default function ProfileForm(props: {
                     ref={ref}
                 />
             </div>
-
-            <div className="flex justify-between">
-                <Button
-                    disabled={props.step !== 2}
-                    onClick={props.prevStepHandler}
-                    className="mt-10 bg-transparent !text-custom-gray"
-                >
-                    السابق
-                </Button>
-                <Button
-                    disabled={props.step !== 2}
-                    onClick={props.nextStepHandler}
-                    className="mt-10 shadow-xl px-10"
-                >
-                    التالي
-                </Button>
-            </div>
+            <motion.div layout className="mt-5">
+                {formError.length > 0 && (
+                    <motion.div
+                        layout
+                        animate={{ y: 0, opacity: 1 }}
+                        initial={{ y: 12, opacity: 0 }}
+                        transition={{ delay: 0.225 }}
+                        className="text-red-500 text-center mt-5"
+                    >
+                        الاسم الاول والاخير يجب ان يكون 3 احرف على الاقل
+                    </motion.div>
+                )}
+                <motion.div layout className="flex justify-between mt-5">
+                    <Button
+                        disabled={props.step !== 2}
+                        onClick={props.prevStepHandler}
+                        className="bg-transparent !text-custom-gray"
+                    >
+                        السابق
+                    </Button>
+                    <Button
+                        disabled={props.step !== 2}
+                        onClick={e => {
+                            e.preventDefault();
+                            if (validateInputs()) {
+                                props.nextStepHandler(e);
+                            }
+                        }}
+                        className="shadow-xl px-9 "
+                    >
+                        التالي
+                    </Button>
+                </motion.div>
+            </motion.div>
         </motion.div>
     );
 }

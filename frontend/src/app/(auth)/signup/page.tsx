@@ -12,16 +12,11 @@ import ProfileForm from "@/components/auth/profile-form";
 import TagForm from "@/components/auth/tag-form";
 import FinalForm from "@/components/auth/final-form";
 
-
-
-
-
 export default function SignUp() {
-
-    
     const [step, setStep] = useState(1);
     const [scope, animate] = useAnimate();
-    const tags:MutableRefObject<string[]> = useRef([]);
+    const tags: MutableRefObject<string[]> = useRef([]);
+    const [isFormDone, setFormDone] = useState(false);
     const ref = useRef({} as HTMLFormElement);
     const router = useRouter();
     const animation = {
@@ -50,31 +45,30 @@ export default function SignUp() {
         router.push("/signin");
     };
 
-    const nextStepHandler = (e:MouseEvent) => {
+    const nextStepHandler = (e: MouseEvent) => {
         e.preventDefault();
         if (step === 4) {
             return;
         }
         setStep(prevStep => prevStep + 1);
-    }
-    const prevStepHandler = (e:MouseEvent) => {
+    };
+    const prevStepHandler = (e: MouseEvent) => {
         e.preventDefault();
         if (step === 1) {
             return;
         }
         setStep(prevStep => prevStep - 1);
-    }
+    };
 
-    const submitTags = (selectedTags:string[]) => {
+    let formData: MutableRefObject<FormData> = useRef(new FormData());
+
+    const submitTags = (selectedTags: string[]) => {
         tags.current = selectedTags;
-        console.log(tags.current)
-    }
-
-    let formData: FormData = new FormData();
-
-    if (step === 4) {
-        formData = new FormData(ref.current);
-    }
+        formData.current = new FormData(ref.current);
+        for (const tag of tags.current) {
+            formData.current.append("tags", tag);
+        }
+    };
 
     return (
         <div ref={scope}>
@@ -89,7 +83,7 @@ export default function SignUp() {
                     ref={scope}
                     className="grid md:grid-cols-2 md:gap-0 gap-3 h-full place-items-center relative"
                 >
-                    <div className="h-full w-full flex flex-col gap-5 z">
+                    <div className="h-full w-full flex flex-col gap-5">
                         <Progress step={step} />
                         <Link className="w-full h-full" href={"/"}>
                             <div className="w-full h-full rounded-[50px] bg-gradient-to-br from-primary to-secondary overflow-hidden items-center md:flex flex-col justify-center gap-14 hidden ">
@@ -107,13 +101,33 @@ export default function SignUp() {
                         </Link>
                     </div>
 
-                    <div className="w-full 2xl:p-14 p-3 flex flex-col items-center exit-right overflow-hidden">
-                        
-                        <form ref={ref} action="" className="max-w-96 w-full relative ">
-                            <MainForm step={step} nextStepHandler={nextStepHandler} />
-                            <ProfileForm step={step} nextStepHandler={nextStepHandler} prevStepHandler={prevStepHandler} />
-                            <TagForm step={step} nextStepHandler={nextStepHandler} prevStepHandler={prevStepHandler} submitTags={submitTags} />
-                            <FinalForm step={step} prevStepHandler={prevStepHandler} formData={formData}/>
+                    <div className="w-full sm:px-10 flex flex-col items-center exit-right overflow-hidden pt-10">
+                        <form
+                            ref={ref}
+                            action=""
+                            className="max-w-96 w-full relative h-[550px]"
+                        >
+                            <MainForm
+                                step={step}
+                                nextStepHandler={nextStepHandler}
+                            />
+                            <ProfileForm
+                                step={step}
+                                nextStepHandler={nextStepHandler}
+                                prevStepHandler={prevStepHandler}
+                            />
+                            <TagForm
+                                step={step}
+                                nextStepHandler={nextStepHandler}
+                                prevStepHandler={prevStepHandler}
+                                submitTags={submitTags}
+                            />
+
+                            <FinalForm
+                                step={step}
+                                prevStepHandler={prevStepHandler}
+                                formData={formData.current}
+                            />
                         </form>
                         <p className="mt-4 text-[#949494] text-center">
                             لديك حساب؟{" "}

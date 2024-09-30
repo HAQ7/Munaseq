@@ -11,7 +11,7 @@ export default function Button(props: {
             <button
                 disabled={props.disabled}
                 className={
-                    "relative bg-gradient-to-l h-10 p-[2px] from-primary to-secondary rounded-full grid place-items-center group " +
+                    "relative bg-gradient-to-l h-10 p-[2px] from-primary to-secondary rounded-full grid place-items-center group text-nowrap " +
                     (props.className ? props.className : "")
                 }
             >
@@ -29,7 +29,7 @@ export default function Button(props: {
                 disabled={props.disabled}
                 onClick={props.onClick}
                 className={
-                    "px-4 h-10 bg-[length:120%] hover:bg-right transition-all bg-gradient-to-l from-primary to-secondary rounded-full text-white font-semibold grid place-items-center " +
+                    "px-4 h-10 bg-[length:120%] hover:bg-right transition-all bg-gradient-to-l from-primary to-secondary rounded-full text-white font-semibold grid place-items-center text-nowrap  " +
                     (props.className ? props.className : "")
                 }
             >
@@ -42,7 +42,7 @@ export default function Button(props: {
         <button
             onClick={props.onClick}
             className={
-                "px-4 h-10 bg-[length:120%] hover:bg-right transition-all bg-black rounded-full text-white font-semibold grid place-items-center " +
+                "px-4 h-10 bg-[length:120%] hover:bg-right transition-all bg-black rounded-full text-white font-semibold grid place-items-center text-nowrap  " +
                 (props.className ? props.className : "")
             }
         >

@@ -1,13 +1,18 @@
 "use client";
-import { useState, useRef } from "react";
+import { forwardRef, useState } from "react";
 
-export default function TextField(props: {
-    placeholder: string;
-    className?: string;
-    name: string;
-    type?: string;
-}) {
-    const inputRef = useRef({} as HTMLInputElement);
+const Input = forwardRef(function TextField(
+    props: {
+        placeholder: string;
+        className?: string;
+        name: string;
+        type?: string;
+        ref?: any;
+        error?: boolean
+        onBlur?: (e: any) => void
+    },
+    ref: any
+) {
     const [inputHasText, setInputHasText] = useState(false);
     return (
         <div className="h-20 relative">
@@ -15,22 +20,25 @@ export default function TextField(props: {
                 <input
                     autoComplete="on"
                     id={props.name}
-                    ref={inputRef}
+                    ref={ref}
                     type={props.type || "text"}
                     name={props.name}
-                    onBlur={() => {
-                        setInputHasText(inputRef.current.value !== "");
+                    onBlur={e => {
+                        setInputHasText(e.target.value !== "");
+                        if (props.onBlur) {
+                            props.onBlur(e);
+                        }
                     }}
                     maxLength={100}
                     className={
                         "h-10 w-full border-b border-gray-300 focus:outline-none peer z-10 bg-transparent " +
-                        (props.className || "")
+                        (props.error ? " border-red-500 " : "") + (props.className || "")
                     }
                 />{" "}
                 <label
                     htmlFor={props.name}
                     className={
-                        "absolute rtl:right-3 ltr:left-3 text-gray-400  peer-focus:text-primary transition-all h-full grid place-items-center " +
+                        "absolute rtl:right-3 ltr:left-3 text-gray-400  peer-focus:text-primary transition-all h-full grid place-items-center text-nowrap " +
                         (inputHasText
                             ? "-translate-y-[90%] text-sm"
                             : "peer-focus:-translate-y-[90%] peer-focus:text-sm")
@@ -41,4 +49,6 @@ export default function TextField(props: {
             </div>
         </div>
     );
-}
+});
+
+export default Input;
