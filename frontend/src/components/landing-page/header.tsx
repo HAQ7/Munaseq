@@ -31,7 +31,7 @@ export default function Header() {
       </motion.div>
 
       <motion.div
-        className="hidden w-full md:block md:w-auto"
+        className="hidden md:flex w-full md:w-auto"
         id="navbar-solid-bg"
         initial="initial"
         animate="animate"
@@ -70,7 +70,7 @@ export default function Header() {
       </motion.div>
 
       <motion.div
-        className="gap-2 sm:flex hidden"
+        className="hidden sm:flex gap-2"
         initial="initial"
         animate="animate"
         transition={{ duration: 0.3, ease: "easeOut" }}
@@ -84,7 +84,9 @@ export default function Header() {
         </Link>
       </motion.div>
 
-      <Menu />
+      <div className="md:hidden">
+        <Menu />
+      </div>
     </header>
   );
 }

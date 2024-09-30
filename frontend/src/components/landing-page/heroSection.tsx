@@ -4,7 +4,7 @@ import Button from "../common/button";
 import Image from "next/image";
 import userIcon from "@/assets/land-assets/user-icon.svg";
 import eventIcon from "@/assets/land-assets/event-icon.svg";
-import effect from "@/assets/land-assets/landing-page-effect.svg";
+import effectLeft from "@/assets/land-assets/landing-page-effect-left.svg";
 import titleEffect from "@/assets/land-assets/title-effect.svg";
 import userImage from "@/assets/land-assets/user-testimonial-1.svg";
 import glow from "@/assets/land-assets/glow.svg";
@@ -49,7 +49,7 @@ export default function HeroSection() {
       </div>
 
       <motion.div
-        className="absolute top-[10%] left-[10%] hidden md:block"
+        className="absolute top-[10%] left-[10%] hidden lg:block"
         variants={{ animate: { opacity: 1, x: 0 } }}
         initial={{ opacity: 0, x: -100 }}
         transition={{ delay: 0.2 }}
@@ -68,7 +68,7 @@ export default function HeroSection() {
       </motion.div>
 
       <motion.div
-        className="absolute top-[15%] right-[10%] hidden md:block"
+        className="absolute top-[15%] lg:top-[5%] right-[10%] hidden lg:block"
         variants={{ animate: { opacity: 1, x: 0 } }}
         initial={{ opacity: 0, x: 100 }}
         transition={{ delay: 0.4 }}
@@ -87,7 +87,7 @@ export default function HeroSection() {
       </motion.div>
 
       <motion.div
-        className="absolute top-[60%] left-[12%] hidden md:block"
+        className="absolute top-[60%] left-[12%] hidden lg:block"
         variants={{ animate: { opacity: 1, x: 0 } }}
         initial={{ opacity: 0, x: -100 }}
         transition={{ delay: 0.6 }}
@@ -145,7 +145,7 @@ export default function HeroSection() {
       </motion.div>
 
       <motion.div
-        className="absolute top-[55%] right-[15%] hidden md:block"
+        className="absolute top-[55%] lg:top-[60%] lg:right-[10%] right-[15%] hidden lg:block"
         variants={{ animate: { opacity: 1, x: 0 } }}
         initial={{ opacity: 0, x: 100 }}
         transition={{ delay: 0.8 }}
@@ -165,7 +165,16 @@ export default function HeroSection() {
       </motion.div>
 
       <div className="absolute -top-[10%] left-0 -z-10">
-        <Image src={effect} alt="" />
+        <Image src={effectLeft} alt="" />
+      </div>
+      <div className="absolute top-[25%] right-0 -z-10 rotate-180">
+        <Image src={effectLeft} alt="" />
+      </div>
+      <div className="absolute top-[100%] left-0 -z-10">
+        <Image src={effectLeft} alt="" />
+      </div>
+      <div className="absolute top-[150%] right-0 -z-10 rotate-180">
+        <Image src={effectLeft} alt="" />
       </div>
     </motion.div>
   );

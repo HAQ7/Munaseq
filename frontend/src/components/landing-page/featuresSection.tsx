@@ -22,22 +22,22 @@ export default function FeaturesSection() {
       <div>
         <motion.div
           ref={ref1}
-          initial={{ opacity: 0, y: -80 }}
-          animate={isInView1 ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={isInView1 ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.4, ease: "easeOut" }}
           className="flex flex-col items-center bg-white border border-gray-200 p-4 mb-16 rounded-3xl shadow-xl md:flex-row md:justify-between max-w-full"
         >
           <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
-            <h5 className="mb-6 pb-2 text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
+            <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
               نسق فعالياتك بسهوله
             </h5>
-            <p className="mb-3 font-light text-gray-500 text-2xl">
+            <p className="mb-3 font-light text-gray-500 text-lg sm:text-xl">
               قم بإنشاء الأحداث التعليمية وإدارتها دون عناء باستخدام أدوات
               متكاملة للجدولة والتواصل ومشاركة الموارد.
             </p>
           </div>
           <Image
-            className="w-full md:h-auto md:w-[450px]"
+            className="w-full md:h-auto md:w-[350px] lg:w-[450px]"
             src={computerIcon}
             alt=""
           />
@@ -45,22 +45,22 @@ export default function FeaturesSection() {
 
         <motion.div
           ref={ref2}
-          initial={{ opacity: 0, x: 250 }}
-          animate={isInView2 ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={isInView2 ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.4, ease: "easeOut" }}
           className="flex flex-col items-center bg-white border border-gray-200 p-4 mb-16 rounded-3xl shadow-xl md:flex-row-reverse md:justify-between max-w-full"
         >
           <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
-            <h5 className="mb-6 pb-2 text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
+            <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
               نسق فعالياتك بسهوله
             </h5>
-            <p className="mb-3 font-light text-gray-500 text-2xl">
+            <p className="mb-3 font-light text-gray-500 text-lg sm:text-xl">
               قم بإنشاء الأحداث التعليمية وإدارتها دون عناء باستخدام أدوات
               متكاملة للجدولة والتواصل ومشاركة الموارد.
             </p>
           </div>
           <Image
-            className="w-full md:h-auto md:w-[450px]"
+            className="w-full md:h-auto md:w-[350px] lg:w-[450px]"
             src={computerIcon}
             alt=""
           />
@@ -68,22 +68,22 @@ export default function FeaturesSection() {
 
         <motion.div
           ref={ref3}
-          initial={{ opacity: 0, x: -250 }}
-          animate={isInView3 ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={isInView3 ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.4, ease: "easeOut" }}
           className="flex flex-col items-center bg-white border border-gray-200 p-4 rounded-3xl shadow-xl md:flex-row md:justify-between max-w-full"
         >
           <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
-            <h5 className="mb-6 pb-2 text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
+            <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
               نسق فعالياتك بسهوله
             </h5>
-            <p className="mb-3 font-light text-gray-500 text-2xl">
+            <p className="mb-3 font-light text-gray-500 text-lg sm:text-xl">
               قم بإنشاء الأحداث التعليمية وإدارتها دون عناء باستخدام أدوات
               متكاملة للجدولة والتواصل ومشاركة الموارد.
             </p>
           </div>
           <Image
-            className="w-full md:h-auto md:w-[450px]"
+            className="w-full md:h-auto md:w-[350px] lg:w-[450px]"
             src={computerIcon}
             alt=""
           />
