@@ -9,14 +9,16 @@ import {
 import Button from "@/components/common/button";
 import Image from "next/image";
 import bars from "@/assets/icons/bars.svg";
-import Link from "next/link";
 import { useState } from "react";
 
 export default function Menu() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLinkClick = () => {
+  const handleLinkClick = (e, sectionId) => {
     setIsOpen(false);
+
+    e.preventDefault();
+    document.querySelector(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -29,27 +31,31 @@ export default function Menu() {
           <SheetTitle className="text-lg font-semibold">Menu</SheetTitle>
         </SheetHeader>
         <SheetDescription className="flex flex-col gap-3">
-          <Link href="#features" scroll={true} onClick={handleLinkClick}>
-            <Button outline className="w-full text-left">
-              المميزات
-            </Button>
-          </Link>
-          <Link href="#events" scroll={true} onClick={handleLinkClick}>
-            <Button outline className="w-full text-left">
-              الفعاليات
-            </Button>
-          </Link>
-          <Link href="#footer" scroll={true} onClick={handleLinkClick}>
-            <Button outline className="w-full text-left">
-              حول منسق
-            </Button>
-          </Link>
-          <Link href="/signin" onClick={handleLinkClick}>
+          <a
+            className="w-full text-left"
+            onClick={(e) => handleLinkClick(e, "#features")}
+          >
+            <Button outline>المميزات</Button>
+          </a>
+          <button
+            className="w-full text-left"
+            onClick={(e) => handleLinkClick(e, "#events")}
+          >
+            <Button outline>الفعاليات</Button>
+          </button>
+          <button
+            className="w-full text-left"
+            onClick={(e) => handleLinkClick(e, "#footer")}
+          >
+            <Button outline>حول منسق</Button>
+          </button>
+
+          <a href="/signin">
             <Button outline>تسجيل دخول</Button>
-          </Link>
-          <Link href="/signup" onClick={handleLinkClick}>
+          </a>
+          <a href="/signup">
             <Button gradient>انشاء الحساب</Button>
-          </Link>
+          </a>
         </SheetDescription>
       </SheetContent>
     </Sheet>

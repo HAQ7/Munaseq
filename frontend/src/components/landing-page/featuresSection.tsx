@@ -29,11 +29,11 @@ export default function FeaturesSection() {
         >
           <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
             <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
-              نسق فعالياتك بسهوله
+              جدولة وترتيب الفعالية بسهولة
             </h5>
             <p className="mb-3 font-light text-custom-gray text-lg sm:text-xl">
-              قم بإنشاء الأحداث التعليمية وإدارتها دون عناء باستخدام أدوات
-              متكاملة للجدولة والتواصل ومشاركة الموارد.
+              المحاضر يقدر يحدد مواعيد الفعاليات وينظم المحتوى بكل سهولة، مما
+              يساعده في تقديم تجربة تعليمية مرتبة وفعّالة للطلاب
             </p>
           </div>
           <Image
@@ -52,11 +52,11 @@ export default function FeaturesSection() {
         >
           <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
             <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
-              نسق فعالياتك بسهوله
+              اختبارات قصيرة أثناء الفعالية
             </h5>
             <p className="mb-3 font-light text-custom-gray text-lg sm:text-xl">
-              قم بإنشاء الأحداث التعليمية وإدارتها دون عناء باستخدام أدوات
-              متكاملة للجدولة والتواصل ومشاركة الموارد.
+              المحاضر يقدر يضيف اختبارات قصيرة خلال الفعالية، والطلاب يحلونها
+              بشكل مباشر، مما يعزز فهمهم ويخليهم يتفاعلون أكثر.
             </p>
           </div>
           <Image
@@ -75,11 +75,11 @@ export default function FeaturesSection() {
         >
           <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
             <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
-              نسق فعالياتك بسهوله
+              شهاده بعد اتمام الفعالية
             </h5>
             <p className="mb-3 font-light text-custom-gray text-lg sm:text-xl">
-              قم بإنشاء الأحداث التعليمية وإدارتها دون عناء باستخدام أدوات
-              متكاملة للجدولة والتواصل ومشاركة الموارد.
+              بعد ما تكمل الفعالية، تاخذ شهادة معتمدة تعزز سيرتك الذاتية وتفتح
+              لك أبواب فرص جديدة.
             </p>
           </div>
           <Image

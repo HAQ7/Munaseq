@@ -6,7 +6,9 @@ import userIcon from "@/assets/land-assets/user-icon.svg";
 import eventIcon from "@/assets/land-assets/event-icon.svg";
 import effectLeft from "@/assets/land-assets/landing-page-effect-left.svg";
 import titleEffect from "@/assets/land-assets/title-effect.svg";
-import userImage from "@/assets/land-assets/user-testimonial-1.svg";
+import testimonial1 from "@/assets/land-assets/testimonial-1.svg";
+import testimonial2 from "@/assets/land-assets/testimonial-2.svg";
+import testimonial3 from "@/assets/land-assets/testimonial-3.svg";
 import glow from "@/assets/land-assets/glow.svg";
 import { Calendar } from "@/components/common/shadcn-ui/calendar";
 import { motion } from "framer-motion";
@@ -48,6 +50,87 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
+      {/* Testimonial Section */}
+      <motion.div
+        className="absolute top-[60%] left-[12%] hidden lg:block"
+        variants={{ animate: { opacity: 1, x: 0 } }}
+        initial={{ opacity: 0, x: -100 }}
+        transition={{ delay: 0.6 }}
+      >
+        <motion.div
+          className="w-80 max-w-md p-4 bg-white border border-gray-200 rounded-3xl shadow-xl sm:p-4"
+          animate={{
+            y: [0, 10, 0],
+            transition: { repeat: Infinity, duration: 5, delay: 1 },
+          }}
+        >
+          <div className="flow-root">
+            <ul role="list" className="divide-y divide-gray-200">
+              <li className="py-3 sm:py-2">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <Image
+                      className="w-10 h-10 rounded-full"
+                      src={testimonial1}
+                      alt=""
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0 ms-4">
+                    <p className="text-sm font-medium text-custom-black truncate">
+                      سلطان
+                    </p>
+                    <p className="text-xs text-custom-gray truncate">
+                      منصة منسق سهلت علي كل شيء، أنصح فيها!
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li className="py-3 sm:py-2">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <Image
+                      className="w-10 h-10 rounded-full"
+                      src={testimonial2}
+                      alt=""
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0 ms-4">
+                    <p className="text-sm font-medium text-custom-black truncate">
+                      خلود
+                    </p>
+                    <p className="text-xs text-custom-gray truncate">
+                      المنصه حلوة، فيها دورات متنوعة!
+                    </p>
+                  </div>
+                </div>
+              </li>
+              {/* Added Testimonial */}
+              <li className="py-3 sm:py-2">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <Image
+                      className="w-10 h-10 rounded-full"
+                      src={testimonial3}
+                      alt=""
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0 ms-4">
+                    <p className="text-sm font-medium text-custom-black truncate">
+                      نايف
+                    </p>
+                    <p className="text-xs text-custom-gray truncate">
+                      تجربتي مع منسق كانت ممتازة جداً!
+                    </p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </motion.div>
+      </motion.div>
+
+      {/* Remaining content here... */}
+
       <motion.div
         className="absolute top-[10%] left-[10%] hidden lg:block"
         variants={{ animate: { opacity: 1, x: 0 } }}
@@ -87,65 +170,7 @@ export default function HeroSection() {
       </motion.div>
 
       <motion.div
-        className="absolute top-[60%] left-[12%] hidden lg:block"
-        variants={{ animate: { opacity: 1, x: 0 } }}
-        initial={{ opacity: 0, x: -100 }}
-        transition={{ delay: 0.6 }}
-      >
-        <motion.div
-          className="w-80 max-w-md p-4 bg-white border border-gray-200 rounded-3xl shadow-xl sm:p-4"
-          animate={{
-            y: [0, 10, 0],
-            transition: { repeat: Infinity, duration: 5, delay: 1 },
-          }}
-        >
-          <div className="flow-root">
-            <ul role="list" className="divide-y divide-gray-200">
-              <li className="py-3 sm:py-2">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <Image
-                      className="w-10 h-10 rounded-full"
-                      src={userImage}
-                      alt=""
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 ms-4">
-                    <p className="text-sm font-medium text-custom-black truncate">
-                      حسام القنام
-                    </p>
-                    <p className="text-sm text-custom-gray truncate">
-                      خدمة جميله جداً وتصميم الموقع أجمل
-                    </p>
-                  </div>
-                </div>
-              </li>
-              <li className="py-3 sm:py-2">
-                <div className="flex items-center ">
-                  <div className="flex-shrink-0">
-                    <Image
-                      className="w-10 h-10 rounded-full"
-                      src={userImage}
-                      alt=""
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0 ms-4">
-                    <p className="text-sm font-medium text-custom-black truncate">
-                      هشام السحباني
-                    </p>
-                    <p className="text-sm text-custom-gray truncate">
-                      خدمة جميله جداً وتصميم الموقع أجمل
-                    </p>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </motion.div>
-      </motion.div>
-
-      <motion.div
-        className="absolute top-[55%] lg:top-[60%] lg:right-[10%] right-[15%] hidden lg:block"
+        className="absolute lg:top-[60%] lg:right-[10%] hidden lg:block"
         variants={{ animate: { opacity: 1, x: 0 } }}
         initial={{ opacity: 0, x: 100 }}
         transition={{ delay: 0.8 }}

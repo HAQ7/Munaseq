@@ -1,4 +1,5 @@
 "use client";
+
 import { motion } from "framer-motion";
 import Button from "../common/button";
 import Image from "next/image";
@@ -12,6 +13,11 @@ const contentVariants = {
 };
 
 export default function Header() {
+  const handleLinkClick = (e, sectionId) => {
+    e.preventDefault();
+    document.querySelector(sectionId)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <header className="p-3 flex justify-between items-center">
       <motion.div
@@ -40,31 +46,37 @@ export default function Header() {
       >
         <ul className="text-custom-black flex font-normal text-xl space-x-20 rtl:space-x-reverse flex-row mt-0">
           <li>
-            <Link
+            <a
               href="#features"
-              scroll={true}
+              onClick={(e) => {
+                handleLinkClick(e, "#features");
+              }}
               className="md:hover:bg-gradient-to-l md:hover:from-primary md:hover:to-secondary md:hover:bg-clip-text md:hover:text-transparent"
             >
               المميزات
-            </Link>
+            </a>
           </li>
           <li>
-            <Link
+            <a
               href="#events"
-              scroll={true}
+              onClick={(e) => {
+                handleLinkClick(e, "#events");
+              }}
               className="md:hover:bg-gradient-to-l md:hover:from-primary md:hover:to-secondary md:hover:bg-clip-text md:hover:text-transparent"
             >
               الفعاليات
-            </Link>
+            </a>
           </li>
           <li>
-            <Link
+            <a
               href="#footer"
-              scroll={true}
+              onClick={(e) => {
+                handleLinkClick(e, "#footer");
+              }}
               className="md:hover:bg-gradient-to-l md:hover:from-primary md:hover:to-secondary md:hover:bg-clip-text md:hover:text-transparent"
             >
               حول منسق
-            </Link>
+            </a>
           </li>
         </ul>
       </motion.div>

@@ -1,7 +1,8 @@
 import React from "react";
 import dateIcon from "@/assets/land-assets/date-icon.svg";
 import timeIcon from "@/assets/land-assets/time-icon.svg";
-import locationIcon from "@/assets/land-assets/location-icon.svg";
+import presenterIcon from "@/assets/land-assets/presenter-icon.svg";
+import rateIcon from "@/assets/land-assets/rate-icon.svg";
 import Image from "next/image";
 import Button from "./button";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
@@ -12,7 +13,8 @@ export default function largeCard({
   description,
   time,
   date,
-  location,
+  presenter,
+  rate,
   cost,
   badges = [],
 }: {
@@ -21,7 +23,8 @@ export default function largeCard({
   description: string;
   time: string;
   date: string;
-  location: string;
+  presenter: string;
+  rate: number;
   cost: string;
   badges: string[];
 }) {
@@ -48,14 +51,14 @@ export default function largeCard({
               {description}
             </p>
             <div>
-              <div className="flex gap-5 mb-3 font-medium">
-                <div className="flex gap-2">
+              <div className="flex gap-5 mb-3 font-medium items-center">
+                <div className="flex gap-2 items-center">
                   <Image src={timeIcon} alt="" />
                   <p className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent text-base">
                     {time}
                   </p>
                 </div>
-                <div className="flex gap-2 font-medium">
+                <div className="flex gap-2 items-center">
                   <Image src={dateIcon} alt="" />
                   <p className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent text-base">
                     {date}
@@ -63,11 +66,19 @@ export default function largeCard({
                 </div>
               </div>
 
-              <div className="flex gap-2 font-medium">
-                <Image src={locationIcon} alt="" />
-                <p className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent text-base">
-                  {location}
-                </p>
+              <div className="flex gap-5 font-medium items-center">
+                <div className="flex gap-2">
+                  <Image src={presenterIcon} alt="" />
+                  <p className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent text-base">
+                    {presenter}
+                  </p>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <Image src={rateIcon} alt="" />
+                  <p className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent text-base">
+                    {rate}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="flex items-center justify-between mt-6">
