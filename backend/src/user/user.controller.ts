@@ -31,7 +31,17 @@ export class UserController {
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    return this.userService.findById(Number(id));
+    return this.userService.findById(+id);
+  }
+
+  @Get('email/:email')
+  async findByEmail(@Param('email') email: string) {
+    return this.userService.findByEmail(email);
+  }
+
+  @Get('username/:username')
+  async findByUsername(@Param('username') username: string) {
+    return this.userService.findByUsername(username);
   }
 
   @UseGuards(AuthGuard)
