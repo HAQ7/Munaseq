@@ -1,6 +1,6 @@
 "use server";
 
-import editProfileAction from "./editProfile-action";
+import editProfileAction from "./edit-profile-action";
 
 export async function signupAction(formData: FormData) {
     const signupData = {

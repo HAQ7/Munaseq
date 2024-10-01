@@ -74,6 +74,7 @@ export default function ProfileForm(props: {
 
     return (
         <motion.div
+            layout
             transition={{ type: "spring", duration: 0.5, bounce: 0 }}
             initial={"next"}
             animate={
@@ -82,78 +83,87 @@ export default function ProfileForm(props: {
             variants={variants}
             className="top-0 w-full"
         >
-            <h1 className="font-bold text-3xl text-center">
-                {" "}
-                بيشوفونها الناس 😎
-            </h1>
-            <div className="grid grid-cols-2 gap-5">
-                <TextField
-                    placeholder="الاسم الاول*"
-                    name="firstName"
-                    ref={firstNameRef}
-                    onBlur={checkFirstNameEmpty}
-                    error={formError.includes("FIRSTNAME_EMPTY")}
-                />
-                <TextField
-                    placeholder="الاسم الاخير*"
-                    name="lastName"
-                    ref={lastNameRef}
-                    onBlur={checkLastNameEmpty}
-                    error={formError.includes("LASTNAME_EMPTY")}
-                />
-            </div>
-            <TextField placeholder="الاسم المعروض" name="displayName" />
-            <div className="grid gap-3 mt-5">
-                <label className="block text-lg text-custom-gray">الجنس</label>
-                <Radio name={"gender"} options={["ذكر", "انثى"]} />
-            </div>
-            <div className="grid gap-3 mt-5">
-                <label
-                    htmlFor="profileImage"
-                    className="block text-lg text-custom-gray"
-                >
-                    صورة العرض
-                </label>
-
-                {image ? (
-                    <div className="flex items-center gap-5">
-                        <div className="w-20 aspect-square relative rounded-full overflow-hidden">
-                            <Image src={image} alt="preview" fill />
-                        </div>
-                        <button
-                            className="rounded-3xl p-2"
-                            onClick={e => {
-                                e.preventDefault();
-                                ref.current.click();
-                            }}
-                        >
-                            تغيير الصورة
-                        </button>
+            <motion.div layout>
+                <motion.div layout>
+                    <h1 className="font-bold text-3xl text-center">
+                        {" "}
+                        بيشوفونها الناس 😎
+                    </h1>
+                    <div className="grid grid-cols-2 gap-5">
+                        <TextField
+                            placeholder="الاسم الاول*"
+                            name="firstName"
+                            ref={firstNameRef}
+                            onBlur={checkFirstNameEmpty}
+                            error={formError.includes("FIRSTNAME_EMPTY")}
+                        />
+                        <TextField
+                            placeholder="الاسم الاخير*"
+                            name="lastName"
+                            ref={lastNameRef}
+                            onBlur={checkLastNameEmpty}
+                            error={formError.includes("LASTNAME_EMPTY")}
+                        />
                     </div>
-                ) : null}
-                <Input
-                    name="profileImage"
-                    id="profileImage"
-                    type="file"
-                    className={"cursor-pointer " + (image ? "hidden" : "")}
-                    accept="image/png, image/jpeg"
-                    onChange={handleImageUpload}
-                    ref={ref}
-                />
-            </div>
-            <motion.div layout className="mt-5">
+                    <TextField placeholder="الاسم المعروض" name="displayName" />
+                    <div className="grid gap-3 mt-5">
+                        <label className="block text-lg text-custom-gray">
+                            الجنس
+                        </label>
+                        <Radio name={"gender"} options={["ذكر", "انثى"]} />
+                    </div>
+                </motion.div>
+                <motion.div className="grid gap-3 mt-5">
+                    <motion.label
+                        layout
+                        htmlFor="profileImage"
+                        className="block text-lg text-custom-gray"
+                    >
+                        صورة العرض
+                    </motion.label>
+
+                    {image ? (
+                        <div className="flex items-center gap-5">
+                            <motion.div layout className="w-20 aspect-square relative rounded-full overflow-hidden">
+                                <Image src={image} alt="preview" fill />
+                            </motion.div>
+                            <motion.button
+                                layout
+                                className="rounded-3xl p-2"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    ref.current.click();
+                                }}
+                            >
+                                تغيير الصورة
+                            </motion.button>
+                        </div>
+                    ) : null}
+                    <Input
+                        name="profileImage"
+                        id="profileImage"
+                        type="file"
+                        className={"cursor-pointer " + (image ? "hidden" : "")}
+                        accept="image/png, image/jpeg"
+                        onChange={handleImageUpload}
+                        ref={ref}
+                    />
+                </motion.div>
+            </motion.div>
+
+            <motion.div layout className="mt-2">
                 {formError.length > 0 && (
                     <motion.div
                         layout
                         animate={{ y: 0, opacity: 1 }}
                         initial={{ y: 12, opacity: 0 }}
                         transition={{ delay: 0.225 }}
-                        className="text-red-500 text-center mt-5"
+                        className="text-red-500 text-center"
                     >
                         الاسم الاول والاخير يجب ان يكون 3 احرف على الاقل
                     </motion.div>
                 )}
-                <motion.div layout className="flex justify-between mt-5">
+                <motion.div layout className="flex justify-between">
                     <Button
                         disabled={props.step !== 2}
                         onClick={props.prevStepHandler}

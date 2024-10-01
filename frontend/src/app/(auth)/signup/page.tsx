@@ -4,7 +4,7 @@ import logoIcon from "@/assets/logo/logo-small-white.svg";
 import munaseq from "@/assets/logo/munaseq-text.svg";
 import Progress from "@/components/auth/progress";
 import { motion, useAnimate } from "framer-motion";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { MutableRefObject, useRef, useState } from "react";
 import Link from "next/link";
 import MainForm from "@/components/auth/main-form";
@@ -100,8 +100,10 @@ export default function SignUp() {
         e.preventDefault();
         setIsLoading(true);
         const token = await signupAction(formData.current);
-        localStorage.setItem("token", token);
-        redirect("/discover");
+        // Save the token in the cookies give 3 days expiry
+        document.cookie = "token=;max-age=0;path=/";
+        document.cookie = `token=${token};max-age=259200;path=/`;
+        router.push("/discover");
     };
 
     return (
@@ -111,13 +113,13 @@ export default function SignUp() {
                 animate={animation}
                 transition={transition}
                 id="card"
-                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] 2xl:p-14 p-4 overflow-hidden grid"
+                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] 2xl:p-14 p-4 py-8 overflow-hidden grid"
             >
                 <div
                     ref={scope}
                     className="grid md:grid-cols-2 md:gap-0 gap-3 h-full place-items-center relative"
                 >
-                    <div className="h-full w-full flex flex-col gap-5 ">
+                    <div className="h-full w-full flex flex-col md:gap-5 ">
                         <Progress step={step} />
                         <Link className="w-full h-full" href={"/"}>
                             <div className="w-full h-full rounded-[50px] bg-gradient-to-br from-primary to-secondary overflow-hidden items-center md:flex flex-col justify-center gap-14 hidden ">
@@ -139,7 +141,7 @@ export default function SignUp() {
                         <form
                             ref={ref}
                             onSubmit={formSubmitHandler}
-                            className="max-w-96 w-full relative 2xl:h-[550px] md:h-[530px] h-[550px]"
+                            className="max-w-96 w-full relative 2xl:h-[550px] md:h-[530px] h-[550px] grid place-items-center"
                         >
                             <MainForm
                                 step={step}

@@ -48,12 +48,12 @@ export default function TagForm(props: {
                 props.step === 3 ? "active" : props.step > 3 ? "past" : "next"
             }
             variants={variants}
-            className="absolute top-0 w-full"
+            className="absolute w-full"
         >
-            <h1 className="font-bold text-3xl text-center">
+            <motion.h1 layout className="font-bold text-3xl text-center">
                 {" "}
                 اختر اللي تحب 🎒
-            </h1>
+            </motion.h1>
 
             <motion.div className="flex flex-wrap gap-2 mt-10 sm:text-[0.75rem] text-xs ">
                 {tags.map((tag, index) => [

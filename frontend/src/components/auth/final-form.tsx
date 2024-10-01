@@ -61,7 +61,7 @@ export default function FinalForm(props: {
                 props.step === 4 ? "active" : props.step > 4 ? "past" : "next"
             }
             variants={variants}
-            className="absolute top-0 w-full"
+            className="absolute w-full"
         >
             <h1 className="font-bold text-3xl text-center">
                 {" "}
@@ -106,7 +106,7 @@ export default function FinalForm(props: {
                 </div>
             )}
 
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex justify-between items-center mt-4">
                 {!props.isLoading ? (
                     <>
                         <Button
