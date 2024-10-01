@@ -10,6 +10,7 @@ export default function FinalForm(props: {
     step: number;
     prevStepHandler: (e: MouseEvent) => void;
     formData: FormData;
+    isLoading: boolean;
 }) {
     let tags: string[] = [];
     let image: string = "";
@@ -18,7 +19,7 @@ export default function FinalForm(props: {
         tags = props.formData.getAll("tags") as string[];
     }
 
-    let file = props.formData.get('profileImage');
+    let file = props.formData.get("profileImage");
     if (file instanceof File && file.size > 0) {
         image = URL.createObjectURL(props.formData.get("profileImage") as any);
     }
@@ -110,7 +111,7 @@ export default function FinalForm(props: {
                     السابق
                 </Button>
                 <Button className="shadow-xl px-10" gradient>
-                    تأكيد الحساب
+                    {props.isLoading ? <div className=" border-white border-s-2 border-e-2 border-t-2 animate-spin w-5 aspect-square rounded-full"/> : "تأكيد الحساب"}
                 </Button>
             </div>
         </motion.div>

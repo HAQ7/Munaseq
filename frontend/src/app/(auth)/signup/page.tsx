@@ -11,12 +11,13 @@ import MainForm from "@/components/auth/main-form";
 import ProfileForm from "@/components/auth/profile-form";
 import TagForm from "@/components/auth/tag-form";
 import FinalForm from "@/components/auth/final-form";
+import { signupAction } from "@/proxy/signup-action";
 
 export default function SignUp() {
     const [step, setStep] = useState(1);
     const [scope, animate] = useAnimate();
+    const [isLoading, setIsLoading] = useState(false);
     const tags: MutableRefObject<string[]> = useRef([]);
-    const [isFormDone, setFormDone] = useState(false);
     const ref = useRef({} as HTMLFormElement);
     const router = useRouter();
     const animation = {
@@ -70,6 +71,13 @@ export default function SignUp() {
         }
     };
 
+    const formSubmitHandler = async (e: any) => {
+        e.preventDefault();
+        setIsLoading(true);
+        await signupAction(formData.current);
+        setIsLoading(false);
+    };
+
     return (
         <div ref={scope}>
             <motion.div
@@ -83,7 +91,7 @@ export default function SignUp() {
                     ref={scope}
                     className="grid md:grid-cols-2 md:gap-0 gap-3 h-full place-items-center relative"
                 >
-                    <div className="h-full w-full flex flex-col gap-5">
+                    <div className="h-full w-full flex flex-col gap-5 ">
                         <Progress step={step} />
                         <Link className="w-full h-full" href={"/"}>
                             <div className="w-full h-full rounded-[50px] bg-gradient-to-br from-primary to-secondary overflow-hidden items-center md:flex flex-col justify-center gap-14 hidden ">
@@ -101,10 +109,10 @@ export default function SignUp() {
                         </Link>
                     </div>
 
-                    <div className="w-full sm:px-10 flex flex-col items-center exit-right overflow-hidden pt-10">
+                    <div className="w-full sm:px-10 flex flex-col items-center exit-right overflow-hidden pt-5">
                         <form
                             ref={ref}
-                            action=""
+                            onSubmit={formSubmitHandler}
                             className="max-w-96 w-full relative h-[550px]"
                         >
                             <MainForm
@@ -127,6 +135,7 @@ export default function SignUp() {
                                 step={step}
                                 prevStepHandler={prevStepHandler}
                                 formData={formData.current}
+                                isLoading={isLoading}
                             />
                         </form>
                         <p className="mt-4 text-[#949494] text-center">
