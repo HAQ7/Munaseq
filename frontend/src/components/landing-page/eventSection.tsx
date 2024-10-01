@@ -4,11 +4,12 @@ import Image from "next/image";
 import courseImage from "@/assets/land-assets/event-image.svg"; // For testing
 import titleEffect from "@/assets/land-assets/title-effect.svg"; // For testing
 import Button from "../common/button";
+import LogoLoading from "../common/logo-loading";
 
 export default function EventSection() {
   return (
     <div id="events" className="container mx-auto px-4 py-24 relative">
-      <h1 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl font-bold mb-12 text-center">
+      <h1 className="text-custom-black text-3xl sm:text-4xl md:text-5xl font-bold mb-12 text-center">
         فعاليات{" "}
         <span className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
           منسقين

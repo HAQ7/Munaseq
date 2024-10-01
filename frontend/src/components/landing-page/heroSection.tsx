@@ -31,14 +31,14 @@ export default function HeroSection() {
             className="absolute -z-10 lg:block hidden"
             alt="effect"
           />
-          <h1 className="text-gray-900 text-5xl font-bold mb-4 leading-snug">
+          <h1 className="text-custom-black text-5xl font-bold mb-4 leading-snug">
             ننسق{" "}
             <span className="bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
               فعالياتك التعليمية{" "}
             </span>
             من الاف الى الياء
           </h1>
-          <p className="text-gray-500 text-lg font-light mb-4">
+          <p className="text-custom-gray text-lg font-light mb-4">
             منسق هي منصة متكاملة لإدارة الفعاليات التعليمية الحضورية و
             الالكترونية مثل الدورات و ورش العمل و المحاضرات
           </p>
@@ -62,7 +62,7 @@ export default function HeroSection() {
           }}
         >
           <AnimatedCounter from={0} to={2874} />
-          <p className="font-light text-xl text-gray-500">مستفيد</p>
+          <p className="font-light text-xl text-custom-gray">مستفيد</p>
           <Image src={userIcon} alt={""} />
         </motion.div>
       </motion.div>
@@ -111,10 +111,10 @@ export default function HeroSection() {
                     />
                   </div>
                   <div className="flex-1 min-w-0 ms-4">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-sm font-medium text-custom-black truncate">
                       حسام القنام
                     </p>
-                    <p className="text-sm text-gray-500 truncate">
+                    <p className="text-sm text-custom-gray truncate">
                       خدمة جميله جداً وتصميم الموقع أجمل
                     </p>
                   </div>
@@ -130,10 +130,10 @@ export default function HeroSection() {
                     />
                   </div>
                   <div className="flex-1 min-w-0 ms-4">
-                    <p className="text-sm font-medium text-gray-900 truncate">
+                    <p className="text-sm font-medium text-custom-black truncate">
                       هشام السحباني
                     </p>
-                    <p className="text-sm text-gray-500 truncate">
+                    <p className="text-sm text-custom-gray truncate">
                       خدمة جميله جداً وتصميم الموقع أجمل
                     </p>
                   </div>

@@ -40,11 +40,11 @@ export default function largeCard({
               </span>
             ))}
 
-            <h5 className="my-2 text-3xl font-bold tracking-tight text-gray-900">
+            <h5 className="my-2 text-3xl font-bold tracking-tight text-custom-black">
               {title}
             </h5>
 
-            <p className="mb-4 font-light text-gray-500 text-sm">
+            <p className="mb-4 font-light text-custom-gray text-sm">
               {description}
             </p>
             <div>
@@ -71,7 +71,7 @@ export default function largeCard({
               </div>
             </div>
             <div className="flex items-center justify-between mt-6">
-              <p className="text-2xl font-bold">{cost}</p>
+              <p className="text-2xl font-bold text-custom-black">{cost}</p>
               <Button gradient>انضم الان</Button>
             </div>
           </div>

@@ -31,7 +31,7 @@ export default function FeaturesSection() {
             <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
               نسق فعالياتك بسهوله
             </h5>
-            <p className="mb-3 font-light text-gray-500 text-lg sm:text-xl">
+            <p className="mb-3 font-light text-custom-gray text-lg sm:text-xl">
               قم بإنشاء الأحداث التعليمية وإدارتها دون عناء باستخدام أدوات
               متكاملة للجدولة والتواصل ومشاركة الموارد.
             </p>
@@ -54,7 +54,7 @@ export default function FeaturesSection() {
             <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
               نسق فعالياتك بسهوله
             </h5>
-            <p className="mb-3 font-light text-gray-500 text-lg sm:text-xl">
+            <p className="mb-3 font-light text-custom-gray text-lg sm:text-xl">
               قم بإنشاء الأحداث التعليمية وإدارتها دون عناء باستخدام أدوات
               متكاملة للجدولة والتواصل ومشاركة الموارد.
             </p>
@@ -77,7 +77,7 @@ export default function FeaturesSection() {
             <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
               نسق فعالياتك بسهوله
             </h5>
-            <p className="mb-3 font-light text-gray-500 text-lg sm:text-xl">
+            <p className="mb-3 font-light text-custom-gray text-lg sm:text-xl">
               قم بإنشاء الأحداث التعليمية وإدارتها دون عناء باستخدام أدوات
               متكاملة للجدولة والتواصل ومشاركة الموارد.
             </p>

@@ -53,7 +53,7 @@ export default function animatedCounter({
   }, [ref, inView, from, to]);
   return (
     <span
-      className="text-5xl font-semibold tracking-tight text-gray-900 block"
+      className="text-5xl font-semibold tracking-tight text-custom-black block"
       ref={ref}
     />
   );
