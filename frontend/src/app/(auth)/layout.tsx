@@ -17,8 +17,8 @@ export default function AuthLayout({
 }>) {
     
     return (
-        <>
-            <div className="absolute overflow-hidden w-screen h-screen -z-10">
+        <div className="grid place-items-center overflow-hidden">
+            <div className="absolute overflow-hidden  h-screen -z-10">
                 <Image
                     alt="deco"
                     src={strange}
@@ -50,9 +50,9 @@ export default function AuthLayout({
                     className="fixed bottom-0 left-0"
                 />
             </div>
-            <section className="w-screen min-h-screen grid place-items-center overflow-hidden">
+            <section className="min-h-screen grid place-items-center">
                 {children}
             </section>
-        </>
+        </div>
     );
 }
