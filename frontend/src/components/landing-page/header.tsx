@@ -38,7 +38,7 @@ export default function Header() {
         transition={{ duration: 0.3, ease: "easeOut" }}
         variants={contentVariants}
       >
-        <ul className="flex font-normal text-xl space-x-20 rtl:space-x-reverse flex-row mt-0">
+        <ul className="text-custom-black flex font-normal text-xl space-x-20 rtl:space-x-reverse flex-row mt-0">
           <li>
             <Link
               href="#features"
