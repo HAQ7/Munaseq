@@ -85,7 +85,7 @@ export default function SignUp() {
                 animate={animation}
                 transition={transition}
                 id="card"
-                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] 2xl:p-14 p-8 overflow-hidden grid"
+                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] 2xl:p-14 p-4 overflow-hidden grid"
             >
                 <div
                     ref={scope}
@@ -113,7 +113,7 @@ export default function SignUp() {
                         <form
                             ref={ref}
                             onSubmit={formSubmitHandler}
-                            className="max-w-96 w-full relative h-[550px]"
+                            className="max-w-96 w-full relative 2xl:h-[550px] md:h-[530px] h-[550px]"
                         >
                             <MainForm
                                 step={step}
