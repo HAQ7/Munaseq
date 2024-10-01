@@ -19,6 +19,7 @@ import { UpdateEventDto } from './dtos/update-event.dto';
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
+  // dtos for createEvent and updateEvent will probably need to be updated
   @UseGuards(AuthGuard)
   @Post()
   create(

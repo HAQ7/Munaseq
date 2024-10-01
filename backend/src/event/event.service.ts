@@ -18,7 +18,13 @@ export class EventService {
   }
 
   getAllEvents() {
-    return this.prisma.event.findMany();
+    return this.prisma.event.findMany(
+      {
+        where: {
+          isPublic: true,
+        },
+      },
+    );
   }
 
   // this function needs availabilty attribute from the event table
