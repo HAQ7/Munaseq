@@ -50,7 +50,6 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
-      {/* Testimonial Section */}
       <motion.div
         className="absolute top-[60%] left-[12%] hidden lg:block"
         variants={{ animate: { opacity: 1, x: 0 } }}
@@ -104,7 +103,7 @@ export default function HeroSection() {
                   </div>
                 </div>
               </li>
-              {/* Added Testimonial */}
+
               <li className="py-3 sm:py-2">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
@@ -128,8 +127,6 @@ export default function HeroSection() {
           </div>
         </motion.div>
       </motion.div>
-
-      {/* Remaining content here... */}
 
       <motion.div
         className="absolute top-[10%] left-[10%] hidden lg:block"

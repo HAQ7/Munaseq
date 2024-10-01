@@ -26,7 +26,18 @@ export default function EventSection() {
           time="3 ساعات"
           date="24/10/10"
           presenter="محمد ال محمود"
-          rate={4.4}
+          rate={4.9}
+          cost="200 ريال"
+          badges={[]}
+        />
+        <LargeCard
+          image={courseImage}
+          title="اسم الفعالية"
+          description="تقدم هذه الدورة مقدمة شاملة في مهارات الحاسب الآلي الأساسية..."
+          time="3 ساعات"
+          date="24/10/10"
+          presenter="محمد ال محمود"
+          rate={4.9}
           cost="200 ريال"
           badges={[]}
         />
@@ -48,18 +59,7 @@ export default function EventSection() {
           time="3 ساعات"
           date="24/10/10"
           presenter="محمد ال محمود"
-          rate={4.4}
-          cost="200 ريال"
-          badges={[]}
-        />
-        <LargeCard
-          image={courseImage}
-          title="اسم الفعالية"
-          description="تقدم هذه الدورة مقدمة شاملة في مهارات الحاسب الآلي الأساسية..."
-          time="3 ساعات"
-          date="24/10/10"
-          presenter="محمد ال محمود"
-          rate={4.4}
+          rate={4.9}
           cost="200 ريال"
           badges={[]}
         />

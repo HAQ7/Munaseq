@@ -1,7 +1,10 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import computerIcon from "@/assets/land-assets/computer-icon.svg";
+
+import quizImage from "@/assets/land-assets/quiz-image.svg";
+import mangeEventImage from "@/assets/land-assets/mange-event-image.svg";
+import certificateImage from "@/assets/land-assets/certificate-image.svg";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
@@ -25,22 +28,24 @@ export default function FeaturesSection() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={isInView1 ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="flex flex-col items-center bg-white border border-gray-200 p-4 mb-16 rounded-3xl shadow-xl md:flex-row md:justify-between max-w-full"
+          className="flex flex-col items-center bg-white border border-gray-200 p-10 mb-16 rounded-3xl shadow-xl md:flex-row md:justify-between max-w-full"
         >
-          <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
-            <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
-              جدولة وترتيب الفعالية بسهولة
+          <div className="flex flex-col justify-between p-4 text-center md:text-right md:w-1/2">
+            <h5 className="mb-6 pb-2 text-4xl font-bold bg-gradient-to-l from-primary to-secondary leading-tight bg-clip-text text-transparent">
+              جدولة وتنسيق الفعالية بسهولة
             </h5>
             <p className="mb-3 font-light text-custom-gray text-lg sm:text-xl">
               المحاضر يقدر يحدد مواعيد الفعاليات وينظم المحتوى بكل سهولة، مما
               يساعده في تقديم تجربة تعليمية مرتبة وفعّالة للطلاب
             </p>
           </div>
-          <Image
-            className="w-full md:h-auto md:w-[350px] lg:w-[450px]"
-            src={computerIcon}
-            alt=""
-          />
+          <div className="w-[300px] h-[300px] md:w-[350px] lg:w-[400px]">
+            <Image
+              className="object-contain w-full h-full"
+              src={mangeEventImage}
+              alt="Manage Event"
+            />
+          </div>
         </motion.div>
 
         <motion.div
@@ -48,10 +53,10 @@ export default function FeaturesSection() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={isInView2 ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="flex flex-col items-center bg-white border border-gray-200 p-4 mb-16 rounded-3xl shadow-xl md:flex-row-reverse md:justify-between max-w-full"
+          className="flex flex-col items-center bg-white border border-gray-200 p-10 mb-16 rounded-3xl shadow-xl md:flex-row-reverse md:justify-between max-w-full"
         >
-          <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
-            <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
+          <div className="flex flex-col justify-between p-4 text-center md:text-right md:w-1/2">
+            <h5 className="mb-6 pb-2 text-4xl leading-tight font-bold bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
               اختبارات قصيرة أثناء الفعالية
             </h5>
             <p className="mb-3 font-light text-custom-gray text-lg sm:text-xl">
@@ -59,11 +64,13 @@ export default function FeaturesSection() {
               بشكل مباشر، مما يعزز فهمهم ويخليهم يتفاعلون أكثر.
             </p>
           </div>
-          <Image
-            className="w-full md:h-auto md:w-[350px] lg:w-[450px]"
-            src={computerIcon}
-            alt=""
-          />
+          <div className="w-[300px] h-[300px] md:w-[350px] lg:w-[400px]">
+            <Image
+              className="object-contain w-full h-full"
+              src={quizImage}
+              alt="Quiz"
+            />
+          </div>
         </motion.div>
 
         <motion.div
@@ -71,10 +78,10 @@ export default function FeaturesSection() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={isInView3 ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="flex flex-col items-center bg-white border border-gray-200 p-4 rounded-3xl shadow-xl md:flex-row md:justify-between max-w-full"
+          className="flex flex-col items-center bg-white border border-gray-200 p-10 rounded-3xl shadow-xl md:flex-row md:justify-between max-w-full"
         >
-          <div className="flex flex-col justify-between p-4 leading-normal text-center md:text-right md:w-1/2">
-            <h5 className="mb-6 pb-2 text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
+          <div className="flex flex-col justify-between p-4 text-center md:text-right md:w-1/2">
+            <h5 className="mb-6 pb-2 text-4xl leading-tight font-bold bg-gradient-to-l from-primary to-secondary bg-clip-text text-transparent">
               شهاده بعد اتمام الفعالية
             </h5>
             <p className="mb-3 font-light text-custom-gray text-lg sm:text-xl">
@@ -82,11 +89,13 @@ export default function FeaturesSection() {
               لك أبواب فرص جديدة.
             </p>
           </div>
-          <Image
-            className="w-full md:h-auto md:w-[350px] lg:w-[450px]"
-            src={computerIcon}
-            alt=""
-          />
+          <div className="w-[300px] h-[300px] md:w-[350px] lg:w-[400px]">
+            <Image
+              className="object-contain w-full h-full"
+              src={certificateImage}
+              alt="Certificate"
+            />
+          </div>
         </motion.div>
       </div>
     </div>
