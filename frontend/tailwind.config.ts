@@ -9,7 +9,24 @@ const config: Config = {
     theme: {
         extend: {
             boxShadow: {
-                "strong": "0 0 50px 0 #D7D7D7"
+                strong: "0 0 50px 0 #D7D7D7",
+            },
+            animation: {
+                rotate: "rotate 10s infinite linear",
+            },
+            keyframes: {
+                rotate: {
+                    "0%": { transform: "rotate(0deg)" },
+                    "100%": { transform: "rotate(360deg)" },
+                },
+            },
+            colors: {
+                "primary": "#ae00fe",
+                "secondary": "#652bb7",
+                "custom-gray": "#949494",
+            },
+            backgroundImage: {
+                "custom-gradient": "linear-gradient(90deg, #ae00fe 0%, #652bb7 100%)",
             }
         },
     },
