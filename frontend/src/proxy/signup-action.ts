@@ -1,6 +1,5 @@
 "use server";
 
-import fileToBase64 from "@/util/file-base64";
 import editProfileAction from "./editProfile-action";
 
 export async function signupAction(formData: FormData) {
@@ -20,16 +19,12 @@ export async function signupAction(formData: FormData) {
         body: JSON.stringify(signupData),
     });
 
-    const token = await response.json();
-    // TO CHANGE TO BASE64 IN FRONT END ----------------------------------------------------------------------
-    const base64String: any = fileToBase64(
-        formData.get("profileImage") as File
-    );
-    const base64Data = base64String.split(",")[1];
+    const data = await response.json();
+    const token = data.access_token;
 
     const profileData = {
         visibleName: formData.get("displayName") as string,
-        profilePicture: base64Data,
+        profilePicture: formData.get("profileImage") as string,
         gender: formData.get("gender") as string,
         categories: formData.getAll("tags") as string[],
     };

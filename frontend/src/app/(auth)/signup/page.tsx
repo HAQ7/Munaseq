@@ -4,7 +4,7 @@ import logoIcon from "@/assets/logo/logo-small-white.svg";
 import munaseq from "@/assets/logo/munaseq-text.svg";
 import Progress from "@/components/auth/progress";
 import { motion, useAnimate } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { MutableRefObject, useRef, useState } from "react";
 import Link from "next/link";
 import MainForm from "@/components/auth/main-form";
@@ -63,19 +63,45 @@ export default function SignUp() {
 
     let formData: MutableRefObject<FormData> = useRef(new FormData());
 
-    const submitTags = (selectedTags: string[]) => {
+    const fileToBase64: (file: File) => Promise<string> = (file: File) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+        });
+    };
+
+    const formFinalization = async (selectedTags: string[]) => {
+        // Save the selected tags in a ref
         tags.current = selectedTags;
         formData.current = new FormData(ref.current);
         for (const tag of tags.current) {
             formData.current.append("tags", tag);
+        }
+
+        // Convert the image to base64
+        const image = formData.current.get("profileImage") as File;
+        const base64Image: string = await fileToBase64(image);
+        formData.current.set("profileImage", base64Image);
+
+        // translates gender to english
+        const formGender = formData.current.get("gender");
+        switch (formGender) {
+            case "ذكر":
+                formData.current.set("gender", "MALE");
+                break;
+            case "انثى":
+                formData.current.set("gender", "FEMALE");
+                break;
         }
     };
 
     const formSubmitHandler = async (e: any) => {
         e.preventDefault();
         setIsLoading(true);
-        await signupAction(formData.current);
-        setIsLoading(false);
+        const token = await signupAction(formData.current);
+        localStorage.setItem("token", token);
+        redirect("/discover");
     };
 
     return (
@@ -128,7 +154,7 @@ export default function SignUp() {
                                 step={step}
                                 nextStepHandler={nextStepHandler}
                                 prevStepHandler={prevStepHandler}
-                                submitTags={submitTags}
+                                submitTags={formFinalization}
                             />
 
                             <FinalForm

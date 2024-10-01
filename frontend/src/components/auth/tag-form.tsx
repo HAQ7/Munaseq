@@ -97,7 +97,7 @@ export default function TagForm(props: {
                     </Button>
                     <Button
                         disabled={props.step !== 3}
-                        onClick={e => {
+                        onClick={async e => {
                             e.preventDefault();
                             if (validateInputs()) {
                                 props.submitTags(addedTags.current);

@@ -11,7 +11,9 @@ export default async function editProfileAction(token: any , data:any) {
         },
         body: JSON.stringify(data),
     });
+    const responseJson = await response.json();
+    console.log(responseJson);
 
-    return await response.json();
+    // return await response.json();
 }
 

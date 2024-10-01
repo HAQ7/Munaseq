@@ -131,7 +131,7 @@ export default function mainForm(props: {
       variants={variants}
       className="absolute top-0 w-full"
     >
-      <h1 className="font-bold 2x:text-3xl text-2xl text-center">
+      <h1 className="font-bold text-3xl text-center">
         {' '}
         متحمسين لدخولك 🔥
       </h1>
@@ -176,7 +176,7 @@ export default function mainForm(props: {
         onBlur={checkPassswordMatch}
         error={formError.includes('PASSWORD_MISMATCH')}
       />
-      <motion.div layout>
+      <motion.div layout className='mt-5'>
         {formError.length > 0 && (
           <motion.div
             layout
@@ -188,7 +188,7 @@ export default function mainForm(props: {
             {getError()}
           </motion.div>
         )}
-        <motion.div layout>
+        <motion.div layout className='mt-5'>
           <Button
             disabled={props.step > 1}
             onClick={(e) => {
@@ -197,7 +197,7 @@ export default function mainForm(props: {
                 props.nextStepHandler(e);
               }
             }}
-            className="mt-5 shadow-xl min-w-full"
+            className="shadow-xl min-w-full"
           >
             انتقل الى الحساب التعريفي
           </Button>
