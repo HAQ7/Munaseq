@@ -92,7 +92,6 @@ export default function SignIn() {
         document.cookie = "token=;max-age=0;path=/";
         let token = "";
         token = await signinAction(formData);
-        console.log(token)
         if (!token) {
             setIsLoading(false);
             setFormError(["AUTHENTICATION_FAILED"]);
