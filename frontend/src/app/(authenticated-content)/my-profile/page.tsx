@@ -60,7 +60,7 @@ export default async function MyProfile() {
                 </div>
                 <div className="mt-5 flex gap-1">
                     <Image src={tag} alt="catigory icon" className="w-10" />
-                    <div>
+                    <div className="flex flex-wrap">
                         {data.categories.map((category: string) => {
                             return <Tag key={category}>{category}</Tag>;
                         })}

@@ -26,10 +26,11 @@ export default function AuthContentLayout({
                     <Link href="/">
                         <Image
                             priority
-                            className="w-52 xl:block hidden absolute left-5 top-5"
+                            className="w-52 xl:block hidden absolute left-0 top-5"
                             src={logo}
                             alt="Munaseq logo"
                         />
+                        
                     </Link>
                     <div className="w-3/4 max-w-[500px] min-w-[300px] bg-white rounded-full shadow-md flex items-center p-2">
                         <input
