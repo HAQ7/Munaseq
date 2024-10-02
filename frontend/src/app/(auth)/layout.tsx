@@ -18,7 +18,7 @@ export default function AuthLayout({
     
     return (
         <div className="grid place-items-center overflow-hidden">
-            <div className="absolute overflow-hidden  h-screen -z-10">
+            <div className="absolute overflow-hidden w-screen h-screen -z-10">
                 <Image
                     alt="deco"
                     src={strange}

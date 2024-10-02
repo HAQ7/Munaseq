@@ -4,7 +4,6 @@ import Image from "next/image";
 import courseImage from "@/assets/land-assets/event-image.svg"; // For testing
 import titleEffect from "@/assets/land-assets/title-effect.svg"; // For testing
 import Button from "../common/button";
-import LogoLoading from "../common/logo-loading";
 
 export default function EventSection() {
   return (
@@ -26,7 +25,8 @@ export default function EventSection() {
           description="تقدم هذه الدورة مقدمة شاملة في مهارات الحاسب الآلي الأساسية..."
           time="3 ساعات"
           date="24/10/10"
-          location="جامعة الملك سعود، كلية الحاسب"
+          presenter="محمد ال محمود"
+          rate={4.9}
           cost="200 ريال"
           badges={[]}
         />
@@ -36,7 +36,8 @@ export default function EventSection() {
           description="تقدم هذه الدورة مقدمة شاملة في مهارات الحاسب الآلي الأساسية..."
           time="3 ساعات"
           date="24/10/10"
-          location="جامعة الملك سعود، كلية الحاسب"
+          presenter="محمد ال محمود"
+          rate={4.9}
           cost="200 ريال"
           badges={[]}
         />
@@ -46,7 +47,8 @@ export default function EventSection() {
           description="تقدم هذه الدورة مقدمة شاملة في مهارات الحاسب الآلي الأساسية..."
           time="3 ساعات"
           date="24/10/10"
-          location="جامعة الملك سعود، كلية الحاسب"
+          presenter="محمد ال محمود"
+          rate={4.4}
           cost="200 ريال"
           badges={[]}
         />
@@ -56,7 +58,8 @@ export default function EventSection() {
           description="تقدم هذه الدورة مقدمة شاملة في مهارات الحاسب الآلي الأساسية..."
           time="3 ساعات"
           date="24/10/10"
-          location="جامعة الملك سعود، كلية الحاسب"
+          presenter="محمد ال محمود"
+          rate={4.9}
           cost="200 ريال"
           badges={[]}
         />

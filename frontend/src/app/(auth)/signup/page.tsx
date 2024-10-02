@@ -63,19 +63,47 @@ export default function SignUp() {
 
     let formData: MutableRefObject<FormData> = useRef(new FormData());
 
-    const submitTags = (selectedTags: string[]) => {
+    const fileToBase64: (file: File) => Promise<string> = (file: File) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+        });
+    };
+
+    const formFinalization = async (selectedTags: string[]) => {
+        // Save the selected tags in a ref
         tags.current = selectedTags;
         formData.current = new FormData(ref.current);
         for (const tag of tags.current) {
             formData.current.append("tags", tag);
+        }
+
+        // Convert the image to base64
+        const image = formData.current.get("profileImage") as File;
+        const base64Image: string = await fileToBase64(image);
+        formData.current.set("profileImage", base64Image);
+
+        // translates gender to english
+        const formGender = formData.current.get("gender");
+        switch (formGender) {
+            case "ذكر":
+                formData.current.set("gender", "MALE");
+                break;
+            case "انثى":
+                formData.current.set("gender", "FEMALE");
+                break;
         }
     };
 
     const formSubmitHandler = async (e: any) => {
         e.preventDefault();
         setIsLoading(true);
-        await signupAction(formData.current);
-        setIsLoading(false);
+        const token = await signupAction(formData.current);
+        // Save the token in the cookies give 3 days expiry
+        document.cookie = "token=;max-age=0;path=/";
+        document.cookie = `token=${token};max-age=259200;path=/`;
+        router.push("/discover");
     };
 
     return (
@@ -85,13 +113,13 @@ export default function SignUp() {
                 animate={animation}
                 transition={transition}
                 id="card"
-                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] 2xl:p-14 p-4 overflow-hidden grid"
+                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] 2xl:p-14 p-4 py-8 overflow-hidden grid"
             >
                 <div
                     ref={scope}
                     className="grid md:grid-cols-2 md:gap-0 gap-3 h-full place-items-center relative"
                 >
-                    <div className="h-full w-full flex flex-col gap-5 ">
+                    <div className="h-full w-full flex flex-col md:gap-5 ">
                         <Progress step={step} />
                         <Link className="w-full h-full" href={"/"}>
                             <div className="w-full h-full rounded-[50px] bg-gradient-to-br from-primary to-secondary overflow-hidden items-center md:flex flex-col justify-center gap-14 hidden ">
@@ -113,7 +141,7 @@ export default function SignUp() {
                         <form
                             ref={ref}
                             onSubmit={formSubmitHandler}
-                            className="max-w-96 w-full relative 2xl:h-[550px] md:h-[530px] h-[550px]"
+                            className="max-w-96 w-full relative 2xl:h-[550px] md:h-[530px] h-[550px] grid place-items-center"
                         >
                             <MainForm
                                 step={step}
@@ -128,7 +156,7 @@ export default function SignUp() {
                                 step={step}
                                 nextStepHandler={nextStepHandler}
                                 prevStepHandler={prevStepHandler}
-                                submitTags={submitTags}
+                                submitTags={formFinalization}
                             />
 
                             <FinalForm

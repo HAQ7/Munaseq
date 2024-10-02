@@ -5,6 +5,8 @@ import Image from "next/image";
 import mail from "@/assets/icons/mail.svg";
 import user from "@/assets/icons/user-gradiant.svg";
 import userCircle from "@/assets/icons/user-circle.svg";
+import { MutableRefObject, useRef } from "react";
+import LogoLoading from "../common/logo-loading";
 
 export default function FinalForm(props: {
     step: number;
@@ -13,7 +15,7 @@ export default function FinalForm(props: {
     isLoading: boolean;
 }) {
     let tags: string[] = [];
-    let image: string = "";
+    let image: MutableRefObject<string> = useRef("");
 
     if (props.formData.getAll("tags").length > 0) {
         tags = props.formData.getAll("tags") as string[];
@@ -21,7 +23,9 @@ export default function FinalForm(props: {
 
     let file = props.formData.get("profileImage");
     if (file instanceof File && file.size > 0) {
-        image = URL.createObjectURL(props.formData.get("profileImage") as any);
+        image.current = URL.createObjectURL(
+            props.formData.get("profileImage") as any
+        );
     }
 
     const data = {
@@ -57,7 +61,7 @@ export default function FinalForm(props: {
                 props.step === 4 ? "active" : props.step > 4 ? "past" : "next"
             }
             variants={variants}
-            className="absolute top-0 w-full"
+            className="absolute w-full"
         >
             <h1 className="font-bold text-3xl text-center">
                 {" "}
@@ -68,8 +72,8 @@ export default function FinalForm(props: {
                 <div className="grid gap-2 mt-10">
                     <div className="flex gap-3">
                         <div className="w-20 aspect-square relative rounded-full overflow-hidden">
-                            {image.length > 0 ? (
-                                <Image src={image} alt="preview" fill />
+                            {image.current.length > 0 ? (
+                                <Image src={image.current} alt="preview" fill />
                             ) : (
                                 <Image src={userCircle} alt="preview" fill />
                             )}
@@ -102,17 +106,25 @@ export default function FinalForm(props: {
                 </div>
             )}
 
-            <div className="flex justify-between items-center mt-2">
-                <Button
-                    disabled={props.step !== 3}
-                    onClick={props.prevStepHandler}
-                    className="bg-transparent !text-custom-gray"
-                >
-                    السابق
-                </Button>
-                <Button className="shadow-xl px-10" gradient>
-                    {props.isLoading ? <div className=" border-white border-s-2 border-e-2 border-t-2 animate-spin w-5 aspect-square rounded-full"/> : "تأكيد الحساب"}
-                </Button>
+            <div className="flex justify-between items-center mt-4">
+                {!props.isLoading ? (
+                    <>
+                        <Button
+                            disabled={props.step !== 3}
+                            onClick={props.prevStepHandler}
+                            className="bg-transparent !text-custom-gray"
+                        >
+                            السابق
+                        </Button>
+                        <Button className="shadow-xl px-10" gradient>
+                            تأكيد الحساب
+                        </Button>{" "}
+                    </>
+                ) : (
+                    <div className="w-full grid place-items-center">
+                        <LogoLoading className="w-20" />
+                    </div>
+                )}
             </div>
         </motion.div>
     );
