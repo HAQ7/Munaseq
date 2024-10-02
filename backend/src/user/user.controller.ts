@@ -19,31 +19,38 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(AuthGuard)
-  @Patch()
-  async editUserInfo(@GetCurrentUserId() id, @Body() EditUserDto: EditUserInfoDto) {
-    return this.userService.editUserInfo(id, EditUserDto);
+  @Get('me')
+  async getMe(@GetCurrentUserId() id) {
+    return this.userService.findById(id);
   }
 
+  
   @Get()
   async findAll() {
     return this.userService.findAllUsers();
   }
-
+  
   @Get(':id')
   async findById(@Param('id') id: string) {
     return this.userService.findById(+id);
   }
-
+  
   @Get('email/:email')
   async findByEmail(@Param('email') email: string) {
     return this.userService.findByEmail(email);
   }
-
+  
   @Get('username/:username')
   async findByUsername(@Param('username') username: string) {
     return this.userService.findByUsername(username);
   }
-
+  
+  @UseGuards(AuthGuard)
+  @Patch()
+  async editUserInfo(@GetCurrentUserId() id, @Body() EditUserDto: EditUserInfoDto) {
+    return this.userService.editUserInfo(id, EditUserDto);
+  }
+  
   @UseGuards(AuthGuard)
   @Post('changePassword')
   changePassword(
