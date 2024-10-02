@@ -24,7 +24,6 @@ export class UserController {
     return this.userService.findById(id);
   }
 
-  
   @Get()
   async findAll() {
     return this.userService.findAllUsers();
@@ -44,7 +43,7 @@ export class UserController {
   async findByUsername(@Param('username') username: string) {
     return this.userService.findByUsername(username);
   }
-  
+
   @UseGuards(AuthGuard)
   @Patch()
   async editUserInfo(@GetCurrentUserId() id, @Body() EditUserDto: EditUserInfoDto) {
