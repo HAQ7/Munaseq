@@ -32,7 +32,7 @@ export default function Nav() {
         },
         {
             name: "الملف الشخصي",
-            path: "/profile",
+            path: "/my-profile",
             icon: user,
             iconActive: userActive,
         },

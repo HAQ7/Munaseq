@@ -13,7 +13,7 @@ export default function AuthContentLayout({
 }>) {
     return (
         <section className="w-screen flex grid-cols-2">
-            <div className="h-screen w-80">
+            <div className="h-screen w-[22rem]">
                 <Menu />
             </div>
             <div className="relative flex-1">
@@ -42,7 +42,10 @@ export default function AuthContentLayout({
                         </Button>
                     </div>
                 </header>
+                <div className="px-20">
+
                 {children}
+                </div>
             </div>
         </section>
     );

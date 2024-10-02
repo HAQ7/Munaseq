@@ -33,6 +33,7 @@ const config: Config = {
         secondary: "#652bb7",
         "custom-gray": "#949494",
         "custom-black": "#333333",
+        "custome-light-gray": "#949494",
         
       },
       backgroundImage: {

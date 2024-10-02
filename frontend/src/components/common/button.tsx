@@ -42,7 +42,7 @@ export default function Button(props: {
         <button
             onClick={props.onClick}
             className={
-                "px-4 h-10 bg-[length:120%] hover:bg-right transition-all bg-black rounded-full text-white font-semibold grid place-items-center text-nowrap  " +
+                "px-4 h-10 bg-[length:120%] hover:bg-right transition-all bg-black hover:bg-[#222222] rounded-full text-white font-semibold grid place-items-center text-nowrap  " +
                 (props.className ? props.className : "")
             }
         >
