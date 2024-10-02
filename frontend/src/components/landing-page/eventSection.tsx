@@ -64,6 +64,7 @@ export default function EventSection() {
           badges={[]}
         />
       </div>
+
       <div className="w-fit mx-auto pt-20">
         <Button gradient>المزيد..</Button>
       </div>

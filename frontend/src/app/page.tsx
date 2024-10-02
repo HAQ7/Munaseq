@@ -11,7 +11,6 @@ export default function Home() {
       <HeroSection />
       <FeaturesSection />
       <EventSection />
-      <Error />
       <FooterSection />
     </div>
   );
