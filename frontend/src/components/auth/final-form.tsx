@@ -22,7 +22,7 @@ export default function FinalForm(props: {
     }
 
     let file = props.formData.get("profileImage");
-    if (file instanceof File && file.size > 0) {
+    if (file instanceof Blob && file.size > 0) {
         image.current = URL.createObjectURL(
             props.formData.get("profileImage") as any
         );

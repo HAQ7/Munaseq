@@ -1,36 +1,64 @@
-import { NextResponse, NextRequest } from "next/server";
-import getProfileAction from "./proxy/get-profile-action";
+import { NextResponse, NextRequest } from 'next/server';
+import getProfileAction from './proxy/get-profile-action';
+
+const pathsNeedingAuth: string[] = [
+  '/discover',
+  '/:username',
+  '/coordinated-events',
+  '/joined-events',
+  '/account',
+];
 
 export async function middleware(req: NextRequest) {
-    if (req.nextUrl.pathname.startsWith("/discover")) {
-        const token = req.cookies.get("token");
+  const pathname: string = req.nextUrl.pathname;
 
-        if (!token) {
-            return NextResponse.redirect(new URL("/signin", req.url));
-        }
+  for (const path of pathsNeedingAuth) {
+    if (pathname.startsWith(path)) {
+      const token = req.cookies.get('token');
 
-        const { username } = await getProfileAction(token.value);
+      if (!token) {
+        return NextResponse.redirect(new URL('/signin', req.url));
+      }
 
-        if (!username) {
-            return NextResponse.redirect(new URL("/signin", req.url));
-        }
+      const { username }: { username: string } = await getProfileAction(
+        token.value
+      );
 
-        return NextResponse.next();
+      if (!username) {
+        return NextResponse.redirect(new URL('/signin', req.url));
+      }
+
+      console.log('authed !!')
+
+      const requestHeaders = new Headers(req.headers);
+      requestHeaders.set('username', username);
+
+      const response = NextResponse.next({
+        request: {
+          // New request headers
+          headers: requestHeaders,
+        },
+      });
+
+      return response;
     }
-    if (req.nextUrl.pathname.startsWith("/signin")) {
-        const token = req.cookies.get("token");
+  }
+  if (req.nextUrl.pathname.startsWith('/signin')) {
+    const token = req.cookies.get('token');
 
-        if (token) {
-            const { username } = await getProfileAction(token.value);
-            if (username) {
-                return NextResponse.redirect(new URL("/discover", req.url));
-            }
-        }
-
-        return NextResponse.next();
+    if (token) {
+      const { username } = await getProfileAction(token.value);
+      if (username) {
+        return NextResponse.redirect(new URL('/discover', req.url));
+      }
     }
+
+    return NextResponse.next();
+  }
 }
 
+const allPaths = [...pathsNeedingAuth, 'signin']
+
 export const config = {
-    matcher: ["/discover", "/signin"],
+  matcher: allPaths,
 };
