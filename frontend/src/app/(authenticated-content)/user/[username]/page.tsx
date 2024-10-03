@@ -3,14 +3,19 @@ import userCircle from "@/assets/icons/user-circle.svg";
 import Link from "next/link";
 import edit from "@/assets/icons/edit.svg";
 import Subtitle from "@/components/authenticated-content/subtitle";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import getProfileAction from "@/proxy/get-profile-action";
 import convertBase64ToImage from "@/util/convertBase64ToImage";
 import { redirect } from "next/navigation";
 import tag from "@/assets/auth-content-assets/tag.svg";
 import Tag from "@/components/common/tag";
+// import { Metadata } from "next";
 
-export default async function MyProfile() {
+// export const metadata: Metadata = {
+//     title: username
+// };
+
+export default async function UserProfile() {
     const cookiesStore = cookies();
     const token = cookiesStore.get("token");
     let data: any;
@@ -77,3 +82,4 @@ export default async function MyProfile() {
     }
     redirect("/signin");
 }
+

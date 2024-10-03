@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: 'اكتشف'
+    title: 'معلومات الحساب'
 };
 
-export default function Discover() {
+export default function Account() {
     return (
         <div>
             

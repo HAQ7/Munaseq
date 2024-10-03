@@ -21,7 +21,7 @@ type NavLink = {
     iconActive: StaticImport;
 };
 
-export default function Nav() {
+export default function Nav(props: { username: string }) {
     const pathname = usePathname();
     const navLinks: NavLink[] = [
         {
@@ -32,13 +32,13 @@ export default function Nav() {
         },
         {
             name: "الملف الشخصي",
-            path: "/my-profile",
+            path: "/user/" + props.username,
             icon: user,
             iconActive: userActive,
         },
         {
             name: "الفعاليات المنسقة",
-            path: "/organized-events",
+            path: "/coordinated-events",
             icon: calender,
             iconActive: calenderActive,
         },
