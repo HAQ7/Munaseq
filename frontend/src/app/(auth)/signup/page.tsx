@@ -1,4 +1,5 @@
 "use client";
+
 import Image from "next/image";
 import logoIcon from "@/assets/logo/logo-small-white.svg";
 import munaseq from "@/assets/logo/munaseq-text.svg";
@@ -12,11 +13,13 @@ import ProfileForm from "@/components/auth/profile-form";
 import TagForm from "@/components/auth/tag-form";
 import FinalForm from "@/components/auth/final-form";
 import { signupAction } from "@/proxy/signup-action";
+import ErrorForm from "@/components/auth/error-form";
+import { useFormState } from "react-dom";
 
 export default function SignUp() {
     const [step, setStep] = useState(1);
     const [scope, animate] = useAnimate();
-    const [isLoading, setIsLoading] = useState(false);
+    const [error, formAction] = useFormState(signupAction, { message: "" });
     const tags: MutableRefObject<string[]> = useRef([]);
     const ref = useRef({} as HTMLFormElement);
     const router = useRouter();
@@ -81,9 +84,13 @@ export default function SignUp() {
 
         // Convert the image to base64
         const image = formData.current.get("profileImage") as File;
-        const base64Image: string = await fileToBase64(image);
-        formData.current.set("profileImage", base64Image);
-
+        if (image.size > 0) {
+            const base64Image: string = await fileToBase64(image);
+            formData.current.set("profileImage", base64Image);
+        }
+        if (image.size === 0) {
+            formData.current.delete("profileImage");
+        }
         // translates gender to english
         const formGender = formData.current.get("gender");
         switch (formGender) {
@@ -94,16 +101,6 @@ export default function SignUp() {
                 formData.current.set("gender", "FEMALE");
                 break;
         }
-    };
-
-    const formSubmitHandler = async (e: any) => {
-        e.preventDefault();
-        setIsLoading(true);
-        const token = await signupAction(formData.current);
-        // Save the token in the cookies give 3 days expiry
-        document.cookie = "token=;max-age=0;path=/";
-        document.cookie = `token=${token};max-age=259200;path=/`;
-        router.push("/discover");
     };
 
     return (
@@ -140,31 +137,38 @@ export default function SignUp() {
                     <div className="w-full sm:px-10 flex flex-col items-center exit-right overflow-hidden pt-5">
                         <form
                             ref={ref}
-                            onSubmit={formSubmitHandler}
+                            onSubmit={async e => {
+                                e.preventDefault();
+                                formAction(formData.current);
+                            }}
                             className="max-w-96 w-full relative 2xl:h-[550px] md:h-[530px] h-[550px] grid place-items-center"
                         >
-                            <MainForm
-                                step={step}
-                                nextStepHandler={nextStepHandler}
-                            />
-                            <ProfileForm
-                                step={step}
-                                nextStepHandler={nextStepHandler}
-                                prevStepHandler={prevStepHandler}
-                            />
-                            <TagForm
-                                step={step}
-                                nextStepHandler={nextStepHandler}
-                                prevStepHandler={prevStepHandler}
-                                submitTags={formFinalization}
-                            />
-
-                            <FinalForm
-                                step={step}
-                                prevStepHandler={prevStepHandler}
-                                formData={formData.current}
-                                isLoading={isLoading}
-                            />
+                            {!error.message ? (
+                                <>
+                                    <MainForm
+                                        step={step}
+                                        nextStepHandler={nextStepHandler}
+                                    />
+                                    <ProfileForm
+                                        step={step}
+                                        nextStepHandler={nextStepHandler}
+                                        prevStepHandler={prevStepHandler}
+                                    />
+                                    <TagForm
+                                        step={step}
+                                        nextStepHandler={nextStepHandler}
+                                        prevStepHandler={prevStepHandler}
+                                        submitTags={formFinalization}
+                                    />
+                                    <FinalForm
+                                        step={step}
+                                        prevStepHandler={prevStepHandler}
+                                        formData={formData.current}
+                                    />
+                                </>
+                            ) : (
+                                <ErrorForm message={error.message} />
+                            )}
                         </form>
                         <p className="mt-4 text-[#949494] text-center">
                             لديك حساب؟{" "}

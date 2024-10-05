@@ -7,8 +7,6 @@ export async function signinAction(formData: FormData) {
     };
 
     try {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
         const response = await fetch(`http://localhost:3000/auth/signin`, {
             method: "POST",
             headers: {

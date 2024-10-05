@@ -14,7 +14,7 @@ import { useState } from "react";
 export default function Menu() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLinkClick = (e, sectionId) => {
+  const handleLinkClick = (e: any, sectionId: string) => {
     setIsOpen(false);
 
     e.preventDefault();

@@ -13,7 +13,7 @@ const contentVariants = {
 };
 
 export default function Header() {
-  const handleLinkClick = (e, sectionId) => {
+  const handleLinkClick = (e: any, sectionId: string) => {
     e.preventDefault();
     document.querySelector(sectionId)?.scrollIntoView({ behavior: "smooth" });
   };

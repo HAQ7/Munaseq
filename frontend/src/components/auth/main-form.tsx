@@ -2,7 +2,6 @@ import TextField from "@/components/common/text-field";
 import Button from "@/components/common/button";
 import { motion, Variants } from "framer-motion";
 import { useRef, useState } from "react";
-import { set } from "date-fns";
 import LogoLoading from "../common/logo-loading";
 
 export default function mainForm(props: {
@@ -27,7 +26,7 @@ export default function mainForm(props: {
             visibility: "visible",
         },
     };
-    const validateEmail: () => boolean = () => {
+    const isEmailCorrect: () => boolean = () => {
         const re = /\S+@\S+\.\S+/;
         if (!re.test(emailRef.current.value)) {
             if (!formError.includes("EMAIL_INVALID")) {
@@ -38,7 +37,7 @@ export default function mainForm(props: {
         setFormError(prev => prev.filter(e => e !== "EMAIL_INVALID"));
         return true;
     };
-    const checkEmailNotEmpty: () => boolean = () => {
+    const isEmailNotEmpty: () => boolean = () => {
         if (emailRef.current.value.length < 3) {
             if (!formError.includes("EMAIL_EMPTY")) {
                 setFormError(prev => [...prev, "EMAIL_EMPTY"]);
@@ -49,7 +48,9 @@ export default function mainForm(props: {
         return true;
     };
 
-    const checkUsernameNotEmpty: () => boolean = () => {
+    // const isEmailUnique: () => boolean = async () => {};
+
+    const isUsernameNotEmpty: () => boolean = () => {
         if (usernameRef.current.value.length < 3) {
             if (!formError.includes("USERNAME_EMPTY")) {
                 setFormError(prev => [...prev, "USERNAME_EMPTY"]);
@@ -60,7 +61,7 @@ export default function mainForm(props: {
         return true;
     };
 
-    const checkPasswordNotEmpty: () => boolean = () => {
+    const isPasswordNotEmpty: () => boolean = () => {
         if (passwordRef.current.value.length < 3) {
             if (!formError.includes("PASSWORD_EMPTY")) {
                 setFormError(prev => [...prev, "PASSWORD_EMPTY"]);
@@ -71,7 +72,7 @@ export default function mainForm(props: {
         return true;
     };
 
-    const checkPassswordMatch: () => boolean = () => {
+    const doesPassswordMatch: () => boolean = () => {
         if (passwordRef.current.value !== confirmPasswordRef.current.value) {
             if (!formError.includes("PASSWORD")) {
                 setFormError(prev => [...prev, "PASSWORD_MISMATCH"]);
@@ -83,27 +84,13 @@ export default function mainForm(props: {
     };
 
     const validateInputs: () => boolean = () => {
-        if (!checkEmailNotEmpty()) {
-            return false;
-        }
-
-        if (!checkUsernameNotEmpty()) {
-            return false;
-        }
-
-        if (!checkPasswordNotEmpty()) {
-            return false;
-        }
-
-        if (!checkPassswordMatch()) {
-            return false;
-        }
-
-        if (!validateEmail()) {
-            return false;
-        }
-
-        return true;
+        return (
+            isEmailNotEmpty() &&
+            isUsernameNotEmpty() &&
+            isPasswordNotEmpty() &&
+            doesPassswordMatch() &&
+            isEmailCorrect()
+        );
     };
 
     const getError: () => string = () => {
@@ -143,8 +130,8 @@ export default function mainForm(props: {
                     className="w-full"
                     ref={emailRef}
                     onBlur={() => {
-                        validateEmail();
-                        checkEmailNotEmpty();
+                        isEmailCorrect();
+                        isEmailNotEmpty();
                     }}
                     error={
                         formError.includes("EMAIL_INVALID") ||
@@ -156,7 +143,7 @@ export default function mainForm(props: {
                     name="username"
                     className="w-full"
                     ref={usernameRef}
-                    onBlur={checkUsernameNotEmpty}
+                    onBlur={isUsernameNotEmpty}
                     error={formError.includes("USERNAME_EMPTY")}
                 />
                 <TextField
@@ -164,7 +151,7 @@ export default function mainForm(props: {
                     name="password"
                     type="password"
                     ref={passwordRef}
-                    onBlur={checkPasswordNotEmpty}
+                    onBlur={isPasswordNotEmpty}
                     error={
                         formError.includes("PASSWORD_MISMATCH") ||
                         formError.includes("PASSWORD_EMPTY")
@@ -175,7 +162,7 @@ export default function mainForm(props: {
                     name="confirmPassword"
                     type="password"
                     ref={confirmPasswordRef}
-                    onBlur={checkPassswordMatch}
+                    onBlur={doesPassswordMatch}
                     error={formError.includes("PASSWORD_MISMATCH")}
                 />
             </motion.div>
