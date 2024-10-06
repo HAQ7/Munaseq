@@ -3,6 +3,8 @@ import Button from "@/components/common/button";
 import { motion, Variants } from "framer-motion";
 import { useRef, useState } from "react";
 import LogoLoading from "../common/logo-loading";
+import isEmailUniqueAction from "@/proxy/is-email-unique-action";
+import isUsernameUniqueAction from "@/proxy/is-username-unique-action";
 
 export default function mainForm(props: {
     step: number;
@@ -13,6 +15,9 @@ export default function mainForm(props: {
     const passwordRef = useRef({} as HTMLInputElement);
     const confirmPasswordRef = useRef({} as HTMLInputElement);
     const [formError, setFormError] = useState([] as string[]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    console.log(formError)
 
     const variants: Variants = {
         past: {
@@ -48,7 +53,34 @@ export default function mainForm(props: {
         return true;
     };
 
-    // const isEmailUnique: () => boolean = async () => {};
+    const isEmailUnique = async () => {
+        setIsLoading(true);
+        const data = await isEmailUniqueAction(emailRef.current.value);
+        console.log(data);
+        if (!data.passed) {
+            if (!formError.includes(data.error)) {
+                setFormError(prev => [...prev, data.error]);
+            }
+            setIsLoading(false);
+            return false;
+        }
+        setFormError(prev => prev.filter(e => e !== 'EMAIL_NOT_UNIQUE' && e !== 'ERROR'));
+        setIsLoading(false);
+        return true;
+    };
+    const isUsernameUnique = async () => {
+        const data = await isUsernameUniqueAction(usernameRef.current.value);
+        if (!data.passed) {
+            if (!formError.includes(data.error)) {
+                setFormError(prev => [...prev, data.error]);
+            }
+            setIsLoading(false);
+            return false;
+        }
+        setFormError(prev => prev.filter(e => e !== 'USERNAME_NOT_UNIQUE' && e !== 'ERROR'));
+        setIsLoading(false);
+        return true;
+    };
 
     const isUsernameNotEmpty: () => boolean = () => {
         if (usernameRef.current.value.length < 3) {
@@ -83,19 +115,31 @@ export default function mainForm(props: {
         return true;
     };
 
-    const validateInputs: () => boolean = () => {
-        return (
+    const validateInputs = async () => {
+        if (
             isEmailNotEmpty() &&
             isUsernameNotEmpty() &&
             isPasswordNotEmpty() &&
             doesPassswordMatch() &&
-            isEmailCorrect()
-        );
+            isEmailCorrect() &&
+            (await isEmailUnique()) &&
+            (await isUsernameUnique())
+        ) {
+            setFormError([]);
+            return true;
+        }
+        return false;
     };
 
     const getError: () => string = () => {
         if (formError.includes("EMAIL_INVALID")) {
             return "الايميل غير صحيح";
+        }
+        if (formError.includes("EMAIL_NOT_UNIQUE")) {
+            return "الايميل موجود بالفعل";
+        }
+        if (formError.includes("USERNAME_NOT_UNIQUE")) {
+            return "اسم المستخدم موجود بالفعل";
         }
         if (formError.includes("EMAIL_EMPTY")) {
             return "الايميل لا يمكن ان يكون اقل من 3 احرف";
@@ -108,6 +152,9 @@ export default function mainForm(props: {
         }
         if (formError.includes("PASSWORD_MISMATCH")) {
             return "كلمة المرور غير متطابقة";
+        }
+        if (formError.includes("ERROR")) {
+            return "حدث خطأ, الرجاء المحاولة في وقت لاحق";
         }
         return "";
     };
@@ -132,10 +179,12 @@ export default function mainForm(props: {
                     onBlur={() => {
                         isEmailCorrect();
                         isEmailNotEmpty();
+                        // await isEmailUnique();
                     }}
                     error={
                         formError.includes("EMAIL_INVALID") ||
-                        formError.includes("EMAIL_EMPTY")
+                        formError.includes("EMAIL_EMPTY") ||
+                        formError.includes("EMAIL_NOT_UNIQUE")
                     }
                 />
                 <TextField
@@ -143,8 +192,14 @@ export default function mainForm(props: {
                     name="username"
                     className="w-full"
                     ref={usernameRef}
-                    onBlur={isUsernameNotEmpty}
-                    error={formError.includes("USERNAME_EMPTY")}
+                    onBlur={() => {
+                        isUsernameNotEmpty();
+                        // await isUsernameUnique();
+                    }}
+                    error={
+                        formError.includes("USERNAME_EMPTY") ||
+                        formError.includes("USERNAME_NOT_UNIQUE")
+                    }
                 />
                 <TextField
                     placeholder="كلمة المرور*"
@@ -178,19 +233,28 @@ export default function mainForm(props: {
                         {getError()}
                     </motion.div>
                 )}
-                <motion.div layout className="mt-5">
-                    <Button
-                        disabled={props.step > 1}
-                        onClick={e => {
-                            e.preventDefault();
-                            if (validateInputs()) {
-                                props.nextStepHandler(e);
-                            }
-                        }}
-                        className="shadow-xl min-w-full"
-                    >
-                        انتقل الى الحساب التعريفي
-                    </Button>
+                <motion.div
+                    layout
+                    className="mt-5 h-10 grid place-items-center"
+                >
+                    {!isLoading ? (
+                        <Button
+                            disabled={props.step > 1}
+                            onClick={async e => {
+                                e.preventDefault();
+                                if (await validateInputs()) {
+                                    props.nextStepHandler(e);
+                                }
+                            }}
+                            className="shadow-xl min-w-full"
+                        >
+                            انتقل الى الحساب التعريفي
+                        </Button>
+                    ) : (
+                        <LogoLoading
+                            className={"w-14 aspect-square absolute"}
+                        />
+                    )}
                 </motion.div>
             </motion.div>
         </motion.div>
