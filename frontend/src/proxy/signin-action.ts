@@ -27,8 +27,6 @@ export async function signinAction(prevState: any, formData: FormData) {
     }
 
     const data = await response.json();
-
-    console.log(data);
     const token = data.access_token;
 
     if (!token) {
@@ -38,7 +36,6 @@ export async function signinAction(prevState: any, formData: FormData) {
     const cookieStore = cookies();
     cookieStore.set('token', token, { maxAge: 259200, path: '/' });
   } catch (error: any) {
-    console.log(error);
     return { message: error.message };
   }
   redirect('/discover');
