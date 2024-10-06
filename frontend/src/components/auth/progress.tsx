@@ -20,14 +20,14 @@ export default function Progress(props: { step: number }) {
                     <Image
                         src={userGreen}
                         alt={"user green icon"}
-                        className="absolute w-14"
+                        className="absolute w-12"
                     />
                 </motion.div>
                 <motion.div animate={props.step === 1 ? {opacity: 1} : {opacity: 0}}>
                     <Image
                         src={userGradient}
                         alt={"user Gradient icon"}
-                        className="w-14"
+                        className="w-12"
                     />
                 </motion.div>
             </div>
@@ -36,18 +36,18 @@ export default function Progress(props: { step: number }) {
                     <Image
                         src={userCircleGreen}
                         alt={"profile green icon"}
-                        className="absolute w-14"
+                        className="absolute w-12"
                     />
                 </motion.div>
                 <motion.div animate={props.step === 2 ? {opacity: 1} : {opacity: 0}}>
                     <Image
                         src={userCircleGradient}
                         alt={"profile gradient icon"}
-                        className="absolute w-14"
+                        className="absolute w-12"
                     />
                 </motion.div>
                 <motion.div animate={props.step < 2 ? {opacity: 1} : {opacity: 0}}>
-                    <Image src={userCircle} alt={"profile icon"} className="w-14" />
+                    <Image src={userCircle} alt={"profile icon"} className="w-12" />
                 </motion.div>
             </div>
             <div>
@@ -55,18 +55,18 @@ export default function Progress(props: { step: number }) {
                     <Image
                         src={tagGreen}
                         alt={"tag green icon"}
-                        className="absolute w-14"
+                        className="absolute w-12"
                     />
                 </motion.div>
                 <motion.div animate={props.step === 3 ? {opacity: 1} : {opacity: 0}}>
                     <Image
                         src={tagGradient}
                         alt={"tag gradient icon"}
-                        className="absolute w-14"
+                        className="absolute w-12"
                     />
                 </motion.div>
                 <motion.div animate={props.step < 3 ? {opacity: 1} : {opacity: 0}}>
-                    <Image src={tag} alt={"tah icon"} className="w-14" />
+                    <Image src={tag} alt={"tah icon"} className="w-12" />
                 </motion.div>
             </div>
             <div>
@@ -74,11 +74,11 @@ export default function Progress(props: { step: number }) {
                     <Image
                         src={checkGradient}
                         alt={"check gradient icon"}
-                        className="absolute w-14"
+                        className="absolute w-12"
                     />
                 </motion.div>
                 <motion.div animate={props.step < 4 ? {opacity: 1} : {opacity: 0}}>
-                    <Image src={check} alt={"check icon"} className="w-14" />
+                    <Image src={check} alt={"check icon"} className="w-12" />
                 </motion.div>
             </div>
         </motion.div>

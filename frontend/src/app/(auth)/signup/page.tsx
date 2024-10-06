@@ -110,7 +110,7 @@ export default function SignUp() {
                 animate={animation}
                 transition={transition}
                 id="card"
-                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] 2xl:p-14 p-4 py-8 overflow-hidden grid"
+                className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] 2xl:p-14 p-4 overflow-hidden grid"
             >
                 <div
                     ref={scope}
