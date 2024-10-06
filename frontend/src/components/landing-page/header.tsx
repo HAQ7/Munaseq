@@ -37,7 +37,7 @@ export default function Header() {
       </motion.div>
 
       <motion.div
-        className="hidden md:flex w-full md:w-auto"
+        className="hidden md:flex w-full md:w-auto mr-[3.2rem]"
         id="navbar-solid-bg"
         initial="initial"
         animate="animate"
