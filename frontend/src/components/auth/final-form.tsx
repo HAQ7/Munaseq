@@ -7,16 +7,15 @@ import user from "@/assets/icons/user-gradiant.svg";
 import userCircle from "@/assets/icons/user-circle.svg";
 import { MutableRefObject, useRef } from "react";
 import LogoLoading from "../common/logo-loading";
-import { useFormStatus } from "react-dom";
 
 export default function FinalForm(props: {
     step: number;
     prevStepHandler: (e: MouseEvent) => void;
     formData: FormData;
+    isLoading: boolean;
 }) {
     let tags: string[] = [];
     let image: MutableRefObject<string> = useRef("");
-    const { pending }: {pending: boolean} = useFormStatus(); 
 
     if (props.formData.getAll("tags").length > 0) {
         tags = props.formData.getAll("tags") as string[];
@@ -108,7 +107,7 @@ export default function FinalForm(props: {
             )}
 
             <div className="flex justify-between items-center mt-4">
-                {!pending ? (
+                {!props.isLoading ? (
                     <>
                         <Button
                             disabled={props.step !== 3}

@@ -14,12 +14,12 @@ import TagForm from "@/components/auth/tag-form";
 import FinalForm from "@/components/auth/final-form";
 import { signupAction } from "@/proxy/signup-action";
 import ErrorForm from "@/components/auth/error-form";
-import { useFormState } from "react-dom";
 
 export default function SignUp() {
     const [step, setStep] = useState(1);
     const [scope, animate] = useAnimate();
-    const [error, formAction] = useFormState(signupAction, { message: "" });
+    const [error, setError] = useState({ message: "" });
+    const [isLoading, setIsLoading] = useState(false);
     const tags: MutableRefObject<string[]> = useRef([]);
     const ref = useRef({} as HTMLFormElement);
     const router = useRouter();
@@ -139,7 +139,13 @@ export default function SignUp() {
                             ref={ref}
                             onSubmit={async e => {
                                 e.preventDefault();
-                                formAction(formData.current);
+                                setIsLoading(true);
+                                const error = await signupAction(formData.current);
+                                setIsLoading(false);
+                                if (error?.message) {
+                                    setError({ message: error.message });
+                                }
+                                
                             }}
                             className="max-w-96 w-full relative 2xl:h-[550px] md:h-[530px] h-[550px] grid place-items-center"
                         >
@@ -161,6 +167,7 @@ export default function SignUp() {
                                         submitTags={formFinalization}
                                     />
                                     <FinalForm
+                                        isLoading={isLoading}
                                         step={step}
                                         prevStepHandler={prevStepHandler}
                                         formData={formData.current}

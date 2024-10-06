@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export async function signinAction(prevState: any, formData: FormData) {
+export async function signinAction(formData: FormData) {
   const signinData = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,

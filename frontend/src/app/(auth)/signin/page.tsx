@@ -10,22 +10,15 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { signinAction } from '@/proxy/signin-action';
 import { useState, useRef, useEffect } from 'react';
-import { useFormState } from 'react-dom';
 import SubmitButton from '@/components/auth/submit-button';
 
 export default function SignIn() {
   const [scope, animate] = useAnimate();
   const [formError, setFormError] = useState([] as string[]);
-  const [error, formAction] = useFormState(signinAction, { message: '' });
+  const [isLoading, setIsLoading] = useState(false);
   const emailRef = useRef({} as HTMLInputElement);
   const passwordRef = useRef({} as HTMLInputElement);
   const router = useRouter();
-
-  useEffect(() => {
-    if (error?.message) {
-      setFormError([...formError, error.message]);
-    }
-  }, [error]);
 
   const animation = {
     x: 0,
@@ -88,14 +81,19 @@ export default function SignIn() {
     }
   };
 
-  const formSubmitHandler = (e: any) => {
+  const formSubmitHandler = async (e: any) => {
     e.preventDefault();
+    setIsLoading(true);
     if (!checkEmailNotEmpty() || !checkPasswordNotEmpty()) {
       return;
     }
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
-    formAction(formData);
+    const error = await signinAction(formData);
+    if (error?.message) {
+      setFormError((prev) => [...prev, error.message]);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -155,7 +153,7 @@ export default function SignIn() {
                 layout
                 className="mt-5 grid place-items-center relative h-10"
               >
-                <SubmitButton>تسجيل الدخول</SubmitButton>
+                <SubmitButton isLoading={isLoading}>تسجيل الدخول</SubmitButton>
               </motion.div>
             </form>
             <motion.p layout className="mt-4 text-[#949494]">

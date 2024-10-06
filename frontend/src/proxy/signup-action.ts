@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function signupAction(prevState: any, formData: FormData) {
+export async function signupAction(formData: FormData) {
     const signupData = {
         username: formData.get("username") as string,
         email: formData.get("email") as string,
@@ -44,7 +44,6 @@ export async function signupAction(prevState: any, formData: FormData) {
             },
             body: JSON.stringify(profileData),
         });
-
 
         if (!editResponse.ok) {
             throw new Error(`HTTP error! status: ${editResponse.status}`);
