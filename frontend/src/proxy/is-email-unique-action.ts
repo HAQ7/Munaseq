@@ -1,8 +1,7 @@
-'use server';
+"use server";
 
 export default async function isEmailUniqueAction(email: string) {
     try {
-        throw new Error("ERROR");
         const response = await fetch(
             `http://localhost:3000/user/email/${email}`,
             {
@@ -20,8 +19,6 @@ export default async function isEmailUniqueAction(email: string) {
         if (response.status !== 404 && !response.ok) {
             throw new Error("ERROR");
         }
-
-
 
         return { passed: true, error: "" };
     } catch (error: any) {
