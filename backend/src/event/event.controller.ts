@@ -35,6 +35,12 @@ export class EventController {
     return this.eventService.getAllEvents();
   }
 
+  // what if the event is not public?
+  @Get(':id')
+  getById(@Param('id') id: string) {
+    return this.eventService.getById(+id);
+  }
+
   //   @Get(':id')
   //   getByID(@Param('id') id: string, @GetCurrentUserId() eventCreatorId: number) {
   //     return this.eventService.getById(+id, eventCreatorId);

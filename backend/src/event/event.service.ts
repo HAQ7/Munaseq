@@ -27,6 +27,12 @@ export class EventService {
     );
   }
 
+  getById(id: number) {
+    return this.prisma.event.findUnique({
+      where: { id },
+    });
+  }
+
   // this function needs availabilty attribute from the event table
 //   getById(id: number, userID: number) {
 //     const availablitity = this.prisma.event.findUnique({
