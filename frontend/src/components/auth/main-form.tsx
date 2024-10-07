@@ -17,8 +17,6 @@ export default function mainForm(props: {
     const [formError, setFormError] = useState([] as string[]);
     const [isLoading, setIsLoading] = useState(false);
 
-    console.log(formError)
-
     const variants: Variants = {
         past: {
             x: "50%",
