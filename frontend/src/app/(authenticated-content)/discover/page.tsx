@@ -1,13 +1,14 @@
+import Subtitle from "@/components/common/subtitle";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: 'اكتشف'
+  title: "اكتشف",
 };
 
 export default function Discover() {
-    return (
-        <div>
-            
-        </div>
-    );
+  return (
+    <div>
+      <Subtitle>من أعلى المنسقين تقييما </Subtitle>
+    </div>
+  );
 }
