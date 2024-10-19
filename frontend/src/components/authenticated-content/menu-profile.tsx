@@ -6,19 +6,20 @@ import convertBase64ToImage from "@/util/convertBase64ToImage";
 import { cookies } from "next/headers";
 import Dropdown from "../common/dropdown";
 import { redirect } from "next/navigation";
+import { UserDataDto } from "@/dtos/user-data.dto";
 
 export default async function MenuProfile() {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token");
-  let data: any;
+  let data: UserDataDto;
   if (token) {
     data = await getProfileAction(token.value);
     return (
       <div className="flex gap-3 p-5 items-center">
         <div className="w-20 aspect-square relative rounded-full overflow-hidden">
-          {data.profilePicture ? (
+          {data.profilePictureUrl ? (
             <Image
-              src={convertBase64ToImage(data.profilePicture)}
+              src={data.profilePictureUrl}
               alt="preview"
               fill
               priority

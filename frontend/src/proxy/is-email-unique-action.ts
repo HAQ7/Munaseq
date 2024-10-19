@@ -3,7 +3,7 @@
 export default async function isEmailUniqueAction(email: string) {
     try {
         const response = await fetch(
-            `http://localhost:3000/user/email/${email}`,
+            `http://localhost:3002/user/email/${email}`,
             {
                 method: "GET",
                 headers: {

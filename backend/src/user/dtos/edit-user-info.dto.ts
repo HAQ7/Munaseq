@@ -29,13 +29,9 @@ export class EditUserInfoDto {
   @IsEmail()
   email?: string;
 
-  @IsOptional()
-  @IsString()
-  organizationName?: string;
+ 
 
-  @IsOptional()
-  @IsUrl()
-  profilePicture?: string; // Assume the profile picture is a URL
+
 
   @IsOptional()
   @IsString()
@@ -45,6 +41,7 @@ export class EditUserInfoDto {
   @IsEnum(Gender)
   gender?: Gender;
 
+  
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
