@@ -6,7 +6,12 @@ import {
   IsDate,
   IsInt,
   IsArray,
+  IsEnum,
+  IsNumber,
+  IsBoolean,
 } from 'class-validator';
+import { Gender } from '@prisma/client';
+import { Transform } from 'class-transformer';
 
 export class CreateEventDto {
   @IsString()
@@ -15,21 +20,40 @@ export class CreateEventDto {
 
   @IsString()
   @IsOptional()
-  description: string;
+  description?: string;
 
   @IsArray()
-  category: string[];
+  categories: string[];
 
   @IsString()
   @IsOptional()
-  location: string;
+  location?: string;
+
+  @IsInt()
+  @Transform(({ value }) => parseInt(value, 10))
+  seatCapacity: number;
+
+  @IsEnum(Gender)
+  @IsNotEmpty()
+  gender: Gender;
+
+  @IsOptional()
+  @IsBoolean()
+  isOnline?: boolean;
+  
+  @IsBoolean()
+  @IsOptional()
+  isPublic?: boolean;
 
   @IsDate()
+  @Transform(({ value }) => new Date(value))
   startDateTime: Date;
 
   @IsDate()
+  @Transform(({ value }) => new Date(value))
   endDateTime: Date;
 
+  @IsOptional()
   @IsInt()
-  seatCapacity: number;
+  price?: number;
 }

@@ -1,12 +1,24 @@
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { PrismaModule } from 'src/prisma/prisma.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [
+    ServeStaticModule.forRoot(
+      {
+        rootPath: join(__dirname, '..', '..', 'pdfs'), // Serve PDF files
+        serveRoot: '/pdfs',
+      },
+      {
+        rootPath: join(__dirname, '..', '..', 'images'), // Serve Image files
+        serveRoot: '/images',
+      },
+    ),
+  ],
   controllers: [UserController],
   providers: [UserService],
-  exports: [UserService, UserModule],
+  exports: [UserService],
 })
 export class UserModule {}

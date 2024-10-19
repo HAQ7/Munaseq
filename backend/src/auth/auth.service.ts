@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { userSignUpDto } from './dtos/user-signup.dto';
 import { userSignInDto } from './dtos/user-signin.dto';
@@ -51,7 +51,11 @@ export class AuthService {
     };
   }
 
-  async register(signUpDto: userSignUpDto) {
+  async signup(
+    signUpDto: userSignUpDto,
+    profilePicture?: Express.Multer.File,
+    cv?: Express.Multer.File,
+  ) {
     signUpDto.email = signUpDto.email.toLowerCase();
     signUpDto.username = signUpDto.username.toLowerCase();
 
@@ -79,17 +83,33 @@ export class AuthService {
       );
     }
 
+    signUpDto.categories = Array.isArray(signUpDto.categories)
+      ? signUpDto.categories
+      : [signUpDto.categories];
     // Hash the password
     const hash = await argon2.hash(signUpDto.password);
 
     // Create the new user
-    await this.prisma.user.create({
+    const cvUrl: string = cv
+      ? `http://localhost:3002/pdfs/${cv.filename}`
+      : null;
+    const profilePictureUrl: string = profilePicture
+      ? `http://localhost:3002/images/${profilePicture.filename}`
+      : null;
+    const user = await this.prisma.user.create({
       data: {
         email: signUpDto.email,
         password: hash,
         firstName: signUpDto.firstName,
         lastName: signUpDto.lastName,
         username: signUpDto.username,
+        gender: signUpDto.gender,
+        categories: signUpDto.categories,
+        description: signUpDto.description,
+        profilePictureUrl: profilePictureUrl,
+        cvUrl: cvUrl,
+        visibleName: signUpDto.visibleName,
+        socialAccounts: signUpDto.socialAccounts,
       },
     });
 
@@ -98,6 +118,6 @@ export class AuthService {
     signInDto.email = signUpDto.email;
     signInDto.password = signUpDto.password;
     signInDto.username = signUpDto.username;
-    return this.signIn(signInDto);
+    return { ...(await this.signIn(signInDto)), ...user };
   }
 }

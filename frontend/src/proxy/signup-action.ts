@@ -3,62 +3,50 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function signupAction(formData: FormData) {
-    const signupData = {
-        username: formData.get("username") as string,
-        email: formData.get("email") as string,
-        firstName: formData.get("firstName"),
-        lastName: formData.get("lastName"),
-        password: formData.get("password") as string,
-    };
+  const mappedFormData = new FormData();
 
-    try {
-        const createResponse = await fetch(
-            `http://localhost:3000/auth/signup`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(signupData),
-            }
-        );
-        if (!createResponse.ok) {
-            throw new Error(`HTTP error! status: ${createResponse.status}`);
-        }
+  // Mapping frontend fields to backend fields
+  mappedFormData.append("username", formData.get("username") as string);
+  mappedFormData.append("email", formData.get("email") as string);
+  mappedFormData.append("firstName", formData.get("firstName") as string);
+  mappedFormData.append("lastName", formData.get("lastName") as string);
+  mappedFormData.append("password", formData.get("password") as string);
+  mappedFormData.append("visibleName", formData.get("displayName") as string);
+  mappedFormData.append("profilePicture", formData.get("profileImage") as File);
+  mappedFormData.append("gender", formData.get("gender") as string);
 
-        const createResponseData = await createResponse.json();
-        const token = createResponseData.access_token;
+  // Handle both single and multiple tag selections
+  const tags = formData.getAll("tags");
+  if (tags.length > 0) {
+    // Ensure tags is always an array, even for a single selection
+    (Array.isArray(tags) ? tags : [tags]).forEach((tag) =>
+      mappedFormData.append("categories", tag as string)
+    );
+  }
 
-        const profileData = {
-            visibleName: formData.get("displayName") as string,
-            profilePicture: formData.get("profileImage") as string,
-            gender: formData.get("gender") as string,
-            categories: formData.getAll("tags") as string[],
-        };
+  try {
+    const createResponse = await fetch(`http://localhost:3002/auth/signup`, {
+      method: "POST",
+      body: mappedFormData,
+    });
 
-        const editResponse = await fetch(`http://localhost:3000/user`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(profileData),
-        });
-
-        if (!editResponse.ok) {
-            throw new Error(`HTTP error! status: ${editResponse.status}`);
-        }
-
-        const cookieStore = cookies();
-        cookieStore.set("token", token, { maxAge: 259200, path: "/" });
-
-        // create cookie and redirect to discover page
-    } catch (error: any) {
-        return {
-            message:
-                "حدث خطأ اثناء التسجيل الرجاء المحاولة مره اخرى في وقت لاحق",
-        };
+    if (!createResponse.ok) {
+      const errorResponse = await createResponse.text(); // Capture the error message
+      console.error("Error response:", errorResponse);
     }
 
-    redirect("/discover");
+    const createResponseData = await createResponse.json();
+    const token = createResponseData.access_token;
+
+    const cookieStore = cookies();
+    cookieStore.set("token", token, { maxAge: 259200, path: "/" });
+
+    // create cookie and redirect to discover page
+  } catch (error: any) {
+    return {
+      message: "حدث خطأ اثناء التسجيل الرجاء المحاولة مره اخرى في وقت لاحق",
+    };
+  }
+
+  redirect("/discover");
 }

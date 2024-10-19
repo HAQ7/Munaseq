@@ -9,6 +9,7 @@ import convertBase64ToImage from "@/util/convertBase64ToImage";
 import { redirect } from "next/navigation";
 import tag from "@/assets/auth-content-assets/tag.svg";
 import Tag from "@/components/common/tag";
+import { UserDataDto } from "@/dtos/user-data.dto";
 // import { Metadata } from "next";
 
 // export const metadata: Metadata = {
@@ -18,7 +19,7 @@ import Tag from "@/components/common/tag";
 export default async function UserProfile() {
   const cookiesStore = cookies();
   const token = cookiesStore.get("token");
-  let data: any;
+  let data: UserDataDto;
   if (token) {
     data = await getProfileAction(token.value);
     return (
@@ -26,9 +27,9 @@ export default async function UserProfile() {
         <div className="flex justify-between items-center">
           <div className="flex gap-5 items-center">
             <div className="lg:w-32 w-24 aspect-square relative rounded-full overflow-hidden">
-              {data.profilePicture ? (
+              {data.profilePictureUrl ? (
                 <Image
-                  src={convertBase64ToImage(data.profilePicture)}
+                  src={data.profilePictureUrl}
                   alt="preview"
                   fill
                   priority
