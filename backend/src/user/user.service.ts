@@ -1,15 +1,18 @@
-import { userChangePasswordDto } from './dtos/user-change-password.dto';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { EditUserInfoDto } from './dtos/edit-user-info.dto';
+
 import * as argon2 from 'argon2';
-import { NotFoundError, PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import {
+  NotFoundError,
+  PrismaClientKnownRequestError,
+} from '@prisma/client/runtime/library';
+import { EditUserInfoDto, userChangePasswordDto } from './dtos';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async deleteUser(id: number) {
+  async deleteUser(id: string) {
     await this.prisma.event.deleteMany({
       where: {
         eventCreatorId: id,
@@ -19,12 +22,15 @@ export class UserService {
       where: {
         id: id,
       },
+      omit: {
+        password: true,
+      },
     });
   }
 
   async deleteAll() {
     try {
-      const deletedUsers = await this.prisma.user.deleteMany({});
+      const deletedUsers = await this.prisma.user.deleteMany();
       return { count: deletedUsers.count }; // Return the count of deleted users
     } catch (error) {
       throw new HttpException(
@@ -34,16 +40,20 @@ export class UserService {
     }
   }
 
-  async findById(id: number) {
+  async findById(id: string) {
     try {
       return await this.prisma.user.findUniqueOrThrow({
         where: {
           id,
         },
+       
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        throw new HttpException('No account with the provided id has been found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'No account with the provided id has been found',
+          HttpStatus.NOT_FOUND,
+        );
       }
       throw new HttpException(
         'Internal server error',
@@ -58,11 +68,15 @@ export class UserService {
         where: {
           email,
         },
+      
       });
     } catch (error) {
       // Catch specific error when a record is not found
       if (error instanceof NotFoundError) {
-        throw new HttpException('No account with the provided email has been found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'No account with the provided email has been found',
+          HttpStatus.NOT_FOUND,
+        );
       }
       // Handle other known request errors (if applicable)
       if (error instanceof PrismaClientKnownRequestError) {
@@ -82,11 +96,15 @@ export class UserService {
         where: {
           username,
         },
+       
       });
     } catch (error) {
       // Catch specific error when a record is not found
       if (error instanceof NotFoundError) {
-        throw new HttpException('No account with the provided username has been found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'No account with the provided username has been found',
+          HttpStatus.NOT_FOUND,
+        );
       }
       // Handle other known request errors (if applicable)
       if (error instanceof PrismaClientKnownRequestError) {
@@ -100,12 +118,28 @@ export class UserService {
     }
   }
 
-  async editUserInfo(id: number, EditUserDto: EditUserInfoDto) {
+  async editUserInfo(
+    id: string,
+    EditUserDto: EditUserInfoDto,
+    cvUrl?,
+    profilePictureUrl?,
+  ) {
     try {
+      const user = await this.prisma.user.findUnique({
+        where: { id },
+      });
+      cvUrl = cvUrl ?? user.cvUrl;
+      profilePictureUrl = profilePictureUrl ?? user.profilePictureUrl;
+
       return this.prisma.user.update({
         where: { id: id },
         data: {
           ...EditUserDto,
+          profilePictureUrl,
+          cvUrl,
+        },
+        omit: {
+          password: true,
         },
       });
     } catch (error) {
@@ -118,12 +152,16 @@ export class UserService {
 
   // this should not return all the user information including password and such
   async findAllUsers() {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      omit: {
+        password: true,
+      },
+    });
   }
 
   async changeUserPassword(
     passwordChangeDto: userChangePasswordDto,
-    userId: number,
+    userId: string,
   ) {
     // Retrieve the user's current hashed password
     const user = await this.prisma.user.findUnique({
@@ -151,6 +189,9 @@ export class UserService {
       where: { id: userId },
       data: {
         password: hash,
+      },
+      omit: {
+        password: true,
       },
     });
   }

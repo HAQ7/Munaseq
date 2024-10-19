@@ -3,7 +3,7 @@
 export default async function isUsernameUniqueAction(username: string) {
     try {
         const response = await fetch(
-            `http://localhost:3000/user/username/${username}`,
+            `http://localhost:3002/user/username/${username}`,
             {
                 method: "GET",
                 headers: {
