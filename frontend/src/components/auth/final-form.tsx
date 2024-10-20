@@ -1,4 +1,4 @@
-import Tag from "@/components/common/tag";
+import Tag from "@/components/common/category";
 import Button from "@/components/common/button";
 import { motion, Variants } from "framer-motion";
 import Image from "next/image";
@@ -14,11 +14,11 @@ export default function FinalForm(props: {
     formData: FormData;
     isLoading: boolean;
 }) {
-    let tags: string[] = [];
+    let categories: string[] = [];
     let image: MutableRefObject<string> = useRef("");
 
-    if (props.formData.getAll("tags").length > 0) {
-        tags = props.formData.getAll("tags") as string[];
+    if (props.formData.getAll("categories").length > 0) {
+        categories = props.formData.getAll("categories") as string[];
     }
 
     let file = props.formData.get("profileImage");
@@ -68,7 +68,7 @@ export default function FinalForm(props: {
                 تأكد من المعلومات 🔍
             </h1>
 
-            {tags.length > 0 && (
+            {categories.length > 0 && (
                 <div className="grid gap-2 mt-10">
                     <div className="flex gap-3">
                         <div className="w-20 aspect-square relative rounded-full overflow-hidden">
@@ -98,7 +98,7 @@ export default function FinalForm(props: {
                     <div>
                         <p className="font-bold text-lg">الاهتمامات</p>
                         <div className="flex flex-wrap gap-2 mt-5 sm:text-[0.75rem] text-xs max-h-44 overflow-hidden">
-                            {tags.map((tag, index) => [
+                            {categories.map((tag, index) => [
                                 <Tag key={index}>{tag}</Tag>,
                             ])}
                         </div>

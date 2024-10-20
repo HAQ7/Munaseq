@@ -10,7 +10,7 @@ import { MutableRefObject, useRef, useState } from "react";
 import Link from "next/link";
 import MainForm from "@/components/auth/main-form";
 import ProfileForm from "@/components/auth/profile-form";
-import TagForm from "@/components/auth/tag-form";
+import TagForm from "@/components/auth/catagory-form";
 import FinalForm from "@/components/auth/final-form";
 import { signupAction } from "@/proxy/signup-action";
 import ErrorForm from "@/components/auth/error-form";
@@ -20,7 +20,7 @@ export default function SignUp() {
   const [scope, animate] = useAnimate();
   const [error, setError] = useState({ message: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const tags: MutableRefObject<string[]> = useRef([]);
+  const categories: MutableRefObject<string[]> = useRef([]);
   const ref = useRef({} as HTMLFormElement);
   const router = useRouter();
   const animation = {
@@ -74,12 +74,12 @@ export default function SignUp() {
   //   });
   // };
 
-  const formFinalization = async (selectedTags: string[]) => {
-    // Save the selected tags in a ref
-    tags.current = selectedTags;
+  const formFinalization = async (selectedCategories: string[]) => {
+    // Save the selected categories in a ref
+    categories.current = selectedCategories;
     formData.current = new FormData(ref.current);
-    for (const tag of tags.current) {
-      formData.current.append("tags", tag);
+    for (const category of categories.current) {
+      formData.current.append("categories", category);
     }
 
     // Convert the image to base64
@@ -154,7 +154,7 @@ export default function SignUp() {
                     step={step}
                     nextStepHandler={nextStepHandler}
                     prevStepHandler={prevStepHandler}
-                    submitTags={formFinalization}
+                    submitCategories={formFinalization}
                   />
                   <FinalForm
                     isLoading={isLoading}

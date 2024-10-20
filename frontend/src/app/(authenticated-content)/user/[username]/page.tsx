@@ -7,15 +7,19 @@ import { cookies } from "next/headers";
 import getProfileAction from "@/proxy/get-profile-action";
 import { notFound, redirect } from "next/navigation";
 import tag from "@/assets/auth-content-assets/tag.svg";
-import Tag from "@/components/common/tag";
+import Tag from "@/components/common/category";
 import { UserDataDto } from "@/dtos/user-data.dto";
 import getUserAction from "@/proxy/get-user-action";
 
-// import { Metadata } from "next";
-
-// export const metadata: Metadata = {
-//     title: username
-// };
+export function generateImageMetadata({
+    params,
+}: {
+    params: { username: string };
+}) {
+    return {
+        title: params.username,
+    };
+}
 
 export default async function UserProfile({
     params,
@@ -29,7 +33,7 @@ export default async function UserProfile({
     if (token) {
         data = await getUserAction(username);
         if (!data) {
-          notFound();
+            notFound();
         }
         const profile: UserDataDto = await getProfileAction(token.value);
         const hisProfile: boolean = data.username === profile.username;
@@ -55,10 +59,10 @@ export default async function UserProfile({
                             )}
                         </div>
                         <div className="mt-2">
-                            <div className="font-bold text-nowrap overflow-ellipsis overflow-hidden w-44 text-3xl">
+                            <div className="font-bold text-nowrap overflow-ellipsis overflow-hidden w-96 text-3xl">
                                 {data.firstName + " " + data.lastName}
                             </div>
-                            <div className="text-custom-gray text-nowrap overflow-ellipsis overflow-hidden w-44 text-xl">
+                            <div className="text-custom-gray text-nowrap overflow-ellipsis overflow-hidden w-96 text-xl">
                                 {data.username}
                             </div>
                         </div>
@@ -71,11 +75,13 @@ export default async function UserProfile({
                             >
                                 معلومات الحساب
                             </Link>
-                            <Image
-                                src={edit}
-                                alt="edit icon"
-                                className="w-10"
-                            />
+                            <Link href={'/account/edit'} className="grid place-items-center">
+                                <Image
+                                    src={edit}
+                                    alt="edit icon"
+                                    className="w-10"
+                                />
+                            </Link>
                         </div>
                     )}
                 </div>
@@ -89,7 +95,7 @@ export default async function UserProfile({
                 </div>
                 <Subtitle>الوصف</Subtitle>
                 {data.description ? (
-                    <p className="p-5">{data.description}</p>
+                    <p className="p-5 w-full">{data.description}</p>
                 ) : (
                     <p className="p-5 text-gray-500">لا يوجد وصف للمستخدم</p>
                 )}

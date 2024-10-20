@@ -18,11 +18,11 @@ export async function signupAction(formData: FormData) {
   mappedFormData.append("gender", formData.get("gender") as string);
 
   //if only one tag is selected it will treat it as a single value. Thus, an error will occur
-  const tags = formData.getAll("tags");
-  if (tags.length > 0) {
-    // Ensure tags is always an array, even for a single selection
-    (Array.isArray(tags) ? tags : [tags]).forEach((tag) =>
-      mappedFormData.append("categories", tag as string)
+  const categories = formData.getAll("categories");
+  if (categories.length > 0) {
+    // Ensure categories is always an array, even for a single selection
+    (Array.isArray(categories) ? categories : [categories]).forEach((category) =>
+      mappedFormData.append("categories", category as string)
     );
   }
 

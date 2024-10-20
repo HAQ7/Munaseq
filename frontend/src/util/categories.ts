@@ -1,4 +1,4 @@
-export const tags = [
+export const catagories: string[] = [
     "الدراسات الإسلامية",
     "التصميم والفنون",
     "الطب",

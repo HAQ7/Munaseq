@@ -6,7 +6,7 @@ import Image from "next/image";
 import userCircle from "@/assets/icons/user-circle.svg";
 import Label from "@/components/common/lable";
 import Subtitle from "@/components/common/subtitle";
-import Tag from "@/components/common/tag";
+import Tag from "@/components/common/category";
 import { cookies } from "next/headers";
 import getProfileAction from "@/proxy/get-profile-action";
 import { redirect } from "next/navigation";
@@ -50,7 +50,7 @@ export default async function Account() {
                             <Label label="الاسم الاول">{data.firstName}</Label>
                             <Label label="الاسم الاخير">{data.lastName}</Label>
                         </div>
-                        <Label label="الاسم المعروض">{data.visibleName}</Label>
+                        <Label label="الاسم المعروض">{data.visibleName !== 'null' ? data.visibleName : ''}</Label>
                         <Label label="صورة الملف الشخصي">
                             {data.profilePictureUrl ? (
                                 <Image
@@ -59,7 +59,7 @@ export default async function Account() {
                                     priority
                                     width={80}
                                     height={80}
-                                    className="rounded-full"
+                                    className="rounded-full aspect-square"
                                 />
                             ) : (
                                 <Image
@@ -70,7 +70,7 @@ export default async function Account() {
                                 />
                             )}
                         </Label>
-                        <Label label="الوصف">{data.description}</Label>
+                        <Label label="الوصف" className={'w-96'}>{data.description}</Label>
                         <Label label="الجنس">
                             {data.gender === "MALE" ? "ذكر" : "انثى"}
                         </Label>

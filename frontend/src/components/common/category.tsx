@@ -3,23 +3,22 @@
 import Image from "next/image";
 import x from "@/assets/icons/x.svg";
 import { motion } from "framer-motion";
-import { useState } from "react";
 
-export default function Tag(props: {
+export default function Catagory(props: {
     onClick?: (e: any) => void;
     checked?: boolean;
     active?: boolean;
     children: string;
+    selected?: boolean;
 }) {
-    const [selected, setSelected] = useState(Boolean(props.checked));
     return (
         <motion.button
             layout
-            animate={{ backgroundColor: selected ? "#F5F5F5" : "#FFFFFF" }}
+            animate={{ backgroundColor: props.selected ? "#F5F5F5" : "#FFFFFF" }}
             onClick={e => {
                 e.preventDefault();
                 if (props.active) {
-                    setSelected((prevState: boolean) => !prevState);
+                  
                     if (props.onClick) {
                         props.onClick(e);
                     }
@@ -31,7 +30,7 @@ export default function Tag(props: {
             }
         >
             <motion.div layout>{props.children}</motion.div>
-            {selected && (
+            {props.selected && (
                 <motion.div
                     animate={{ opacity: 1, y: 0 }}
                     initial={{ y: 10, opacity: 0 }}

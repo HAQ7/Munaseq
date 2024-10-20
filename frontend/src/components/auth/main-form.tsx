@@ -54,7 +54,6 @@ export default function mainForm(props: {
     const isEmailUnique = async () => {
         setIsLoading(true);
         const data = await isEmailUniqueAction(emailRef.current.value);
-        console.log(data);
         if (!data.passed) {
             if (!formError.includes(data.error)) {
                 setFormError(prev => [...prev, data.error]);

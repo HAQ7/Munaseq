@@ -1,15 +1,25 @@
-export default function TextArea(props: {
-    placeholder: string;
-    className?: string;
-    name: string;
-    cols?: number;
-    rows?: number;
-    defaultValue?: string;
-}) {
+"use client";
+
+import { forwardRef } from "react";
+
+const TextArea = forwardRef(function TextArea(
+    props: {
+        placeholder: string;
+        className?: string;
+        name: string;
+        cols?: number;
+        rows?: number;
+        defaultValue?: string;
+    },
+    ref: any
+) {
     return (
         <div className="relative grid items-center">
-            <label htmlFor={props.name} className="text-gray-400 text-md">{props.placeholder}</label>
+            <label htmlFor={props.name} className="text-gray-400 text-md">
+                {props.placeholder}
+            </label>
             <textarea
+                ref={ref}
                 id={props.name}
                 name={props.name}
                 cols={props.cols}
@@ -19,4 +29,6 @@ export default function TextArea(props: {
             />
         </div>
     );
-}
+});
+
+export default TextArea
