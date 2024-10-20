@@ -4,6 +4,7 @@ export default function TextArea(props: {
     name: string;
     cols?: number;
     rows?: number;
+    defaultValue?: string;
 }) {
     return (
         <div className="relative grid place-items-center">
@@ -12,6 +13,7 @@ export default function TextArea(props: {
                 name={props.name}
                 cols={props.cols}
                 placeholder={props.placeholder}
+                defaultValue={props.defaultValue}
                 maxLength={500}
                 className="w-full h-28 min-h-32 border-b border-gray-400 rounded-md focus:outline-none peer resize-none bg-transparent z-10 px-3"
             />

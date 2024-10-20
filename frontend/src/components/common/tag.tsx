@@ -7,10 +7,11 @@ import { useState } from "react";
 
 export default function Tag(props: {
     onClick?: (e: any) => void;
+    checked?: boolean;
     active?: boolean;
     children: string;
 }) {
-    const [selected, setSelected] = useState(false);
+    const [selected, setSelected] = useState(Boolean(props.checked));
     return (
         <motion.button
             layout
@@ -24,7 +25,10 @@ export default function Tag(props: {
                     }
                 }
             }}
-            className="bg-white border-pirmary border-2 rounded-3xl px-3 py-2 text-primary font-bold flex justify-center items-center gap-2 group text-nowrap"
+            className={
+                "bg-white border-pirmary border-2 rounded-3xl px-3 py-2 text-primary font-bold flex justify-center items-center gap-2 group text-nowrap " +
+                (!props.active ? " cursor-default" : "")
+            }
         >
             <motion.p layout>{props.children}</motion.p>
             {selected && (

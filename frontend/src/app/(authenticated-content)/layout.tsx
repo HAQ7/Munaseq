@@ -12,7 +12,7 @@ export default function AuthContentLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <section className="w-screen flex grid-cols-2">
+        <section className=" flex grid-cols-2">
             <div className="h-screen w-[22rem]">
                 <Menu />
             </div>

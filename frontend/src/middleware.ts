@@ -9,6 +9,7 @@ export const config = {
         "/joined-events",
         "/account",
         "/signin",
+        "/account/edit",
     ],
 };
 
@@ -16,7 +17,8 @@ const authRequiredStaticPaths = new Set([
     "/discover",
     "/coordinated-events",
     "/joined-events",
-    "/account"
+    "/account",
+    "/account/edit",
 ]);
 
 const checkAuth = async (req: NextRequest) => {
@@ -47,7 +49,10 @@ const checkAuth = async (req: NextRequest) => {
 export async function middleware(req: NextRequest) {
     const pathname: string = req.nextUrl.pathname;
 
-    if (authRequiredStaticPaths.has(pathname) || pathname.startsWith("/user/")) {
+    if (
+        authRequiredStaticPaths.has(pathname) ||
+        pathname.startsWith("/user/")
+    ) {
         return await checkAuth(req);
     }
 

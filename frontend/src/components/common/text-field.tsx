@@ -8,12 +8,14 @@ const Input = forwardRef(function TextField(
         name: string;
         type?: string;
         ref?: any;
-        error?: boolean
+        error?: boolean;
+        disabled?: boolean;
+        defaultValue?: string;
         onBlur?: (e: any) => void
     },
     ref: any
 ) {
-    const [inputHasText, setInputHasText] = useState(false);
+    const [inputHasText, setInputHasText] = useState(Boolean(props.defaultValue));
     return (
         <div className="h-20 relative">
             <div className="absolute w-full flex justify-center items-center h-10 bottom-0 2xl:text-base text-md ">
@@ -23,6 +25,8 @@ const Input = forwardRef(function TextField(
                     ref={ref}
                     type={props.type || "text"}
                     name={props.name}
+                    disabled={props.disabled}
+                    defaultValue={props.defaultValue}
                     onBlur={e => {
                         setInputHasText(e.target.value !== "");
                         if (props.onBlur) {
