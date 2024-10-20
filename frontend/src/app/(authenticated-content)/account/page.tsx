@@ -57,7 +57,9 @@ export default async function Account() {
                                     src={data.profilePictureUrl}
                                     alt="preview"
                                     priority
-                                    className="w-20"
+                                    width={80}
+                                    height={80}
+                                    className="rounded-full"
                                 />
                             ) : (
                                 <Image
@@ -76,7 +78,7 @@ export default async function Account() {
                     <div className="grid grid-cols-1 gap-10">
                         <Subtitle>الاهتمامات</Subtitle>
 
-                        <div className="flex gap-10 ">
+                        <div className="flex flex-wrap gap-2">
                             {data.categories.map(category => (
                                 <Tag key={category}>{category}</Tag>
                             ))}

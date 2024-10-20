@@ -8,7 +8,7 @@ export default function Label({
     return (
         <div className=" relative">
             <h4 className="font-medium pb-1">{label}</h4>
-            <p className="">{children ? children : 'لا يوجد'}</p>
+            <div className="">{children ? children : 'لا يوجد'}</div>
         </div>
     );
 }

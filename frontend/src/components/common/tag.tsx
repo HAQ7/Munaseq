@@ -30,7 +30,7 @@ export default function Tag(props: {
                 (!props.active ? " cursor-default" : "")
             }
         >
-            <motion.p layout>{props.children}</motion.p>
+            <motion.div layout>{props.children}</motion.div>
             {selected && (
                 <motion.div
                     animate={{ opacity: 1, y: 0 }}

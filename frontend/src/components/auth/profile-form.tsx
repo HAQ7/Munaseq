@@ -5,17 +5,16 @@ import Radio from "../common/radio-group";
 import { Input } from "../common/shadcn-ui/input";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { set } from "date-fns";
 
 export default function ProfileForm(props: {
   step: number;
   nextStepHandler: (e: MouseEvent) => void;
   prevStepHandler: (e: MouseEvent) => void;
 }) {
-  const [image, setImage] = useState("");
   const [formError, setFormError] = useState([] as string[]);
   const firstNameRef = useRef({} as HTMLInputElement);
   const lastNameRef = useRef({} as HTMLInputElement);
+  const [image, setImage] = useState("");
   const ref = useRef({} as HTMLInputElement);
 
   const handleImageUpload = (e: any) => {
