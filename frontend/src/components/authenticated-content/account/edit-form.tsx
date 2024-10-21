@@ -187,15 +187,7 @@ export default function EditForm({
                 for (const category of selectedCatagories) {
                     formData.append("categories", category);
                 }
-                const formGender = formData.get("gender");
-                switch (formGender) {
-                    case "ذكر":
-                        formData.set("gender", "MALE");
-                        break;
-                    case "انثى":
-                        formData.set("gender", "FEMALE");
-                        break;
-                }
+                
                 const error: { message: string } = await editProfileAction(
                     formData,
                     token
@@ -326,7 +318,7 @@ export default function EditForm({
                     <span className="block text-lg text-custom-gray">
                         الجنس
                     </span>
-                    <Radio name={"gender"} options={["ذكر", "انثى"]} />
+                    <Radio name={"gender"} options={["ذكر", "انثى"]} values={["MALE", "FEMALE"]} defaultValue={userData.gender} />
                 </div>
             </div>
             <div className="grid grid-cols-1 gap-10">

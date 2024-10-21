@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import Catagory from "@/components/common/category";
 import AddCatagoryDropdown from "@/components/common/add-category-dropdown";
 import LoadingWrapper from "@/components/common/loading-wrapper";
+import { set } from "date-fns";
 export default function TimeForm({
     onCategoriesChange,
     step,
@@ -23,6 +24,10 @@ export default function TimeForm({
     prevStepHandler: () => void;
     error: { message: string };
 }>) {
+    const today = new Date().toISOString().split('T')[0];
+    const [endDateMin, setEndDateMin] = useState(today);
+    const [endDateVal, setEndDateVal] = useState(today);
+    const [startDate, setStartDate] = useState(today);
     const [selectedCatagories, setSelectedCatagories] = useState(
         [] as string[]
     );
@@ -48,9 +53,13 @@ export default function TimeForm({
                     <Input
                         type="date"
                         name="startDateTime"
-                        defaultValue={50}
-                        min={1}
-                        max={1000}
+                        min={today}
+                        value={startDate}
+                        onChange={(e) => {
+                            setEndDateMin(e.target.value);
+                            setEndDateVal(e.target.value);
+                            setStartDate(e.target.value);
+                        }}
                     />
                     <label
                         htmlFor="endDateTime"
@@ -59,11 +68,14 @@ export default function TimeForm({
                         تاريخ انتهاء الفعالية
                     </label>
                     <Input
+
                         type="date"
                         name="endDateTime"
-                        defaultValue={50}
-                        min={1}
-                        max={1000}
+                        min={endDateMin}
+                        value={endDateVal}
+                        onChange={(e) => {
+                            setEndDateVal(e.target.value);
+                        }}
                     />
                 </div>
                 <label className="block text-lg text-custom-gray">

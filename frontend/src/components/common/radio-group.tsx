@@ -5,12 +5,19 @@ export default function Radio(props: {
     options: string[];
     values?: string[];
     name: string;
+    defaultValue?: string;
 }) {
     return (
         <RadioGroup
             name={props.name}
             id={props.name}
-            defaultValue={props.values ? props.values[0] : props.options[0]}
+            defaultValue={
+                props.defaultValue
+                    ? props.defaultValue
+                    : props.values
+                    ? props.values[0]
+                    : props.options[0]
+            }
             required
         >
             {props.options.map((option, index) => {
