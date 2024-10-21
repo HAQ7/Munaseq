@@ -5,8 +5,12 @@ export const config = {
     matcher: [
         "/discover",
         "/user/:username?",
-        "/coordinated-events",
-        "/joined-events",
+        "/coordinated-events/active",
+        "/coordinated-events/past",
+        "/coordinated-events/upcoming",
+        "/joined-events/active",
+        "/joined-events/past",
+        "/joined-events/upcoming",
         "/account",
         "/signin",
         "/account/edit",
@@ -15,8 +19,12 @@ export const config = {
 
 const authRequiredStaticPaths = new Set([
     "/discover",
-    "/coordinated-events",
-    "/joined-events",
+    "/coordinated-events/active",
+    "/coordinated-events/past",
+    "/coordinated-events/upcoming",
+    "/joined-events/active",
+    "/joined-events/past",
+    "/joined-events/upcoming",
     "/account",
     "/account/edit",
 ]);

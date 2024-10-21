@@ -17,6 +17,7 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 type NavLink = {
     name: string;
     path: string;
+    match?: string;
     icon: StaticImport;
     iconActive: StaticImport;
 };
@@ -38,13 +39,15 @@ export default function Nav(props: { username: string }) {
         },
         {
             name: "الفعاليات المنسقة",
-            path: "/coordinated-events",
+            path: "/coordinated-events/active",
+            match: "/coordinated-events",
             icon: calender,
             iconActive: calenderActive,
         },
         {
             name: "الفعاليات المنضمة",
-            path: "/joined-events",
+            path: "/joined-events/active",
+            match: "/joined-events",
             icon: join,
             iconActive: joinActive,
         },
@@ -52,7 +55,7 @@ export default function Nav(props: { username: string }) {
     return (
         <nav className="mt-20 text-xl grid gap-5 text-[#525252] relative">
             {navLinks.map((link: NavLink) => {
-                const isActive: boolean = link.path === pathname;
+                const isActive: boolean = pathname.includes(link.match || link.path);
                 return (
                     <Link key={link.name} href={link.path}>
                         <motion.div
