@@ -9,7 +9,7 @@ import { notFound, redirect } from "next/navigation";
 import tag from "@/assets/auth-content-assets/tag.svg";
 import Tag from "@/components/common/category";
 import { UserDataDto } from "@/dtos/user-data.dto";
-import getUserAction from "@/proxy/get-user-action";
+import getUserAction from "@/proxy/get-user-using-username-action";
 
 export function generateImageMetadata({
     params,

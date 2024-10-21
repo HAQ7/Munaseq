@@ -27,7 +27,7 @@ export default function Menu() {
                     href="/create-event"
                     className="bg-custom-gradient  px-6 py-4 text-white  text-xl flex justify-center gap-3 bg-[length:120%] hover:bg-right transition-all rounded-full font-semibold text-nowrap "
                 >
-                    نسق فعالية{" "}
+                    نسق فعاليتك{" "}
                     <Image
                         src={plus}
                         className="w-7 aspect-square"

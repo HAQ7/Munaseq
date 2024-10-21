@@ -22,15 +22,15 @@ export class CreateEventDto {
   @IsOptional()
   description?: string;
 
-  @IsArray()
+  // @IsArray()
   categories: string[];
 
   @IsString()
   @IsOptional()
   location?: string;
 
-  @IsInt()
   @Transform(({ value }) => parseInt(value, 10))
+  // @IsInt()
   seatCapacity: number;
 
   @IsEnum(Gender)
@@ -39,10 +39,20 @@ export class CreateEventDto {
 
   @IsOptional()
   @IsBoolean()
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return value;
+  })
   isOnline?: boolean;
-  
+
   @IsBoolean()
   @IsOptional()
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return value;
+  })
   isPublic?: boolean;
 
   @IsDate()

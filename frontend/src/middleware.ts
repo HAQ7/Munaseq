@@ -14,6 +14,7 @@ export const config = {
         "/account",
         "/signin",
         "/account/edit",
+        "/create-event",
     ],
 };
 
@@ -27,6 +28,7 @@ const authRequiredStaticPaths = new Set([
     "/joined-events/upcoming",
     "/account",
     "/account/edit",
+    "/create-event",
 ]);
 
 const checkAuth = async (req: NextRequest) => {

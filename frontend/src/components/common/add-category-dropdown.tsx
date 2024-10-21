@@ -12,7 +12,7 @@ import Image from 'next/image';
 export default function addCatagoryDropdown({
   onCatagorySelect,
 }: {
-  onCatagorySelect: (tag: string) => void;
+  onCatagorySelect: (catagory: string) => void;
 }) {
   return (
     <DropdownMenu dir="rtl">

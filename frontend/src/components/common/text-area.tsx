@@ -15,7 +15,7 @@ const TextArea = forwardRef(function TextArea(
 ) {
     return (
         <div className="relative grid items-center">
-            <label htmlFor={props.name} className="text-gray-400 text-md">
+            <label htmlFor={props.name} className="text-gray-400 text-md ms-3">
                 {props.placeholder}
             </label>
             <textarea
@@ -25,7 +25,7 @@ const TextArea = forwardRef(function TextArea(
                 cols={props.cols}
                 defaultValue={props.defaultValue}
                 maxLength={500}
-                className="w-full h-28 min-h-32 border-b border-gray-400 rounded-md focus:outline-none peer resize-none bg-transparent z-10 px-3"
+                className="w-full h-28 min-h-32 border-b border-gray-300 focus:outline-none peer resize-none bg-transparent z-10 px-3"
             />
         </div>
     );

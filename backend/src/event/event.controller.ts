@@ -73,7 +73,7 @@ export class EventController {
   )
   @Post()
   create(
-    @Body()
+    @Body(new ValidationPipe({ transform: true }))
     createEventDto: CreateEventDto,
     @GetCurrentUserId() eventCreatorId: string,
     @UploadedFiles()

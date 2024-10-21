@@ -3,7 +3,7 @@
 import Image from "next/image";
 import logoIcon from "@/assets/logo/logo-small-white.svg";
 import munaseq from "@/assets/logo/munaseq-text.svg";
-import Progress from "@/components/auth/progress";
+import Progress from "@/components/auth/signup-progress";
 import { motion, useAnimate } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { MutableRefObject, useRef, useState } from "react";

@@ -1,17 +1,11 @@
-"use client";
-
 import Subtitle from "@/components/common/subtitle";
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-
+import TabIndicator from "@/components/authenticated-content/event-lists/tab-indicator";
 export default function CoordinatedEvents({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const pathname = usePathname();
-
     return (
         <>
             <Subtitle>
@@ -21,36 +15,21 @@ export default function CoordinatedEvents({
                         className="relative text-nowrap"
                     >
                         الفعاليات الحالية
-                        {pathname === "/coordinated-events/active" && (
-                            <motion.div
-                                layoutId="active-coordinated-events-tab"
-                                className="w-full h-1 rounded-full bg-custom-gradient mt-1"
-                            />
-                        )}
+                        <TabIndicator tab="/coordinated-events/active" />
                     </Link>
                     <Link
                         href="/coordinated-events/upcoming"
                         className="relative text-nowrap"
                     >
                         الفعاليات القادمة{" "}
-                        {pathname === "/coordinated-events/upcoming" && (
-                            <motion.div
-                                layoutId="active-coordinated-events-tab"
-                                className="w-full h-1 rounded-full bg-custom-gradient mt-1"
-                            />
-                        )}
+                        <TabIndicator tab="/coordinated-events/upcoming" />
                     </Link>
                     <Link
                         href="/coordinated-events/past"
                         className="relative text-nowrap"
                     >
                         الفعاليات الماضية{" "}
-                        {pathname === "/coordinated-events/past" && (
-                            <motion.div
-                                layoutId="active-coordinated-events-tab"
-                                className="w-full h-1 rounded-full bg-custom-gradient mt-1"
-                            />
-                        )}
+                        <TabIndicator tab="/coordinated-events/past" />
                     </Link>
                 </div>
             </Subtitle>
