@@ -124,4 +124,29 @@ export class EventService {
       },
     });
   }
+
+  async leaveEvent(userId: string, eventId: string) {
+    const event = await this.prisma.event.findUnique({
+      where: { id: eventId },
+      include: { joinedUsers: true },
+    });
+
+    if (!event) {
+      throw new NotFoundException('Event not found');
+    }
+
+    const isUserJoined = event.joinedUsers.some(user => user.id === userId);
+    if (!isUserJoined) {
+      throw new BadRequestException('User is not joined to this event');
+    }
+
+    await this.prisma.event.update({
+      where: { id: eventId },
+      data: {
+        joinedUsers: {
+          disconnect: { id: userId },
+        },
+      },
+    });
+  }
 }

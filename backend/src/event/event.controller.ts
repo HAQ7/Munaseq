@@ -18,11 +18,11 @@ import { AuthGuard } from '../auth/auth.guard';
 import { GetCurrentUserId } from '../auth/decorators/get-current-user-id.decorator';
 import { CreateEventDto, UpdateEventDto } from './dtos';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { extname } from 'path';
 import * as multerS3 from 'multer-s3';
 import { S3Client } from '@aws-sdk/client-s3';
 import * as dotenv from 'dotenv';
 import { JoinEventDto } from './dtos/join-event.dto';
+import { LeaveEventDto } from './dtos/leave-event.dto';
 dotenv.config();
 const bucketName = process.env.BUCKET_NAME;
 const region = process.env.BUCKET_REGION;
@@ -168,6 +168,13 @@ export class EventController {
   async joinEvent(@GetCurrentUserId() userId, @Body() joinEventDto: JoinEventDto) {
     await this.eventService.joinEvent(userId, joinEventDto);
     return { message: 'Successfully joined the event' };
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('leave')
+  async leaveEvent(@GetCurrentUserId() userId, @Body() leaveEventDto: LeaveEventDto) {
+    await this.eventService.leaveEvent(userId, leaveEventDto.eventId);
+    return { message: 'Successfully left the event' };
   }
 
   @UseGuards(AuthGuard)
