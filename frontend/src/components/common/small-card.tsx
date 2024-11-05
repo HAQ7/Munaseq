@@ -27,8 +27,8 @@ export default function SmallCard({
     badges: string[];
 }) {
     return (
-        <div className="max-w-sm bg-white border border-gray-200 rounded-3xl shadow-lg ">
-            <div className="p-0 relative h-40 w-[340px]">
+        <div className="max-w-[340px] w-full bg-white border border-gray-200 rounded-3xl shadow-lg ">
+            <div className="p-0 relative h-40">
                 {image && <Image className="w-full rounded-t-3xl object-cover" src={image} fill alt="" />}
             </div>
 
