@@ -18,16 +18,26 @@ export default function AuthContentLayout({
         <Menu />
       </div>
       <div className="relative flex-1">
-        <header className="flex items-center justify-center my-10 gap-2 w-full">
-          <div className="absolute right-5">
+        <header className="flex items-center lg:justify-end justify-center lg:px-10 px-2 my-10 gap-2 w-full">
+          <div className="">
             <MenuMobile />
           </div>
           <Image
             src={deco}
             alt="deco"
-            className="absolute -right-32 top-0 -z-10"
+            className="absolute -right-32 top-0 -z-10 min-w-96 sm:block hidden"
           />
-          <Link href="/" className="absolute left-5">
+          <div className="lg:w-3/4 max-w-[500px] lg:min-w-[300px] lg:mx-auto bg-white rounded-full shadow-md flex w-full items-center p-2 ">
+            <input
+              placeholder="ابحث عن فعالية"
+              type="text"
+              className="outline-none flex-1 ps-2"
+            />
+            <Button gradient className="px-5 h-8">
+              بحث
+            </Button>
+          </div>
+          <Link href="/" className="">
             <Image
               priority
               className="w-52 2xl:block hidden "
@@ -41,18 +51,8 @@ export default function AuthContentLayout({
               alt="Munaseq logo"
             />
           </Link>
-          <div className="lg:w-3/4 max-w-[500px] lg:min-w-[300px] bg-white rounded-full shadow-md flex w-full items-center p-2 ">
-            <input
-              placeholder="ابحث عن فعالية"
-              type="text"
-              className="outline-none flex-1 ps-2"
-            />
-            <Button gradient className="px-5 h-8">
-              بحث
-            </Button>
-          </div>
         </header>
-        <div className="px-20">{children}</div>
+        <div className="xl:px-20 px-2">{children}</div>
       </div>
     </section>
   );
