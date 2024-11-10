@@ -1,0 +1,10 @@
+
+TO EDIT THE SCHEMA:
+        npx prisma migrate dev --name ""comment your changes""
+        npx prisma generate
+
+TO UPDATE YOUR SCHEMA TO THE LATEST MIGRATION:
+        npm install
+        npx prisma migrate dev
+        npx prisma generate
+

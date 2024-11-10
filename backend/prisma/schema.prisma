@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+model User {
+  id                String   @id @default(uuid())
+  firstName         String
+  lastName          String
+  username          String   @unique
+  email             String   @unique
+  password          String
+  // organizationName String? // Optional for organizations -> not needed
+  profilePictureUrl String? // Optional profile picture
+  cvUrl             String? //Optional cv 
+  visibleName       String? // Can default to name or organization
+  gender            Gender // Optional gender field -->Are You sure mohammed?
+  socialAccounts    Json? // Optional social accounts linked
+  categories        String[] // Array of strings for interests in event categories
+  description       String? // New: Optional description field for the user
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  createdEvents     Event[]  @relation("UserCreatedEvents") // Relation to created events
+  joinedEvents      Event[]  @relation("UserEventsJoined") // New: Events joined by the user (many-to-many)
+  presentedEvents   Event[]  @relation("EventPresenters") // Relation to events where user is a presenter (many-to-many)
+  moderatedEvents   Event[]  @relation("EventModerators") // Relation to events where user is a moderator (many-to-many)
+}
+
+model Event {
+  id             String   @id @default(uuid())
+  title          String
+  description    String? // Optional description
+  categories     String[] // Array of event categories (string array)
+  location       String? // Optional location
+  seatCapacity   Int? // New: Optional seat capacity
+  isPublic       Boolean  @default(true) // New: Whether the event is public or private
+  isOnline       Boolean  @default(true) // New: Whether the event is remote or on-site
+  gender         Gender   @default(BOTH) // New: Gender of attendees (male, female, both)
+  // targetAudience String[] // New: Array of target audiences
+  startDateTime  DateTime // Date without time
+  endDateTime    DateTime // Date without time
+  imageUrl       String? // New: Optional image string
+  price          Int?     @default(0) // New: Price for the event
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  presenters     User[]   @relation("EventPresenters") // New: List of event presenters (many-to-many)
+  moderators     User[]   @relation("EventModerators") // New: List of event moderators (many-to-many)
+  joinedUsers    User[]   @relation("UserEventsJoined") // New: Users who have joined the event (many-to-many)
+  eventCreator   User     @relation("UserCreatedEvents", fields: [eventCreatorId], references: [id], onDelete: Cascade)
+  eventCreatorId String
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  BOTH
+}

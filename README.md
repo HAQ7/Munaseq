@@ -1,6 +1,6 @@
 # Munasiq - Edu-Activity Management Platform
 
-![Munasiq Logo](./assets/munaseq-logo-dark.svg)
+![Munasiq Logo](./frontend/src/assets/logo/munaseq-logo-dark.svg)
 ### 🏫 Coordinating your Educational Activities, from A to Z
 
 Munasiq is a comprehensive platform designed to streamline the creation, management, and participation in educational events. Whether it's lectures, workshops, or courses, Munasiq makes it easy to coordinate and join activities with ease.
@@ -51,3 +51,10 @@ Munasiq is a comprehensive platform designed to streamline the creation, managem
 1. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/munasiq.git
+
+2. Initilize a copy of the DB and create a .env file to store the DB url:
+
+3. Run the prisma commands to create the schema for your DB:
+   npm install
+   npx prisma migrate dev
+   npx prisma generate
