@@ -93,6 +93,7 @@ export default function SignUp() {
     if (image.size === 0) {
       formData.current.delete("profileImage");
     }
+
     // translates gender to english
     const formGender = formData.current.get("gender");
     switch (formGender) {
