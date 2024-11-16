@@ -8,7 +8,10 @@ export interface UserDataDto {
   gender?: string;
   cvUrl?: string;
   profilePictureUrl?: string;
-  socialAccounts?: any;
+  socialAccounts?: {
+    xLink?: string;
+    linkedinLink?: string;
+  };
   categories: string[];
   description?: string;
   createdAt?: Date;
