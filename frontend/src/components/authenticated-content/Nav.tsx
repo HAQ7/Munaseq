@@ -22,7 +22,10 @@ type NavLink = {
     iconActive: StaticImport;
 };
 
-export default function Nav(props: { username: string }) {
+export default function Nav(props: {
+    username: string;
+    onLinkClick?: () => void;
+}) {
     const pathname = usePathname();
     const navLinks: NavLink[] = [
         {
@@ -55,9 +58,19 @@ export default function Nav(props: { username: string }) {
     return (
         <nav className="mt-20 text-xl grid gap-5 text-[#525252] relative">
             {navLinks.map((link: NavLink) => {
-                const isActive: boolean = pathname.includes(link.match || link.path);
+                const isActive: boolean = pathname.includes(
+                    link.match || link.path
+                );
                 return (
-                    <Link key={link.name} href={link.path}>
+                    <Link
+                        key={link.name}
+                        href={link.path}
+                        onClick={() => {
+                            if (props.onLinkClick) {
+                                props.onLinkClick();
+                            }
+                        }}
+                    >
                         <motion.div
                             whileHover={"active"}
                             className="flex gap-5 items-center py-1 relative w-full group"

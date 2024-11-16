@@ -1,3 +1,5 @@
+'use server'
+
 export default async function getProfileAction(token: any) {
     try {
         

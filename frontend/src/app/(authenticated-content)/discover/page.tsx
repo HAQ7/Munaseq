@@ -15,7 +15,8 @@ export const metadata: Metadata = {
 
 export default async function Discover() {
     const eventList = await getEventsAction();
-    if (eventList.length === 0) {
+    
+    if (eventList?.length === 0) {
         return (
             <div className="mt-5 text-custom-gray">
                 لا يوجد فعاليات
@@ -29,20 +30,13 @@ export default async function Discover() {
                 اكتشف فعاليات المنسقين
             </Title>
             <Subtitle>من أعلى المنسقين تقييما </Subtitle>
-            <div className="flex mt-4 gap-8 flex-wrap">
-                {eventList.map(async (event: any) => (
+            <div className="flex mt-4 gap-8 flex-wrap md:justify-start justify-center">
+                {eventList?.map(async (event: any) => (
                     <SmallCard
                         image={event.imageUrl}
                         title={event.title}
                         date={getDate(event.startDateTime)}
-                        presenter={await getUserAction(
-                            event.eventCreatorId
-                        ).then((user: UserDataDto) => {
-                            if (!user) {
-                                return "غير معروف";
-                            }
-                            return user.firstName + " " + user.lastName;
-                        })}
+                        userId={event.eventCreatorId}
                         badges={event.categories}
                     />
                 ))}

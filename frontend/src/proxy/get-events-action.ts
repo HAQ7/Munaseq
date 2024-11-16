@@ -9,7 +9,6 @@ export default async function getEventsAction() {
         });
 
         const data = await eventsRes.json();
-        console.log(data);
 
         return data;
     } catch (error: any) {

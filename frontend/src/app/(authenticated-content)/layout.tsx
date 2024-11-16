@@ -19,19 +19,20 @@ export default function AuthContentLayout({
       </div>
       <div className="relative flex-1">
         <header className="flex items-center lg:justify-end justify-center lg:px-10 px-2 my-10 gap-2 w-full">
-          <div className="">
+          <div className="lg:hidden block">
             <MenuMobile />
           </div>
           <Image
             src={deco}
             alt="deco"
             className="absolute -right-32 top-0 -z-10 min-w-96 sm:block hidden"
+            priority
           />
-          <div className="lg:w-3/4 max-w-[500px] lg:min-w-[300px] lg:mx-auto bg-white rounded-full shadow-md flex w-full items-center p-2 ">
+          <div className="lg:w-3/4 max-w-[500px] lg:min-w-[300px] lg:mx-auto bg-white rounded-full shadow-md w-full flex items-center p-2 ">
             <input
               placeholder="ابحث عن فعالية"
               type="text"
-              className="outline-none flex-1 ps-2"
+              className="outline-none w-full flex-1 px-2"
             />
             <Button gradient className="px-5 h-8">
               بحث
@@ -46,13 +47,13 @@ export default function AuthContentLayout({
             />
             <Image
               priority
-              className="w-14 block 2xl:hidden "
+              className="min-w-14 w-14 block 2xl:hidden "
               src={logoSmall}
               alt="Munaseq logo"
             />
           </Link>
         </header>
-        <div className="xl:px-20 px-2">{children}</div>
+        <div className="xl:px-20 px-5">{children}</div>
       </div>
     </section>
   );

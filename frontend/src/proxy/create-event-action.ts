@@ -21,7 +21,6 @@ export default async function createEventAction(formData: FormData) {
             },
         });
 
-        console.log(await createRes.json());
 
         if (!createRes.ok) {
             const errorResponse = await createRes.text(); // Capture the error message
