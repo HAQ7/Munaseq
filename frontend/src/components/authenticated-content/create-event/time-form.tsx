@@ -24,7 +24,7 @@ export default function TimeForm({
     prevStepHandler: () => void;
     error: { message: string };
 }>) {
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split("T")[0];
     const [endDateMin, setEndDateMin] = useState(today);
     const [endDateVal, setEndDateVal] = useState(today);
     const [startDate, setStartDate] = useState(today);
@@ -42,8 +42,8 @@ export default function TimeForm({
                 <Image src={puzzleIcon} alt="puzzle icon" />
                 جدولة الفعالية
             </h1>
-            <div className="w-1/2 grid gap-5 mt-2">
-                <div className="flex gap-4">
+            <div className="max-w-96 w-full grid gap-5 mt-2">
+                <div className="flex gap-4 flex-col">
                     <label
                         htmlFor="startDateTime"
                         className="block text-lg text-custom-gray text-nowrap"
@@ -51,11 +51,12 @@ export default function TimeForm({
                         تاريخ بدأ الفعالية
                     </label>
                     <Input
+                        className="w-min"
                         type="date"
                         name="startDateTime"
                         min={today}
                         value={startDate}
-                        onChange={(e) => {
+                        onChange={e => {
                             setEndDateMin(e.target.value);
                             setEndDateVal(e.target.value);
                             setStartDate(e.target.value);
@@ -68,12 +69,12 @@ export default function TimeForm({
                         تاريخ انتهاء الفعالية
                     </label>
                     <Input
-
+                        className="w-min"
                         type="date"
                         name="endDateTime"
                         min={endDateMin}
                         value={endDateVal}
-                        onChange={(e) => {
+                        onChange={e => {
                             setEndDateVal(e.target.value);
                         }}
                     />
@@ -90,52 +91,50 @@ export default function TimeForm({
                     <Image src={tagIcon} alt="puzzle icon" />
                     لمن توجه اليه الفعالية
                 </h1>
-                <motion.div layout className="flex flex-wrap gap-2">
-                    {selectedCatagories.map(category => (
-                        <Catagory
-                            onClick={() => {
-                                if (selectedCatagories.length === 1) {
+            </div>
+            <motion.div layout className="flex flex-wrap gap-2">
+                {selectedCatagories.map(category => (
+                    <Catagory
+                        onClick={() => {
+                            if (selectedCatagories.length === 1) {
+                                return;
+                            }
+                            setSelectedCatagories(prevState => {
+                                return prevState.filter(t => t !== category);
+                            });
+                        }}
+                        selected={selectedCatagories.includes(category)}
+                        checked
+                        active
+                        key={category}
+                    >
+                        {category}
+                    </Catagory>
+                ))}
+                <motion.div layout className="grid place-items-center">
+                    {selectedCatagories.length < 3 && (
+                        <AddCatagoryDropdown
+                            onCatagorySelect={(catagory: string) => {
+                                if (selectedCatagories.includes(catagory)) {
                                     return;
                                 }
-                                setSelectedCatagories(prevState => {
-                                    return prevState.filter(
-                                        t => t !== category
-                                    );
-                                });
+                                setSelectedCatagories(prevState => [
+                                    ...prevState,
+                                    catagory,
+                                ]);
                             }}
-                            selected={selectedCatagories.includes(category)}
-                            checked
-                            active
-                            key={category}
-                        >
-                            {category}
-                        </Catagory>
-                    ))}
-                    <motion.div layout className="grid place-items-center">
-                        {selectedCatagories.length < 3 && (
-                            <AddCatagoryDropdown
-                                onCatagorySelect={(catagory: string) => {
-                                    if (selectedCatagories.includes(catagory)) {
-                                        return;
-                                    }
-                                    setSelectedCatagories(prevState => [
-                                        ...prevState,
-                                        catagory,
-                                    ]);
-                                }}
-                            />
-                        )}
-                    </motion.div>
+                        />
+                    )}
                 </motion.div>
-            </div>
+            </motion.div>
             {error.message && (
                 <p className="text-red-500 text-center mt-5">
                     حدث خطأ, الرجاء المحاولة مره اخرى.
                 </p>
             )}
             <LoadingWrapper>
-                <div className="flex flex-row-reverse justify-between w-full mt-20">
-                    <Button gradient className="!px-10">
+                <div className="flex flex-row-reverse justify-between w-full mt-10">
+                    <Button gradient className="">
                         تنسيق الفعالية
                     </Button>
                     <Button

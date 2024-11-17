@@ -7,7 +7,7 @@ export default async function PastCoordinatedEvents() {
     const eventList = await GetUserEventsAction();
     let numEventRendered = 0;
     return (
-        <div className="flex mt-4 gap-8 flex-wrap">
+        <div className="flex mt-4 gap-8 flex-wrap lg:justify-start justify-center">
             {eventList.map(async (event: any) => {
                 if (
                     checkData(event.startDateTime, event.endDateTime) === "past"
@@ -19,6 +19,7 @@ export default async function PastCoordinatedEvents() {
                             title={event.title}
                             date={getDate(event.startDateTime)}
                             userId={event.eventCreatorId}
+                            eventId={event.id}
                             badges={event.categories}
                         />
                     );

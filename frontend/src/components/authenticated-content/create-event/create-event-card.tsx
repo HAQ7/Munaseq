@@ -1,7 +1,7 @@
 "use client";
 
 import decoLeft from "@/assets/create-event/deco-left-top.png";
-import decoRight from "@/assets/create-event/deco-right-bottom.svg";
+// import decoRight from "@/assets/create-event/deco-right-bottom.svg";
 import Image from "next/image";
 import { motion, Variants } from "framer-motion";
 
@@ -15,19 +15,19 @@ export default function CreateEventCard({
             x: "-50%",
             opacity: 0,
             visibility: "hidden",
-            
+            zIndex: -1,
         },
         past: {
             x: "50%",
             opacity: 0,
             visibility: "hidden",
-            
+            zIndex: -1,
         },
         active: {
             x: 0,
             opacity: 1,
             visibility: "visible",
-            
+            zIndex: 1
         },
     };
     return (
@@ -38,7 +38,10 @@ export default function CreateEventCard({
                 actual === goal ? "active" : actual > goal ? "past" : "next"
             }
             variants={variants}
-            className="w-[45rem] bg-white shadow-md rounded-3xl relative overflow-hidden p-5"
+            className={
+                "max-w-[45rem] w-[98%] bg-white shadow-md rounded-3xl overflow-hidden p-5 " + 
+                (goal !== 3 ? "absolute" : "relative")
+            }
         >
             <Image
                 alt="deco"

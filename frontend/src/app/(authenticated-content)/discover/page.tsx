@@ -26,17 +26,18 @@ export default async function Discover() {
     return (
         <div>
             <Title>
-                <Image src={discover} alt="" />
+                <Image src={discover} className="sm:w-14 w-10" alt="" />
                 اكتشف فعاليات المنسقين
             </Title>
             <Subtitle>من أعلى المنسقين تقييما </Subtitle>
-            <div className="flex mt-4 gap-8 flex-wrap md:justify-start justify-center">
+            <div className="flex mt-4 gap-8 flex-wrap lg:justify-start justify-center">
                 {eventList?.map(async (event: any) => (
                     <SmallCard
                         image={event.imageUrl}
                         title={event.title}
                         date={getDate(event.startDateTime)}
                         userId={event.eventCreatorId}
+                        eventId={event.id}
                         badges={event.categories}
                     />
                 ))}

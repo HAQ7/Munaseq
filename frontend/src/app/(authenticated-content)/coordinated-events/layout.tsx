@@ -1,7 +1,8 @@
 import Subtitle from "@/components/common/subtitle";
 import Link from "next/link";
 import TabIndicator from "@/components/authenticated-content/event-lists/tab-indicator";
-import Dropdown from "@/components/common/dropdown-options";
+import SelectEvents from "@/components/common/select-events";
+
 export default function CoordinatedEvents({
     children,
 }: {
@@ -33,7 +34,10 @@ export default function CoordinatedEvents({
                         <TabIndicator tab="/coordinated-events/past" />
                     </Link>
                 </div>
-            
+                <div className="sm:hidden block">
+                    
+                <SelectEvents />
+                </div>
             </Subtitle>
             {children}
         </>

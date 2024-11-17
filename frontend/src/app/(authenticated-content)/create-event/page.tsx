@@ -27,9 +27,9 @@ export default function CreateEvent() {
     const selectedCategories = useRef([] as string[]);
     const categoriesHandler = (categories: string[]) => {
         selectedCategories.current = categories;
-    }
+    };
     return (
-        <div className="">
+        <div className="overflow-hidden">
             <Title>
                 <Image src={plusCricle} alt="plus icon" />
                 نسق فعاليتك
@@ -37,33 +37,36 @@ export default function CreateEvent() {
             <div className="grid place-items-center">
                 {/* <CreateEventProgress step={1} /> */}
                 <form
-                    action={async (formData) => {
+                    action={async formData => {
                         for (const category of selectedCategories.current) {
                             formData.append("categories", category);
                         }
-                        const error : { message: string } = await createEventAction(formData);
+                        const error: { message: string } =
+                            await createEventAction(formData);
                         if (error.message) {
                             setError(error);
                         }
                     }}
-                    className="overflow-x-hidden p-10 grid place-items-center"
+                    className="overflow-hidden p-2 flex justify-center w-full relative"
                 >
-                    <div className="absolute overflow-hidden p-10">
-                        <div className="absolute">
-                            <TimeForm
-                                prevStepHandler={prevStepHandler}
-                                onCategoriesChange={categoriesHandler}
-                                error={error}
-                                step={step}
-                            />
-                        </div>
+                    <div className="absolute overflow-hidden flex justify-center w-full h-full p-2">
+                        <MainForm
+                            nextStepHandler={nextStepHandler}
+                            step={step}
+                        />
+
                         <ParticipantsForm
                             nextStepHandler={nextStepHandler}
                             prevStepHandler={prevStepHandler}
                             step={step}
                         />
                     </div>
-                    <MainForm nextStepHandler={nextStepHandler} step={step} />
+                    <TimeForm
+                        prevStepHandler={prevStepHandler}
+                        onCategoriesChange={categoriesHandler}
+                        error={error}
+                        step={step}
+                    />
                 </form>
             </div>
         </div>

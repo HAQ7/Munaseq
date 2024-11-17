@@ -19,6 +19,7 @@ export default function SmallCard({
     time,
     date,
     userId,
+    eventId,
     rate,
     cost,
     badges = [],
@@ -28,6 +29,7 @@ export default function SmallCard({
     time?: string;
     date: string;
     userId: string;
+    eventId: string;
     rate?: number;
     cost?: string;
     badges: string[];
@@ -80,7 +82,11 @@ export default function SmallCard({
                 </div>
 
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-custom-black">
-                    {!loading ? title : <Skeleton className="w-3/4 h-8 mt-10" />}
+                    {!loading ? (
+                        title
+                    ) : (
+                        <Skeleton className="w-3/4 h-8 mt-10" />
+                    )}
                 </h5>
 
                 {!loading ? (
@@ -129,7 +135,11 @@ export default function SmallCard({
                         <p className="text-2xl font-bold text-custom-black">
                             {cost}
                         </p>
-                        <Button gradient>انضم الان</Button>
+                        <Button gradient>
+                            <Link href={`/event/${eventId}`}>
+                                التفاصيل
+                            </Link>
+                        </Button>
                     </div>
                 ) : (
                     <></>

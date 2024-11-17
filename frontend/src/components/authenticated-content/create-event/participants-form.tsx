@@ -20,7 +20,7 @@ export default function ParticipantsForm({
                 <Image src={puzzleIcon} alt="puzzle icon" />
                 معلومات الحضور
             </h1>
-            <div className="w-1/2 grid gap-5 mt-2">
+            <div className="max-w-96 w-full grid gap-5 mt-2">
                 <label className="block text-lg text-custom-gray">
                     طريقة حضور الفعالية
                 </label>

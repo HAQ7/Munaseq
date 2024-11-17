@@ -29,10 +29,10 @@ export default async function Account() {
     return (
       <section className="relative pb-10">
         <Title>
-          <Link className="absolute left-10" href={"account/edit"}>
+          <Link className="absolute left-0" href={"account/edit"}>
             <Image className=" left-0 w-10" src={editIcon} alt="edit icon" />
           </Link>
-          <Image src={userIcon} className="w-14" alt="" />
+          <Image src={userIcon} className="sm:w-14 w-10" alt="" />
           <span>معلومات الحساب</span>
         </Title>
         <div className="grid grid-cols-1 gap-10">
@@ -89,7 +89,7 @@ export default async function Account() {
             <Label label="رابط LinkedIn">
               {data.socialAccounts?.linkedinLink || ""}
             </Label>
-            <Label label="الوصف" className={"w-96"}>
+            <Label label="الوصف" className={""}>
               {data.description}
             </Label>
             <Label label="الجنس">

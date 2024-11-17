@@ -5,7 +5,7 @@ import FooterSection from "@/components/landing-page/footerSection";
 import EventSection from "@/components/landing-page/eventSection";
 export default function Home() {
   return (
-    <div>
+    <div className="overflow-hidden">
       <Header />
       <HeroSection />
       <FeaturesSection />

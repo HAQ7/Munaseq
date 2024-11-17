@@ -25,7 +25,7 @@ export default function MainForm({
                 <Image src={puzzleIcon} alt="puzzle icon" />
                 المعلومات الاساسية
             </h1>
-            <div className="w-1/2 grid gap-5">
+            <div className="max-w-96 w-full grid gap-5">
                 <TextField placeholder="عنوان الفعالية" name="title" />
                 <TextArea placeholder="وصف الفعالية" name="description" />
                 <div className="grid gap-3 ">
@@ -63,7 +63,7 @@ export default function MainForm({
                     />
                 </div>
             </div>
-            <div className="flex flex-row-reverse w-full">
+            <div className="flex flex-row-reverse w-full mt-3">
                 <Button
                     onClick={e => {
                         e.preventDefault();

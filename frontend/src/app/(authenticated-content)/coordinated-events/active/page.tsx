@@ -7,7 +7,7 @@ export default async function ActiveCoordinatedEvents() {
     const eventList = await GetUserEventsAction();
     let numEventRendered = 0;
     return (
-        <div className="flex mt-4 gap-8 flex-wrap">
+        <div className="flex mt-4 gap-8 flex-wrap lg:justify-start justify-center">
             {eventList.map(async (event: any) => {
 
                 if (
@@ -21,6 +21,7 @@ export default async function ActiveCoordinatedEvents() {
                             title={event.title}
                             date={getDate(event.startDateTime)}
                             userId={event.eventCreatorId}
+                            eventId={event.id}
                             badges={event.categories}
                         />
                     );
