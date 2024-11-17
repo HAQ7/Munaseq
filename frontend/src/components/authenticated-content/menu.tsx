@@ -55,7 +55,7 @@ export default function Menu({ mobile, onLinkClick }: { mobile?: boolean , onLin
         <div
             className={
                 !mobile
-                    ? "w-[22rem] h-screen rounded-3xl fixed bg-white shadow-menu"
+                    ? "w-[20rem] h-screen rounded-3xl shadow-menu"
                     : ""
             }
         >

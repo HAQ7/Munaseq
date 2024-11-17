@@ -1,20 +1,20 @@
-import Image from "next/image";
-import userCircle from "@/assets/icons/user-circle.svg";
-import Link from "next/link";
-import edit from "@/assets/icons/edit.svg";
-import Subtitle from "@/components/common/subtitle";
-import { cookies } from "next/headers";
-import getProfileAction from "@/proxy/get-profile-action";
-import { notFound, redirect } from "next/navigation";
-import tag from "@/assets/auth-content-assets/tag.svg";
-import rateIcon from "@/assets/auth-content-assets/Rate-Icon.svg";
-import XIcon from "@/assets/auth-content-assets/X-Icon.svg";
-import linkedinIcon from "@/assets/auth-content-assets/Linkedin-Icon.svg";
-import cvIcon from "@/assets/auth-content-assets/CV-Icon.svg";
-import emailIcon from "@/assets/auth-content-assets/Email-Icon.svg";
-import Tag from "@/components/common/category";
-import { UserDataDto } from "@/dtos/user-data.dto";
-import getUserAction from "@/proxy/get-user-using-username-action";
+import Image from 'next/image';
+import userCircle from '@/assets/icons/user-circle.svg';
+import Link from 'next/link';
+import edit from '@/assets/icons/edit.svg';
+import Subtitle from '@/components/common/subtitle';
+import { cookies } from 'next/headers';
+import getProfileAction from '@/proxy/get-profile-action';
+import { notFound, redirect } from 'next/navigation';
+import tag from '@/assets/auth-content-assets/tag.svg';
+import rateIcon from '@/assets/auth-content-assets/Rate-Icon.svg';
+import XIcon from '@/assets/auth-content-assets/X-Icon.svg';
+import linkedinIcon from '@/assets/auth-content-assets/Linkedin-Icon.svg';
+import cvIcon from '@/assets/auth-content-assets/CV-Icon.svg';
+import emailIcon from '@/assets/auth-content-assets/Email-Icon.svg';
+import Tag from '@/components/common/category';
+import { UserDataDto } from '@/dtos/user-data.dto';
+import getUserAction from '@/proxy/get-user-using-username-action';
 
 export function generateImageMetadata({
   params,
@@ -33,7 +33,7 @@ export default async function UserProfile({
 }) {
   const username = params.username;
   const cookiesStore = cookies();
-  const token = cookiesStore.get("token");
+  const token = cookiesStore.get('token');
   let data: UserDataDto;
   if (token) {
     data = await getUserAction(username);
@@ -45,7 +45,20 @@ export default async function UserProfile({
     data.socialAccounts = JSON.parse(data.socialAccounts as string);
     return (
       <section>
-        <div className="flex justify-between items-center">
+        {hisProfile && (
+          <div className="flex gap-5 w-full justify-between">
+            <Link
+              href="/account"
+              className="bg-black text-white p-3 rounded-full font-bold"
+            >
+              معلومات الحساب
+            </Link>
+            <Link href={'/account/edit'} className="grid place-items-center">
+              <Image src={edit} alt="edit icon" className="w-10" />
+            </Link>
+          </div>
+        )}
+        <div className="flex justify-between items-center mt-5">
           <div className="flex gap-5 items-center">
             <div className="lg:w-32 w-24 aspect-square relative rounded-full overflow-hidden">
               {data.profilePictureUrl ? (
@@ -56,33 +69,19 @@ export default async function UserProfile({
                   priority
                 />
               ) : (
-                <Image src={userCircle} alt="user-circle" fill priority />
+                <Image
+                  src={userCircle}
+                  alt="user-circle"
+                  fill
+                  priority
+                  className="w-auto"
+                />
               )}
             </div>
             <div className="mt-2">
               <div className="flex gap-3">
                 <div className="font-bold text-nowrap overflow-ellipsis overflow-hidden max-w-96 text-3xl">
-                  {data.firstName + " " + data.lastName}
-                </div>
-                <div className="flex gap-3">
-                  <a
-                    href={data.cvUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Image
-                      src={cvIcon}
-                      alt="CV icon"
-                      className="w-10 cursor-pointer"
-                    />
-                  </a>
-                  <a href={`mailto:${data.email}`}>
-                    <Image
-                      src={emailIcon}
-                      alt="email icon"
-                      className="w-10 cursor-pointer"
-                    />
-                  </a>
+                  {data.firstName + ' ' + data.lastName}
                 </div>
               </div>
 
@@ -91,25 +90,32 @@ export default async function UserProfile({
               </div>
             </div>
           </div>
-          {hisProfile && (
-            <div className="flex gap-5">
-              <Link
-                href="/account"
-                className="bg-black text-white p-3 rounded-full font-bold"
-              >
-                معلومات الحساب
-              </Link>
-              <Link href={"/account/edit"} className="grid place-items-center">
-                <Image src={edit} alt="edit icon" className="w-10" />
-              </Link>
-            </div>
+        </div>
+        <div className="flex gap-3 mt-3">
+          {data.cvUrl && (
+            <a href={data.cvUrl} target="_blank" rel="noopener noreferrer">
+              <Image
+                src={cvIcon}
+                alt="CV icon"
+                className="w-10 cursor-pointer"
+              />
+            </a>
+          )}
+          {data.email && (
+            <a href={`mailto:${data.email}`}>
+              <Image
+                src={emailIcon}
+                alt="email icon"
+                className="w-10 cursor-pointer"
+              />
+            </a>
           )}
         </div>
         <div className="mt-5 flex gap-24">
-          <div>
+          {/* <div>
             <Image src={rateIcon} alt="rating icon" className="w-10" />
-            {/* RATING */}
-          </div>
+            RATING
+          </div> */}
 
           <div className="flex gap-3">
             {data.socialAccounts?.linkedinLink && (
@@ -149,5 +155,5 @@ export default async function UserProfile({
       </section>
     );
   }
-  redirect("/signin");
+  redirect('/signin');
 }

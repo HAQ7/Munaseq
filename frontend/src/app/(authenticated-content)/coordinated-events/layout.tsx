@@ -1,6 +1,7 @@
 import Subtitle from "@/components/common/subtitle";
 import Link from "next/link";
 import TabIndicator from "@/components/authenticated-content/event-lists/tab-indicator";
+import Dropdown from "@/components/common/dropdown-options";
 export default function CoordinatedEvents({
     children,
 }: {
@@ -9,7 +10,7 @@ export default function CoordinatedEvents({
     return (
         <>
             <Subtitle>
-                <div className="flex gap-8">
+                <div className="gap-8 sm:flex hidden">
                     <Link
                         href="/coordinated-events/active"
                         className="relative text-nowrap"
@@ -32,6 +33,7 @@ export default function CoordinatedEvents({
                         <TabIndicator tab="/coordinated-events/past" />
                     </Link>
                 </div>
+            
             </Subtitle>
             {children}
         </>

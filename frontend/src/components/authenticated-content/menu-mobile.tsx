@@ -31,7 +31,7 @@ export default function MenuMobile() {
             <SheetContent className="max-w-[22rem] w-screen h-screen rounded-e-3xl fixed p-0 pt-10 bg-white ">
                 <SheetTitle className="hidden">القائمة</SheetTitle>
                 <SheetDescription className="hidden">القائمة</SheetDescription>
-                <Menu onLinkClick={() => setIsOpen(false)} />
+                <Menu mobile onLinkClick={() => setIsOpen(false)} />
             </SheetContent>
         </Sheet>
     );
