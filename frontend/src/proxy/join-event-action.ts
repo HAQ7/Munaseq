@@ -2,11 +2,22 @@
 
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
+import GetUserEventsAction from "./get-user-events-action";
 
 export default async function joinEventAction(eventId: string) {
     console.log(eventId);
     const cookiesList = cookies();
     const token = cookiesList.get("token");
+
+    const listCreatedEvents = await GetUserEventsAction();
+    const createdEvent = listCreatedEvents.find(
+        (event: any) => event.id === eventId
+    );
+    if (createdEvent) {
+        return {
+            error: "CREATOR",
+        };
+    }
 
     try {
         const joinRes = await fetch("http://localhost:3002/event/join", {

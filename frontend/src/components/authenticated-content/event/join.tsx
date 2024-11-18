@@ -24,6 +24,8 @@ export default function JoinButton({
                 return "الجنس غير مطابق للفعالية";
             case "JOINED":
                 return "تم الانضمام مسبقاً";
+            case "CREATOR":
+                return "لا يمكنك الانضمام لفعالية قمت بإنشائها";
             default:
                 return "حدث خطأ ما، الرجاء المحاولة مرة أخرى";
         }
@@ -36,29 +38,33 @@ export default function JoinButton({
                     {getErrorMessage()}
                 </motion.p>
             )}
-            {!isLoading ? <div className="w-full flex justify-end mt-5">
-                <Button
-                    onClick={async () => {
-                        setIsLoading(true);
-                        const res = await joinEventAction(eventId);
-                        if (res.error) {
-                            setError(res.error);
+            {!isLoading ? (
+                <div className="w-full flex justify-end mt-5">
+                    <Button
+                        onClick={async () => {
+                            setIsLoading(true);
+                            const res = await joinEventAction(eventId);
+                            if (res.error) {
+                                setError(res.error);
+                                setIsLoading(false);
+                                return;
+                            }
                             setIsLoading(false);
-                            return;
-                        }
-                        setIsLoading(false);
-                        toast({
-                            duration: 5000,
-                            title: "تم الانضمام للفعالية",
-                        });
-                        router.push("/joined-events/upcoming");
-                    }}
-                    gradient
-                    className="relative z-10"
-                >
-                    الانضمام للفعالية
-                </Button>
-            </div> : <LogoLoading className="w-20" />}
+                            toast({
+                                duration: 5000,
+                                title: "تم الانضمام للفعالية",
+                            });
+                            router.push("/joined-events/upcoming");
+                        }}
+                        gradient
+                        className="relative z-10"
+                    >
+                        الانضمام للفعالية
+                    </Button>
+                </div>
+            ) : (
+                <LogoLoading className="w-20" />
+            )}
             {children}
         </div>
     );

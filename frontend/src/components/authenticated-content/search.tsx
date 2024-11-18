@@ -11,7 +11,7 @@ import Link from "next/link";
 
 const SearchComponent = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [isSearching, setIsSearching] = useState(false);
+    // const [isSearching, setIsSearching] = useState(false);
     const [results, setResults] = useState([] as EventDataDto[]);
     const [isLoading, setIsLoading] = useState(false);
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -58,8 +58,8 @@ const SearchComponent = () => {
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
                     className="outline-none w-full flex-1 px-2"
-                    onFocus={() => setIsSearching(true)}
-                    onBlur={() => setIsSearching(false)}
+                    // onFocus={() => setIsSearching(true)}
+                    // onBlur={() => setIsSearching(false)}
                 />
                 {/* <Button gradient className="px-5 h-8">
                     بحث
@@ -72,7 +72,7 @@ const SearchComponent = () => {
                     </div>
                 )}
 
-                {!isLoading && results.length > 0 && isSearching && (
+                {!isLoading && results.length > 0 && (
                     <Card className="divide-y w-full flex-col">
                         {results.map((result, index) => (
                             <Link
@@ -87,14 +87,11 @@ const SearchComponent = () => {
                     </Card>
                 )}
 
-                {!isLoading &&
-                    debouncedSearchTerm &&
-                    results.length === 0 &&
-                    isSearching && (
-                        <p className="text-center text-gray-500 p-5">
-                            لا توجد نتائج للبحث
-                        </p>
-                    )}
+                {!isLoading && debouncedSearchTerm && results.length === 0 && (
+                    <p className="text-center text-gray-500 p-5">
+                        لا توجد نتائج للبحث
+                    </p>
+                )}
             </div>
         </div>
     );
