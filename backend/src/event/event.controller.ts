@@ -100,6 +100,11 @@ export class EventController {
   findAllCurrentUserEvents(@GetCurrentUserId() eventCreatorId: string) {
     return this.eventService.findAllCurrentUserEvents(eventCreatorId);
   }
+  @UseGuards(AuthGuard)
+  @Get('joinedEvents')
+  findJoinedEvents(@GetCurrentUserId() userId) {
+    return this.eventService.findJoinedEvents(userId);
+  }
   // what if the event is not public?
   @Get(':id')
   getById(@Param('id') id: string) {
@@ -163,16 +168,22 @@ export class EventController {
     );
   }
 
-  @UseGuards(AuthGuard) 
+  @UseGuards(AuthGuard)
   @Post('join')
-  async joinEvent(@GetCurrentUserId() userId, @Body() joinEventDto: JoinEventDto) {
+  async joinEvent(
+    @GetCurrentUserId() userId,
+    @Body() joinEventDto: JoinEventDto,
+  ) {
     await this.eventService.joinEvent(userId, joinEventDto);
     return { message: 'Successfully joined the event' };
   }
 
   @UseGuards(AuthGuard)
   @Delete('leave')
-  async leaveEvent(@GetCurrentUserId() userId, @Body() leaveEventDto: LeaveEventDto) {
+  async leaveEvent(
+    @GetCurrentUserId() userId,
+    @Body() leaveEventDto: LeaveEventDto,
+  ) {
     await this.eventService.leaveEvent(userId, leaveEventDto.eventId);
     return { message: 'Successfully left the event' };
   }
