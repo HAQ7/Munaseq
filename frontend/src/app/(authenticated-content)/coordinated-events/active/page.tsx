@@ -9,7 +9,6 @@ export default async function ActiveCoordinatedEvents() {
     return (
         <div className="flex mt-4 gap-8 flex-wrap lg:justify-start justify-center">
             {eventList.map(async (event: any) => {
-
                 if (
                     checkData(event.startDateTime, event.endDateTime) ===
                     "active"
@@ -17,6 +16,7 @@ export default async function ActiveCoordinatedEvents() {
                     numEventRendered++;
                     return (
                         <SmallCard
+                            asEventCreator
                             image={event.imageUrl}
                             title={event.title}
                             date={getDate(event.startDateTime)}

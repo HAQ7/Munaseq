@@ -11,6 +11,7 @@ const config: Config = {
       boxShadow: {
         strong: "0 0 50px 0 #D7D7D7",
         menu: "-8px 4px 7px 0 rgba(0, 0, 0, 0.1)",
+        custom: 'rgba(0, 0, 0, 0.24) 0px 3px 8px;'
       },
       animation: {
         rotate: "rotate 10s infinite linear",

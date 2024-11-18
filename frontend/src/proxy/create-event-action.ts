@@ -8,6 +8,7 @@ export default async function createEventAction(formData: FormData) {
     // get token from cookie
     const cookiesList = cookies();
     const token = cookiesList.get("token");
+    console.log(formData.getAll("categories"));
     if (!token?.value) {
         redirect("signin");
     }

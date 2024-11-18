@@ -2,10 +2,16 @@ import getEventAction from "@/proxy/get-event-using-id-action";
 import Image from "next/image";
 import { EventDataDto } from "@/dtos/event-data.dto";
 import Tag from "@/components/common/category";
-import Button from "@/components/common/button";
 import userIcon from "@/assets/icons/user-gradiant.svg";
 import { UserDataDto } from "@/dtos/user-data.dto";
+import calendarIcon from "@/assets/icons/calender.svg";
+import groupIcon from "@/assets/icons/participants.svg";
+import loactionIcon from "@/assets/icons/location.svg";
 import getUserAction from "@/proxy/get-user-using-id-action";
+import decoTop from "@/assets/event/top.png";
+import decoBottom from "@/assets/event/bottom.png";
+import Return from "@/components/authenticated-content/event/return";
+import JoinButton from "@/components/authenticated-content/event/join";
 
 export default async function EventPage({
     params,
@@ -16,10 +22,17 @@ export default async function EventPage({
         eventId: params.eventId,
     });
     const user: UserDataDto = await getUserAction(event.eventCreatorId);
-    console.log(event);
+
     return (
-        <section className="grid place-items-center">
-            <div className="bg-white w-full max-w-[1100px] shadow-lg rounded-xl md:p-8 overflow-hidden">
+        <section className="grid place-items-center mb-10">
+            <div className="bg-white w-full max-w-[1100px] shadow-custom rounded-xl md:p-8 overflow-hidden relative">
+                <Image
+                    className="absolute top-0 left-0 md:block hidden"
+                    src={decoTop}
+                    alt="deco"
+                />
+                <Return className="absolute top-10 left-10 md:block hidden" />
+
                 <div className="flex relative md:flex-row flex-col">
                     <div className="w-full md:max-w-[600px] aspect-[7/5] relative">
                         <Image
@@ -29,22 +42,40 @@ export default async function EventPage({
                             className="object-cover rounded-2xl shadow-menu  md:rounded-b-2xl rounded-b-none rounded-t-2xl"
                         />
                     </div>
-                    <div className="flex-1 text-xl gap-5 flex flex-col md:min-w-72 p-8 ">
+                    <div className="flex-1 text-xl gap-5 flex flex-col md:min-w-72 p-8 relative">
+                        <Image
+                            className="absolute top-0 left-0 block md:hidden"
+                            src={decoTop}
+                            alt="deco"
+                        />
+                        <Return className="absolute top-5 left-5 block md:hidden" />
                         <h1 className="font-bold ">معلومات الحضور</h1>
                         <div className="text-custom-black gap-2 flex flex-col">
-                            <p>
+                            <p className="flex gap-2 items-center">
+                                <Image
+                                    src={calendarIcon}
+                                    alt="date icon"
+                                    className="w-10"
+                                />
                                 {"تاريخ بدأ الفعالية: " +
                                     new Date(
                                         event.startDateTime
                                     ).toLocaleDateString()}
                             </p>
-                            <p>
-                                {"تاريخ انتهاء الفعالية: " + new Date(
-                                    event.endDateTime
-                                ).toLocaleDateString()}
+                            <p className="flex gap-2 items-center">
+                                <Image
+                                    src={calendarIcon}
+                                    alt="date icon"
+                                    className="w-10"
+                                />
+                                {"تاريخ انتهاء الفعالية: " +
+                                    new Date(
+                                        event.endDateTime
+                                    ).toLocaleDateString()}
                             </p>
-                            <p>
-                                {(event.isOnline ? "حضوري" : "عن بعد") +
+                            <p className="flex gap-2 items-center">
+                                <Image src={groupIcon} alt="group icon" />
+                                {(!event.isOnline ? "حضوري" : "عن بعد") +
                                     " " +
                                     (event.gender === "BOTH"
                                         ? "للجميع"
@@ -52,7 +83,15 @@ export default async function EventPage({
                                         ? "للذكور"
                                         : "للإناث")}
                             </p>
-                            <p>{event.location}</p>
+                            {!event.isOnline && (
+                                <p className="flex gap-2 items-center">
+                                    <Image
+                                        src={loactionIcon}
+                                        alt="loaction Icon"
+                                    />
+                                    {event.location}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -83,9 +122,14 @@ export default async function EventPage({
                             {event.description}
                         </div>
                     </div>
-                    <div className="w-full flex justify-end mt-5">
-                        <Button gradient>الانضمام للفعالية</Button>
-                    </div>
+
+                    <JoinButton eventId={params.eventId}>
+                        <Image
+                            className="absolute bottom-0 left-0 "
+                            src={decoBottom}
+                            alt="deco"
+                        />
+                    </JoinButton>
                 </div>
             </div>
         </section>

@@ -6,7 +6,7 @@ import getDate from "@/util/get-date";
 export default async function UpcomingCoordinatedEvents() {
     const eventList = await GetUserEventsAction();
     let numEventRendered = 0;
-    
+
     return (
         <div className="flex mt-4 gap-8 flex-wrap lg:justify-start justify-center">
             {eventList.map(async (event: any) => {
@@ -17,6 +17,7 @@ export default async function UpcomingCoordinatedEvents() {
                     numEventRendered++;
                     return (
                         <SmallCard
+                            asEventCreator
                             image={event.imageUrl}
                             title={event.title}
                             date={getDate(event.startDateTime)}

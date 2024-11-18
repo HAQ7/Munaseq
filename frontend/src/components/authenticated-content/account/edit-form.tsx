@@ -238,6 +238,13 @@ export default function EditForm({
                 for (const category of selectedCatagories) {
                     formData.append("categories", category);
                 }
+                formData.set(
+                    "socialAccounts",
+                    JSON.stringify({
+                        xLink: xLinkRef.current.value,
+                        linkedinLink: linkedinLinkRef.current.value,
+                    })
+                );
 
                 const error: { message: string } = await editProfileAction(
                     formData,

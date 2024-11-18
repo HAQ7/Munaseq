@@ -38,6 +38,7 @@ export default function CreateEvent() {
                 {/* <CreateEventProgress step={1} /> */}
                 <form
                     action={async formData => {
+                        console.log(selectedCategories.current)
                         for (const category of selectedCategories.current) {
                             formData.append("categories", category);
                         }

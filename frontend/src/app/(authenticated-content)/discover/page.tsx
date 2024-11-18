@@ -5,8 +5,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import SmallCard from "@/components/common/small-card";
 import getDate from "@/util/get-date";
-import getUserAction from "@/proxy/get-user-using-id-action";
-import { UserDataDto } from "@/dtos/user-data.dto";
+
 import getEventsAction from "@/proxy/get-events-action";
 
 export const metadata: Metadata = {

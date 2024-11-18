@@ -4,7 +4,15 @@ import { useEffect, useState } from "react";
 import dateIcon from "@/assets/land-assets/date-icon.svg";
 import timeIcon from "@/assets/land-assets/time-icon.svg";
 import presenterIcon from "@/assets/land-assets/presenter-icon.svg";
+import signout from "@/assets/icons/signout.svg";
+import dots from "@/assets/icons/dots-white.svg";
+import { Separator } from "./shadcn-ui/separator";
 import rateIcon from "@/assets/land-assets/rate-icon.svg";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from "./shadcn-ui/dropdown-menu";
 import Image from "next/image";
 import Button from "./button";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
@@ -12,6 +20,10 @@ import Link from "next/link";
 import getUserAction from "@/proxy/get-user-using-id-action";
 import { UserDataDto } from "@/dtos/user-data.dto";
 import { Skeleton } from "./shadcn-ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
+import cancelEventAction from "@/proxy/cancel-event-action";
+import leaveEventAction from "@/proxy/leave-event-action";
+import LogoLoading from "./logo-loading";
 
 export default function SmallCard({
     image,
@@ -23,6 +35,8 @@ export default function SmallCard({
     rate,
     cost,
     badges = [],
+    asEventCreator = false,
+    asEventParticipant = false,
 }: {
     image: StaticImport;
     title: string;
@@ -33,9 +47,31 @@ export default function SmallCard({
     rate?: number;
     cost?: string;
     badges: string[];
+    asEventCreator?: boolean;
+    asEventParticipant?: boolean;
 }) {
     const [user, setUser] = useState<UserDataDto>();
     const [loading, setLoading] = useState(true);
+    const [cancelOrLeaveLoading, setCancelOrLeaveLoading] = useState(false);
+    const { toast } = useToast();
+    const leaveEvent = async () => {
+
+        const res = await leaveEventAction(eventId);
+        console.log(res);
+        toast({
+            duration: 5000,
+            title: "تم الخروج من الفعالية",
+        });
+    };
+    const cancelEvent = async () => {
+        const res = await cancelEventAction(eventId);
+        console.log(res);
+        toast({
+            duration: 5000,
+            title: "تم الغاء الفعالية",
+        });
+    };
+
     useEffect(() => {
         async function getUser() {
             if (userId) {
@@ -57,13 +93,56 @@ export default function SmallCard({
         <div className="max-w-[340px] w-full min-h-[350px] bg-white border border-gray-200 rounded-3xl shadow-lg ">
             <div className="p-0 relative h-40">
                 {!loading ? (
-                    <Image
-                        className="rounded-t-3xl object-cover"
-                        src={image}
-                        fill
-                        sizes="100%"
-                        alt=""
-                    />
+                    <>
+                        <Image
+                            className="rounded-t-3xl object-cover"
+                            src={image}
+                            fill
+                            sizes="100%"
+                            alt=""
+                        />
+                        {(asEventCreator || asEventParticipant) && (
+                            <DropdownMenu dir="rtl">
+                                <DropdownMenuTrigger className="absolute top-2 right-2 z-30">
+                                    <Image src={dots} alt="options" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-white relative">
+                                    {cancelOrLeaveLoading && (
+                                        <LogoLoading className="w-10" />
+                                    )}
+                                    {asEventCreator &&
+                                        !cancelOrLeaveLoading && (
+                                            <div
+                                                onClick={() => cancelEvent()}
+                                                className="px-4 py-2 flex items-center gap-2 transition-colors hover:bg-[#ebebeb] cursor-pointer"
+                                            >
+                                                الغاء الفعالية{" "}
+                                                <Image
+                                                    src={signout}
+                                                    alt="user icon"
+                                                    className="w-8"
+                                                />
+                                            </div>
+                                        )}
+                                    {asEventParticipant &&
+                                        !cancelOrLeaveLoading && (
+                                            <div
+                                                onClick={() => leaveEvent()}
+                                                className="px-4 py-2 flex items-center gap-2 transition-colors hover:bg-[#ebebeb] cursor-pointer"
+                                            >
+                                                {" "}
+                                                الخروج من الفعالية{" "}
+                                                <Image
+                                                    src={signout}
+                                                    alt="user icon"
+                                                    className="w-8"
+                                                />
+                                            </div>
+                                        )}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        )}
+                    </>
                 ) : (
                     <Skeleton className="rounded-t-3xl h-40" />
                 )}
@@ -136,7 +215,10 @@ export default function SmallCard({
                             {cost}
                         </p>
                         <Button gradient>
-                            <Link href={`/event/${eventId}`}>
+                            <Link
+                                className="w-full h-full grid place-items-center"
+                                href={`/event/${eventId}`}
+                            >
                                 التفاصيل
                             </Link>
                         </Button>
