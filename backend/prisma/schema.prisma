@@ -15,11 +15,11 @@ generator client {
 }
 
 model User {
-  id                String   @id @default(uuid())
+  id                String           @id @default(uuid())
   firstName         String
   lastName          String
-  username          String   @unique
-  email             String   @unique
+  username          String           @unique
+  email             String           @unique
   password          String
   // organizationName String? // Optional for organizations -> not needed
   profilePictureUrl String? // Optional profile picture
@@ -29,36 +29,108 @@ model User {
   socialAccounts    Json? // Optional social accounts linked
   categories        String[] // Array of strings for interests in event categories
   description       String? // New: Optional description field for the user
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  createdEvents     Event[]  @relation("UserCreatedEvents") // Relation to created events
-  joinedEvents      Event[]  @relation("UserEventsJoined") // New: Events joined by the user (many-to-many)
-  presentedEvents   Event[]  @relation("EventPresenters") // Relation to events where user is a presenter (many-to-many)
-  moderatedEvents   Event[]  @relation("EventModerators") // Relation to events where user is a moderator (many-to-many)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  createdEvents     Event[]          @relation("UserCreatedEvents") // Relation to created events
+  joinedEvents      Event[]          @relation("UserEventsJoined") // New: Events joined by the user (many-to-many)
+  presentedEvents   Event[]          @relation("EventPresenters") // Relation to events where user is a presenter (many-to-many)
+  moderatedEvents   Event[]          @relation("EventModerators") // Relation to events where user is a moderator (many-to-many)
+  TakeQuiz          TakeQuiz[]
+  TakeAssignment    TakeAssignment[]
+  GiveFeedback      GiveFeedback[]
 }
 
 model Event {
-  id             String   @id @default(uuid())
+  id             String         @id @default(uuid())
   title          String
   description    String? // Optional description
   categories     String[] // Array of event categories (string array)
   location       String? // Optional location
   seatCapacity   Int? // New: Optional seat capacity
-  isPublic       Boolean  @default(true) // New: Whether the event is public or private
-  isOnline       Boolean  @default(true) // New: Whether the event is remote or on-site
-  gender         Gender   @default(BOTH) // New: Gender of attendees (male, female, both)
+  isPublic       Boolean        @default(true) // New: Whether the event is public or private
+  isOnline       Boolean        @default(true) // New: Whether the event is remote or on-site
+  gender         Gender         @default(BOTH) // New: Gender of attendees (male, female, both)
   // targetAudience String[] // New: Array of target audiences
   startDateTime  DateTime // Date without time
   endDateTime    DateTime // Date without time
   imageUrl       String? // New: Optional image string
-  price          Int?     @default(0) // New: Price for the event
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  presenters     User[]   @relation("EventPresenters") // New: List of event presenters (many-to-many)
-  moderators     User[]   @relation("EventModerators") // New: List of event moderators (many-to-many)
-  joinedUsers    User[]   @relation("UserEventsJoined") // New: Users who have joined the event (many-to-many)
-  eventCreator   User     @relation("UserCreatedEvents", fields: [eventCreatorId], references: [id], onDelete: Cascade)
+  price          Int?           @default(0) // New: Price for the event
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  presenters     User[]         @relation("EventPresenters") // New: List of event presenters (many-to-many)
+  moderators     User[]         @relation("EventModerators") // New: List of event moderators (many-to-many)
+  joinedUsers    User[]         @relation("UserEventsJoined") // New: Users who have joined the event (many-to-many)
+  eventCreator   User           @relation("UserCreatedEvents", fields: [eventCreatorId], references: [id], onDelete: Cascade)
   eventCreatorId String
+  Quiz           Quiz[]
+  Assignment     Assignment[]
+  GivenFeedbacks GiveFeedback[]
+}
+
+model Quiz {
+  id        String   @id @default(uuid())
+  startDate DateTime
+  endDate   DateTime
+  questions Json
+  duration  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Event     Event    @relation(fields: [eventId], references: [id]) // Event has MANY Quiz, while Quiz belongs to ONLY ONE Event (One-To-Many)
+  eventId   String
+}
+
+model Assignment {
+  id          String   @id @default(uuid())
+  startDate   DateTime
+  endDate     DateTime
+  questions   String?
+  materialUrl String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Event       Event    @relation(fields: [eventId], references: [id]) // Event has MANY Assignment, while Assignment belongs to ONLY ONE Event (One-To-Many)
+  eventId     String
+}
+
+model Feedback {
+  id     String @id @default(uuid())
+  rating Float
+
+  GiveFeedback GiveFeedback[]
+}
+
+// ----------------------------------------------------------------
+// THE FOLLOWING Models ARE TO REPRESENT MANY-TO-MANY RELATIONSHIPS
+// ----------------------------------------------------------------
+
+//To represent many-to-many relationship that conatains "answers" attribute
+model TakeQuiz {
+  id      String @id @default(uuid())
+  answers Json
+  User    User   @relation(fields: [userId], references: [id])
+  userId  String
+}
+
+//To represent many-to-many relationship that conatains "textAnswers" and "answerMaterialUrl" attributes
+model TakeAssignment {
+  id                String  @id @default(uuid())
+  textAnswers       String?
+  answerMaterialUrl String? //Store the uploaded answerfile in AWS S3
+  User              User    @relation(fields: [userId], references: [id])
+  userId            String
+}
+
+// -------------------------------------------------------------------------------------
+// THE FOLLOWING Model IS TO REPRESENT TERNARY RELATIONSHIP FOR STORING USERS' FEEDBACKS
+// -------------------------------------------------------------------------------------
+
+model GiveFeedback {
+  id         String   @id @default(uuid())
+  User       User     @relation(fields: [userId], references: [id])
+  userId     String
+  Event      Event    @relation(fields: [eventId], references: [id])
+  eventId    String
+  Feedback   Feedback @relation(fields: [feedbackId], references: [id])
+  feedbackId String
 }
 
 enum Gender {

@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prisma:dev:deploy": "prisma migrate deploy",
+    "prisma:dev:deploy": "prisma migrate dev",
     "db:dev:rm": "docker compose rm munaseq_db -s -f -v",
     "db:dev:restart": "npm run db:dev:rm && npm run db:dev:up && sleep 1 && npm run prisma:dev:deploy",
     "db:dev:up": "docker compose up munaseq_db -d",
