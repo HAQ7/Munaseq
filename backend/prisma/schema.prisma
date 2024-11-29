@@ -62,9 +62,10 @@ model Event {
   joinedUsers    User[]         @relation("UserEventsJoined") // New: Users who have joined the event (many-to-many)
   eventCreator   User           @relation("UserCreatedEvents", fields: [eventCreatorId], references: [id], onDelete: Cascade)
   eventCreatorId String
-  Quiz           Quiz[]
-  Assignment     Assignment[]
+  Quizzes        Quiz[]
+  Assignments    Assignment[]
   GivenFeedbacks GiveFeedback[]
+  Materials      Material[]
 }
 
 model Quiz {
@@ -96,6 +97,13 @@ model Feedback {
   rating Float
 
   GiveFeedback GiveFeedback[]
+}
+
+model Material {
+  materialId  String @id @default(uuid())
+  materialUrl String
+  Event       Event  @relation(fields: [eventId], references: [id])
+  eventId     String
 }
 
 // ----------------------------------------------------------------

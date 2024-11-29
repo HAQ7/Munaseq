@@ -11,7 +11,7 @@ import {
   IsBoolean,
 } from 'class-validator';
 import { Gender } from '@prisma/client';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class CreateEventDto {
   @IsString()
@@ -22,15 +22,18 @@ export class CreateEventDto {
   @IsOptional()
   description?: string;
 
-  // @IsArray()
+  @IsArray()
+  @IsOptional() //MAKE SURE THAT MUANSEQ TEAM IS INFORMED THAT CATEGORIES OF THE EVENT IS OPTIONAL
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   categories: string[];
 
   @IsString()
   @IsOptional()
   location?: string;
 
-  @Transform(({ value }) => parseInt(value, 10))
-  // @IsInt()
+  @Type(() => Number) 
+  @IsOptional()
+  @IsInt()
   seatCapacity: number;
 
   @IsEnum(Gender)
@@ -64,6 +67,7 @@ export class CreateEventDto {
   endDateTime: Date;
 
   @IsOptional()
+  @Type(() => Number) 
   @IsInt()
   price?: number;
 }

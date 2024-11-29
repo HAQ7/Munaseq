@@ -11,6 +11,7 @@ import {
   ValidationPipe,
   UseInterceptors,
   UploadedFiles,
+  Query,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { AuthGuard } from '../auth/auth.guard';
@@ -19,10 +20,12 @@ import {
   CreateEventDto,
   JoinEventDto,
   LeaveEventDto,
+  SearchEvent,
   UpdateEventDto,
 } from './dtos';
 
 import { multerEventLogic } from 'src/utils/multer.logic';
+import { query } from 'express';
 
 @Controller('event')
 export class EventController {
@@ -51,19 +54,36 @@ export class EventController {
 
   // this should only return events that are public
   @Get()
-  getAllEvents() {
-    return this.eventService.getAllEvents();
+  getAllEvents(@Query() query: SearchEvent) {
+    return this.eventService.getAllEvents(
+      query.title,
+      query.pageNumber,
+      query.pageSize,
+    );
   }
 
   @UseGuards(AuthGuard)
   @Get('current')
-  findAllCurrentUserEvents(@GetCurrentUserId() eventCreatorId: string) {
-    return this.eventService.findAllCurrentUserEvents(eventCreatorId);
+  findAllCurrentUserEvents(
+    @GetCurrentUserId() eventCreatorId: string,
+    @Query() query: SearchEvent,
+  ) {
+    return this.eventService.findAllCurrentUserEvents(
+      eventCreatorId,
+      query.title,
+      query.pageNumber,
+      query.pageSize,
+    );
   }
   @UseGuards(AuthGuard)
   @Get('joinedEvents')
-  findJoinedEvents(@GetCurrentUserId() userId) {
-    return this.eventService.findJoinedEvents(userId);
+  findJoinedEvents(@GetCurrentUserId() userId, @Query() query: SearchEvent) {
+    return this.eventService.findJoinedEvents(
+      userId,
+      query.title,
+      query.pageNumber,
+      query.pageSize,
+    );
   }
   // what if the event is not public?
   @Get(':id')

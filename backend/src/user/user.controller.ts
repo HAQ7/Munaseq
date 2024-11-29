@@ -9,12 +9,13 @@ import {
   Post,
   UseInterceptors,
   UploadedFiles,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 
 import { GetCurrentUserId } from '../auth/decorators/get-current-user-id.decorator';
 import { AuthGuard } from '../auth/auth.guard';
-import { EditUserInfoDto, userChangePasswordDto } from './dtos';
+import { EditUserInfoDto, SeacrhUser, userChangePasswordDto } from './dtos';
 import { multerUserLogic } from 'src/utils/multer.logic';
 
 @Controller('user')
@@ -26,9 +27,9 @@ export class UserController {
   getMe(@GetCurrentUserId() id: string) {
     return this.userService.findById(id);
   }
-
+  //allows to search by username letters (Used in search bar)
   @Get()
-  findAll() {
+  findAll(@Query() query: SeacrhUser) {
     return this.userService.findAllUsers();
   }
 
@@ -41,7 +42,7 @@ export class UserController {
   findByEmail(@Param('email') email: string) {
     return this.userService.findByEmail(email);
   }
-
+  //Returns |specific| user (must contains the full username)(used when visiting specific user's profile)
   @Get('username/:username')
   findByUsername(@Param('username') username: string) {
     return this.userService.findByUsername(username);

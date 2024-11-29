@@ -46,7 +46,6 @@ export class UserService {
         where: {
           id,
         },
-       
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -68,7 +67,6 @@ export class UserService {
         where: {
           email,
         },
-      
       });
     } catch (error) {
       // Catch specific error when a record is not found
@@ -96,7 +94,6 @@ export class UserService {
         where: {
           username,
         },
-       
       });
     } catch (error) {
       // Catch specific error when a record is not found
@@ -151,12 +148,34 @@ export class UserService {
   }
 
   // this should not return all the user information including password and such
-  async findAllUsers() {
-    return this.prisma.user.findMany({
-      omit: {
-        password: true,
-      },
-    });
+  async findAllUsers(
+    username?: string,
+    pageNumber: number = 1,
+    pageSize: number = 5,
+  ) {
+    const skipedRecords = (pageNumber - 1) * pageSize;
+    if (username) {
+      return this.prisma.user.findMany({
+        where: {
+          username: {
+            contains: username,
+          },
+        },
+        omit: {
+          password: true,
+        },
+        take: pageSize,
+        skip: skipedRecords,
+      });
+    } else {
+      return this.prisma.user.findMany({
+        omit: {
+          password: true,
+        },
+        take: pageSize,
+        skip: skipedRecords,
+      });
+    }
   }
 
   async changeUserPassword(
