@@ -56,11 +56,11 @@ export class CreateEventDto {
   isPublic?: boolean;
 
   @IsDate()
-  @Transform(({ value }) => new Date(value))
+  @Transform(({ value }) => new Date(+value))
   startDateTime: Date;
 
   @IsDate()
-  @Transform(({ value }) => new Date(value))
+  @Transform(({ value }) => new Date(+value))
   endDateTime: Date;
 
   @IsOptional()

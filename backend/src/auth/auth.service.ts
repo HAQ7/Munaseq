@@ -9,10 +9,8 @@ import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import { UserService } from '../user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { userSignUpDto } from './dtos/user-signup.dto';
-import { userSignInDto } from './dtos/user-signin.dto';
+import { userSignUpDto, userSignInDto } from './dtos';
 import { JwtPayload } from './types/jwtPayload';
-
 @Injectable()
 export class AuthService {
   constructor(

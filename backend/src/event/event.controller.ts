@@ -11,66 +11,26 @@ import {
   ValidationPipe,
   UseInterceptors,
   UploadedFiles,
-  Request,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { GetCurrentUserId } from '../auth/decorators/get-current-user-id.decorator';
-import { CreateEventDto, UpdateEventDto } from './dtos';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import * as multerS3 from 'multer-s3';
-import { S3Client } from '@aws-sdk/client-s3';
-import * as dotenv from 'dotenv';
-import { JoinEventDto } from './dtos/join-event.dto';
-import { LeaveEventDto } from './dtos/leave-event.dto';
-dotenv.config();
-const bucketName = process.env.BUCKET_NAME;
-const region = process.env.BUCKET_REGION;
-const accessKeyId = process.env.ACCESS_KEY;
-const secretAccessKey = process.env.SECRET_ACCESS_KEY;
+import {
+  CreateEventDto,
+  JoinEventDto,
+  LeaveEventDto,
+  UpdateEventDto,
+} from './dtos';
+
+import { multerEventLogic } from 'src/utils/multer.logic';
+
 @Controller('event')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
   // dtos for createEvent and updateEvent will probably need to be updated
   @UseGuards(AuthGuard)
-  @UseInterceptors(
-    FileFieldsInterceptor(
-      [
-        { name: 'image', maxCount: 1 }, // The field name for the image file
-      ],
-      {
-        storage: multerS3({
-          s3: new S3Client({
-            region,
-            credentials: {
-              accessKeyId,
-              secretAccessKey,
-            },
-          }),
-          bucket: bucketName,
-          acl: 'public-read',
-          contentType: multerS3.AUTO_CONTENT_TYPE,
-
-          key: (req, file, cb) => {
-            const fileExt = file.originalname.split('.').pop();
-            const fileName = `${file.fieldname}-${Date.now()}.${fileExt}`;
-            cb(null, fileName); // The file name in the S3 bucket
-          },
-        }),
-        fileFilter: (req, file, cb) => {
-          if (file.mimetype.startsWith('image/')) {
-            cb(null, true);
-          } else {
-            cb(
-              new Error('Invalid file type, only PDF and images are allowed!'),
-              false,
-            );
-          }
-        },
-      },
-    ),
-  )
+  @UseInterceptors(multerEventLogic())
   @Post()
   create(
     @Body(new ValidationPipe({ transform: true }))
@@ -113,43 +73,7 @@ export class EventController {
 
   @UseGuards(AuthGuard)
   @Patch(':id')
-  @UseInterceptors(
-    FileFieldsInterceptor(
-      [
-        { name: 'image', maxCount: 1 }, // The field name for the image file
-      ],
-      {
-        storage: multerS3({
-          s3: new S3Client({
-            region,
-            credentials: {
-              accessKeyId,
-              secretAccessKey,
-            },
-          }),
-          bucket: bucketName,
-          acl: 'public-read',
-          contentType: multerS3.AUTO_CONTENT_TYPE,
-
-          key: (req, file, cb) => {
-            const fileExt = file.originalname.split('.').pop();
-            const fileName = `${file.fieldname}-${Date.now()}.${fileExt}`;
-            cb(null, fileName); // The file name in the S3 bucket
-          },
-        }),
-        fileFilter: (req, file, cb) => {
-          if (file.mimetype.startsWith('image/')) {
-            cb(null, true);
-          } else {
-            cb(
-              new Error('Invalid file type, only PDF and images are allowed!'),
-              false,
-            );
-          }
-        },
-      },
-    ),
-  )
+  @UseInterceptors(multerEventLogic())
   update(
     @GetCurrentUserId() eventCreatorId: string,
     @Param('id') id: string,

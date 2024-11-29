@@ -5,8 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateEventDto, UpdateEventDto } from './dtos';
-import { JoinEventDto } from './dtos/join-event.dto';
+import { CreateEventDto, JoinEventDto, UpdateEventDto } from './dtos';
 
 @Injectable()
 export class EventService {
@@ -169,4 +168,5 @@ export class EventService {
       },
     });
   }
+  async searchEvent() {}
 }

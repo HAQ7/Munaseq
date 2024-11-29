@@ -15,18 +15,8 @@ import { UserService } from './user.service';
 import { GetCurrentUserId } from '../auth/decorators/get-current-user-id.decorator';
 import { AuthGuard } from '../auth/auth.guard';
 import { EditUserInfoDto, userChangePasswordDto } from './dtos';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import * as multerS3 from 'multer-s3';
+import { multerUserLogic } from 'src/utils/multer.logic';
 
-import { S3Client } from '@aws-sdk/client-s3';
-
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-const bucketName = process.env.BUCKET_NAME;
-const region = process.env.BUCKET_REGION;
-const accessKeyId = process.env.ACCESS_KEY;
-const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -59,47 +49,7 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Patch()
-  @UseInterceptors(
-    FileFieldsInterceptor(
-      [
-        { name: 'cv', maxCount: 1 }, // Field for the PDF
-        { name: 'profilePicture', maxCount: 1 }, // Field for the profile image
-      ],
-      {
-        storage: multerS3({
-          s3: new S3Client({
-            region,
-            credentials: {
-              accessKeyId,
-              secretAccessKey,
-            },
-          }),
-          bucket: bucketName,
-          acl: 'public-read',
-          contentType: multerS3.AUTO_CONTENT_TYPE,
-
-          key: (req, file, cb) => {
-            const fileExt = file.originalname.split('.').pop();
-            const fileName = `${file.fieldname}-${Date.now()}.${fileExt}`;
-            cb(null, fileName); // The file name in the S3 bucket
-          },
-        }),
-        fileFilter: (req, file, cb) => {
-          if (
-            file.mimetype === 'application/pdf' ||
-            file.mimetype.startsWith('image/')
-          ) {
-            cb(null, true);
-          } else {
-            cb(
-              new Error('Invalid file type, only PDF and images are allowed!'),
-              false,
-            );
-          }
-        },
-      },
-    ),
-  )
+  @UseInterceptors(multerUserLogic())
   editUserInfo(
     @GetCurrentUserId() id,
     @Body() EditUserDto: EditUserInfoDto,
