@@ -76,7 +76,7 @@ model Quiz {
   duration  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Event     Event    @relation(fields: [eventId], references: [id]) // Event has MANY Quiz, while Quiz belongs to ONLY ONE Event (One-To-Many)
+  Event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade) // Event has MANY Quiz, while Quiz belongs to ONLY ONE Event (One-To-Many)
   eventId   String
 }
 
@@ -88,7 +88,7 @@ model Assignment {
   materialUrl String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  Event       Event    @relation(fields: [eventId], references: [id]) // Event has MANY Assignment, while Assignment belongs to ONLY ONE Event (One-To-Many)
+  Event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade) // Event has MANY Assignment, while Assignment belongs to ONLY ONE Event (One-To-Many)
   eventId     String
 }
 
@@ -100,9 +100,10 @@ model Feedback {
 }
 
 model Material {
-  materialId  String @id @default(uuid())
+  materialId  String   @id @default(uuid())
   materialUrl String
-  Event       Event  @relation(fields: [eventId], references: [id])
+  createdAt   DateTime @default(now())
+  Event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId     String
 }
 

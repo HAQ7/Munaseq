@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateEventDto, JoinEventDto, UpdateEventDto } from './dtos';
-import { title } from 'process';
 
 @Injectable()
 export class EventService {
@@ -89,9 +88,10 @@ export class EventService {
       where: { id },
     });
   }
+  //Returns the joined events for certain user
   findJoinedEvents(
     userId,
-    title?: string,
+    title?: string, //
     pageNumber: number = 1,
     pageSize: number = 5,
   ) {
@@ -125,6 +125,60 @@ export class EventService {
       });
     }
   }
+  //Return all users that attends in certain event
+  async findUsersParticipateInEvent(
+    eventId: string,
+    role: string,
+    username?: string, //to enable search by username
+    pageNumber: number = 1,
+    pageSize: number = 5,
+  ) {
+    const skipedRecords = (pageNumber - 1) * pageSize;
+    if (username) {
+      const result = await this.prisma.event.findMany({
+        where: {
+          id: eventId,
+        },
+        select: {
+          [role]: {
+            where: {
+              username: {
+                contains: username,
+              },
+            },
+            select: {
+              firstName: true,
+              lastName: true,
+              profilePictureUrl: true,
+              username: true,
+            },
+            take: pageSize,
+            skip: skipedRecords,
+          },
+        },
+      });
+      return result.length > 0 ? result[0][role] : []; // to return array contains the selected fields only
+    } else {
+      const result = await this.prisma.event.findMany({
+        where: {
+          id: eventId,
+        },
+        select: {
+          [role]: {
+            select: {
+              firstName: true,
+              lastName: true,
+              profilePictureUrl: true,
+              username: true,
+            },
+            take: pageSize,
+            skip: skipedRecords,
+          },
+        },
+      });
+      return result.length > 0 ? result[0][role] : []; // to return array contains the selected fields only
+    }
+  }
   //-----------------------------------------------------------------------------------------------------------------
   //-----------------------------------------------------------------------------------------------------------------
 
@@ -136,6 +190,56 @@ export class EventService {
   //             availabilty:
   //         });
   //   }
+  async addMaterialsToEvent(
+    eventId: string,
+    userId: string,
+    materials: { materialUrl: string }[],
+  ) {
+    //the following logic is to ensure that the material will not be added to the event unless the user is authorized to do that
+
+    //retreive eventCreator, moderators, and presenters ids
+    const eventIds = await this.prisma.event.findUniqueOrThrow({
+      where: { id: eventId },
+      select: {
+        eventCreatorId: true,
+        presenters: { select: { id: true } },
+        moderators: { select: { id: true } },
+      },
+    });
+    // Check if the userId matches any of the roles
+    const isAuthorized =
+      eventIds.eventCreatorId === userId ||
+      eventIds.presenters.some((presenter) => presenter.id === userId) ||
+      eventIds.moderators.some((moderator) => moderator.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to add materials to this event',
+      );
+    }
+
+    // If authorized, proceed to add materials
+    return this.prisma.event.update({
+      where: { id: eventId },
+      data: {
+        Materials: {
+          createMany: {
+            data: materials,
+          },
+        },
+      },
+      select: {
+        Materials: {
+          where: {
+            materialUrl: {
+              in: materials.map((material) => material.materialUrl), //to retreive the only materials' urls 
+            },
+          },
+          select: { materialUrl: true },
+        },
+      },
+    });
+  }
 
   updateEvent(
     eventCreatorId: string,

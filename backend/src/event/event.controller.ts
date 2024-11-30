@@ -12,6 +12,7 @@ import {
   UseInterceptors,
   UploadedFiles,
   Query,
+  BadRequestException,
 } from '@nestjs/common';
 import { EventService } from './event.service';
 import { AuthGuard } from '../auth/auth.guard';
@@ -20,12 +21,12 @@ import {
   CreateEventDto,
   JoinEventDto,
   LeaveEventDto,
+  SeacrhUser,
   SearchEvent,
   UpdateEventDto,
 } from './dtos';
 
-import { multerEventLogic } from 'src/utils/multer.logic';
-import { query } from 'express';
+import { multerEventLogic, multerMaterialtLogic } from 'src/utils/multer.logic';
 
 @Controller('event')
 export class EventController {
@@ -61,7 +62,7 @@ export class EventController {
       query.pageSize,
     );
   }
-
+  //Returns all event that've been created by current the user
   @UseGuards(AuthGuard)
   @Get('current')
   findAllCurrentUserEvents(
@@ -75,6 +76,7 @@ export class EventController {
       query.pageSize,
     );
   }
+  //Returns all events that the current user has joined
   @UseGuards(AuthGuard)
   @Get('joinedEvents')
   findJoinedEvents(@GetCurrentUserId() userId, @Query() query: SearchEvent) {
@@ -85,6 +87,49 @@ export class EventController {
       query.pageSize,
     );
   }
+  //Returns all users that attend in certain event
+  @Get('attendeess/:eventId')
+  findUsersAttendEvent(
+    @Param('eventId') eventId: string,
+    @Query() query: SeacrhUser,
+  ) {
+    return this.eventService.findUsersParticipateInEvent(
+      eventId,
+      'joinedUsers',
+      query.username,
+      query.pageNumber,
+      query.pageSize,
+    );
+  }
+  //Returns all users that moderate in certain event
+  @Get('moderators/:eventId')
+  findUsersModerateEvent(
+    @Param('eventId') eventId: string,
+    @Query() query: SeacrhUser,
+  ) {
+    return this.eventService.findUsersParticipateInEvent(
+      eventId,
+      'moderators',
+      query.username,
+      query.pageNumber,
+      query.pageSize,
+    );
+  }
+  //Returns all users that attend in certain event
+  @Get('presenters/:eventId')
+  findUsersPresentEvent(
+    @Param('eventId') eventId: string,
+    @Query() query: SeacrhUser,
+  ) {
+    return this.eventService.findUsersParticipateInEvent(
+      eventId,
+      'presenters',
+      query.username,
+      query.pageNumber,
+      query.pageSize,
+    );
+  }
+
   // what if the event is not public?
   @Get(':id')
   getById(@Param('id') id: string) {
@@ -121,7 +166,24 @@ export class EventController {
     await this.eventService.joinEvent(userId, joinEventDto);
     return { message: 'Successfully joined the event' };
   }
+  @UseGuards(AuthGuard)
+  @Post('addMaterial/:eventId')
+  @UseInterceptors(multerMaterialtLogic())
+  addMaterialToEvent(
+    @Param('eventId') eventId: string,
+    @UploadedFiles() files: { materials: any },
+    @GetCurrentUserId() userId: string,
+  ) {
+    if (!files.materials || files.materials.length === 0) {
+      throw new BadRequestException('No materials uploaded');
+    }
 
+    // Extract URLs from the uploaded files
+    const materialUrls = files.materials.map((material) => ({
+      materialUrl: material.location, // S3 location of the file
+    }));
+    return this.eventService.addMaterialsToEvent(eventId, userId, materialUrls);
+  }
   @UseGuards(AuthGuard)
   @Delete('leave')
   async leaveEvent(

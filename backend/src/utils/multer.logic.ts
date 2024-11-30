@@ -79,7 +79,27 @@ export function multerUserLogic() {
     },
   );
 }
-export function multerAssignmentLogic() {}
+export function multerMaterialtLogic() {
+  return FileFieldsInterceptor(
+    [
+      { name: 'materials', maxCount: 10 }, // The field name for the material file
+    ],
+    {
+      storage: multerS3({
+        s3: s3Client,
+        bucket: bucketName,
+        acl: 'public-read',
+        contentType: multerS3.AUTO_CONTENT_TYPE,
+
+        key: (req, file, cb) => {
+          const fileExt = file.originalname.split('.').pop();
+          const fileName = `${uuidv4()}.${fileExt}`;
+          cb(null, fileName); // The file name in the S3 bucket
+        },
+      }),
+    },
+  );
+}
 // FileFieldsInterceptor(
 //   [
 //     { name: 'image', maxCount: 1 }, // The field name for the image file
