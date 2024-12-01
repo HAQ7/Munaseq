@@ -248,7 +248,58 @@ export class EventService {
   }
 
   //TODO: Deleting material
-  deleteMaterial() {}
+  async deleteMaterial(userId, materialId) {
+    //the following logic is to ensure that the material will not be deleted from an event unless the user is authorized to do that
+
+    //retreive eventCreator, moderators, and presenters ids
+    const eventIds = await this.prisma.event.findFirstOrThrow({
+      where: {
+        Materials: {
+          some: {
+            materialId,
+          },
+        },
+      },
+      select: {
+        id: true,
+        eventCreatorId: true,
+        presenters: { select: { id: true } },
+        moderators: { select: { id: true } },
+      },
+    });
+    // Check if the userId matches any of the roles
+    const isAuthorized =
+      eventIds.eventCreatorId === userId ||
+      eventIds.presenters.some((presenter) => presenter.id === userId) ||
+      eventIds.moderators.some((moderator) => moderator.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to add materials to this event',
+      );
+    }
+    const result = await this.prisma.event.update({
+      where: {
+        id: eventIds.id,
+      },
+      data: {
+        Materials: {
+          delete: {
+            materialId,
+          },
+        },
+      },
+    });
+    if (result) {
+      return {
+        message: `The assignment with id "${materialId}" has been deleted successfully`,
+      };
+    } else {
+      throw new InternalServerErrorException(
+        "The assignment couldn't be deleted successfully",
+      );
+    }
+  }
 
   //--------------------------------------------------
   //THE FOLLOWING IS FOR ADDING/UPDATING/DELETING MATERIAL LOGIC

@@ -201,7 +201,14 @@ export class EventController {
     }));
     return this.eventService.addMaterialsToEvent(eventId, userId, materialUrls);
   }
-
+  @UseGuards(AuthGuard)
+  @Delete('deleteMaterial/:materialId')
+  deleteMaterial(
+    @GetCurrentUserId() userid: string,
+    @Param('materialId') materialId: string,
+  ) {
+    return this.eventService.deleteMaterial(userid, materialId);
+  }
   //-----------------------------------------
   //Assignment's endpoints
   //-----------------------------------------
