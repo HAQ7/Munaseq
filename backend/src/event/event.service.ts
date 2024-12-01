@@ -23,8 +23,9 @@ export class EventService {
       },
     });
   }
-  //-----------------------------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------
   //THE FOLLOWING ARE SEARCH METHODS
+  //----------------------------------------------------------------------
 
   //pageSize indicate how many number records the user wants to retreive
   //pageNumber is help the user to indicate how many records will be skipped. The following variable will calculate the number of skipped records
@@ -125,7 +126,7 @@ export class EventService {
       });
     }
   }
-  //Return all users that attends in certain event
+  //Return all users that have the specified role in certain event
   async findUsersParticipateInEvent(
     eventId: string,
     role: string,
@@ -190,6 +191,10 @@ export class EventService {
   //             availabilty:
   //         });
   //   }
+
+  //--------------------------------------------------
+  //THE FOLLOWING IS FOR ADDING/DELETING MATERIAL LOGIC
+  //--------------------------------------------------
   async addMaterialsToEvent(
     eventId: string,
     userId: string,
@@ -232,38 +237,92 @@ export class EventService {
         Materials: {
           where: {
             materialUrl: {
-              in: materials.map((material) => material.materialUrl), //to retreive the only materials' urls 
+              in: materials.map((material) => material.materialUrl), //to retreive the only materials' urls
             },
           },
-          select: { materialUrl: true },
+          select: { materialUrl: true, materialId: true }, //the materialId is send in the response in order to make the front-end team able to send the materialId in order to delete the material
         },
       },
     });
   }
 
-  updateEvent(
-    eventCreatorId: string,
-    id: string,
-    updateEventDto: UpdateEventDto,
-    imageUrl?: any,
+  //TODO: Deleting material
+  deleteMaterial() {}
+
+  //--------------------------------------------------
+  //THE FOLLOWING IS FOR ADDING/UPDATING/DELETING MATERIAL LOGIC
+  //--------------------------------------------------
+  async addAssignmentToEvent(
+    eventId: string,
+    userId: string,
+    startDate: Date,
+    endDate: Date,
+    questions?: string,
+    materialUrl?: string,
   ) {
-    return imageUrl
-      ? this.prisma.event.update({
-          where: { id, eventCreatorId },
-          data: { ...updateEventDto, imageUrl },
-        })
-      : this.prisma.event.update({
-          where: { id, eventCreatorId },
-          data: updateEventDto,
-        });
-  }
+    //the following logic is to ensure that the assignment will not be added to the event unless the user is authorized to do that
 
-  remove(id: string) {
-    return this.prisma.event.delete({
-      where: { id },
+    //retreive eventCreator, moderators, and presenters ids
+    const eventIds = await this.prisma.event.findUniqueOrThrow({
+      where: { id: eventId },
+      select: {
+        eventCreatorId: true,
+        presenters: { select: { id: true } },
+        moderators: { select: { id: true } },
+      },
     });
+    // Check if the userId matches any of the roles
+    const isAuthorized =
+      eventIds.eventCreatorId === userId ||
+      eventIds.presenters.some((presenter) => presenter.id === userId) ||
+      eventIds.moderators.some((moderator) => moderator.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to add materials to this event',
+      );
+    }
+    const result = await this.prisma.event.update({
+      where: {
+        id: eventId,
+      },
+      data: {
+        Assignments: {
+          create: {
+            startDate,
+            endDate,
+            materialUrl,
+            questions,
+          },
+        },
+      },
+      select: {
+        Assignments: {
+          where: {
+            materialUrl: {
+              equals: materialUrl,
+            },
+          },
+          select: {
+            id: true,
+            startDate: true,
+            endDate: true,
+            materialUrl: true,
+            questions: true,
+          },
+        },
+      },
+    });
+    return result?.Assignments[0] ?? [];
   }
 
+  //TODO: Updating and Deleting an assigment
+  async updateAssignment() {}
+  async deleteAssignment() {}
+
+  //--------------------------------------------------
+  //THE FOLLOWING IS FOR JOINNING/LEAVING AN EVENT LOGIC
+  //--------------------------------------------------
   async joinEvent(userId: string, joinEventDto: JoinEventDto) {
     const { eventId } = joinEventDto;
     const event = await this.prisma.event.findUnique({
@@ -340,6 +399,31 @@ export class EventService {
           disconnect: { id: userId },
         },
       },
+    });
+  }
+  //--------------------------------------------------
+  //THE FOLLOWING IS FOR UPDATING/REMOVING AN EVENT LOGIC
+  //--------------------------------------------------
+  updateEvent(
+    eventCreatorId: string,
+    id: string,
+    updateEventDto: UpdateEventDto,
+    imageUrl?: any,
+  ) {
+    return imageUrl
+      ? this.prisma.event.update({
+          where: { id, eventCreatorId },
+          data: { ...updateEventDto, imageUrl },
+        })
+      : this.prisma.event.update({
+          where: { id, eventCreatorId },
+          data: updateEventDto,
+        });
+  }
+
+  remove(id: string) {
+    return this.prisma.event.delete({
+      where: { id },
     });
   }
 }

@@ -27,6 +27,7 @@ import {
 } from './dtos';
 
 import { multerEventLogic, multerMaterialtLogic } from 'src/utils/multer.logic';
+import { CreateAssignment } from './dtos/create-assignement.dto';
 
 @Controller('event')
 export class EventController {
@@ -167,8 +168,8 @@ export class EventController {
     return { message: 'Successfully joined the event' };
   }
   @UseGuards(AuthGuard)
-  @Post('addMaterial/:eventId')
   @UseInterceptors(multerMaterialtLogic())
+  @Post('addMaterial/:eventId')
   addMaterialToEvent(
     @Param('eventId') eventId: string,
     @UploadedFiles() files: { materials: any },
@@ -184,6 +185,27 @@ export class EventController {
     }));
     return this.eventService.addMaterialsToEvent(eventId, userId, materialUrls);
   }
+
+  @UseGuards(AuthGuard)
+  @UseInterceptors(multerMaterialtLogic())
+  @Post('addAssignment/:eventId')
+  addAssignmentToEvent(
+    @Param('eventId') eventId: string,
+    @UploadedFiles() files: { materials: any },
+    @GetCurrentUserId() userId: string,
+    @Body() createAssignmentDto: CreateAssignment,
+  ) {
+    const materialUrl = files?.materials[0].location;
+    return this.eventService.addAssignmentToEvent(
+      eventId,
+      userId,
+      createAssignmentDto.startDate,
+      createAssignmentDto.endDate,
+      createAssignmentDto.questions,
+      materialUrl,
+    );
+  }
+
   @UseGuards(AuthGuard)
   @Delete('leave')
   async leaveEvent(
