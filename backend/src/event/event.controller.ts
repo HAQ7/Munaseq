@@ -18,16 +18,17 @@ import { EventService } from './event.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { GetCurrentUserId } from '../auth/decorators/get-current-user-id.decorator';
 import {
+  CreateAssignment,
   CreateEventDto,
   JoinEventDto,
   LeaveEventDto,
   SeacrhUser,
   SearchEvent,
+  UpdateAssignment,
   UpdateEventDto,
 } from './dtos';
 
 import { multerEventLogic, multerMaterialtLogic } from 'src/utils/multer.logic';
-import { CreateAssignment } from './dtos/create-assignement.dto';
 
 @Controller('event')
 export class EventController {
@@ -157,7 +158,9 @@ export class EventController {
       imageUrl,
     );
   }
-
+  //-----------------------------------------
+  //Joining/Leaving Event's endpoints
+  //-----------------------------------------
   @UseGuards(AuthGuard)
   @Post('join')
   async joinEvent(
@@ -167,6 +170,19 @@ export class EventController {
     await this.eventService.joinEvent(userId, joinEventDto);
     return { message: 'Successfully joined the event' };
   }
+  @UseGuards(AuthGuard)
+  @Delete('leave')
+  async leaveEvent(
+    @GetCurrentUserId() userId,
+    @Body() leaveEventDto: LeaveEventDto,
+  ) {
+    await this.eventService.leaveEvent(userId, leaveEventDto.eventId);
+    return { message: 'Successfully left the event' };
+  }
+
+  //-----------------------------------------
+  //Material's endpoints
+  //-----------------------------------------
   @UseGuards(AuthGuard)
   @UseInterceptors(multerMaterialtLogic())
   @Post('addMaterial/:eventId')
@@ -186,6 +202,9 @@ export class EventController {
     return this.eventService.addMaterialsToEvent(eventId, userId, materialUrls);
   }
 
+  //-----------------------------------------
+  //Assignment's endpoints
+  //-----------------------------------------
   @UseGuards(AuthGuard)
   @UseInterceptors(multerMaterialtLogic())
   @Post('addAssignment/:eventId')
@@ -205,17 +224,37 @@ export class EventController {
       materialUrl,
     );
   }
-
   @UseGuards(AuthGuard)
-  @Delete('leave')
-  async leaveEvent(
-    @GetCurrentUserId() userId,
-    @Body() leaveEventDto: LeaveEventDto,
+  @UseInterceptors(multerMaterialtLogic())
+  @Patch('updateAssignment/:assignmentId')
+  updateAssignment(
+    @Param('assignmentId') assignmentId: string,
+    @UploadedFiles() files: { materials: any },
+    @GetCurrentUserId() userId: string,
+    @Body() createAssignmentDto: UpdateAssignment,
   ) {
-    await this.eventService.leaveEvent(userId, leaveEventDto.eventId);
-    return { message: 'Successfully left the event' };
+    const materialUrl = files?.materials[0].location;
+    return this.eventService.updateAssignment(
+      assignmentId,
+      userId,
+      createAssignmentDto.startDate,
+      createAssignmentDto.endDate,
+      createAssignmentDto.questions,
+      materialUrl,
+    );
+  }
+  @UseGuards(AuthGuard)
+  @Delete('deleteAssignment/:assignmentId')
+  deleteAssignment(
+    @GetCurrentUserId() userId: string,
+    @Param('assignmentId') assignmentId: string,
+  ) {
+    return this.eventService.deleteAssignment(assignmentId, userId);
   }
 
+  //-----------------------------------------
+  //Deleting Event's endpoint
+  //-----------------------------------------
   @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {

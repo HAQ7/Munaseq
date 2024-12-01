@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
@@ -313,12 +314,150 @@ export class EventService {
         },
       },
     });
-    return result?.Assignments[0] ?? [];
+    return result?.Assignments[0] ?? []; //to remove the unnecessary structure from the response
   }
 
-  //TODO: Updating and Deleting an assigment
-  async updateAssignment() {}
-  async deleteAssignment() {}
+  async updateAssignment(
+    assignementId: string,
+    userId: string,
+    startDate?: Date,
+    endDate?: Date,
+    questions?: string,
+    materialUrl?: string,
+  ) {
+    //the following logic is to ensure that the assignment will not be edited unless the user is authorized to do that
+
+    //retreive eventCreator, moderators, ,presenters, and event ids
+    const eventIds = await this.prisma.event.findFirstOrThrow({
+      //findUnique requires a direct unique attribute for event model, in this case the unique attr. isn't direct
+      where: {
+        Assignments: {
+          some: {
+            id: assignementId, // will check for an event that has an assignment id matches assignmentId
+          },
+        },
+      },
+      select: {
+        id: true,
+        eventCreatorId: true,
+        presenters: { select: { id: true } },
+        moderators: { select: { id: true } },
+      },
+    });
+    // Check if the userId matches any of the roles
+    const isAuthorized =
+      eventIds.eventCreatorId === userId ||
+      eventIds.presenters.some((presenter) => presenter.id === userId) ||
+      eventIds.moderators.some((moderator) => moderator.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to add materials to this event',
+      );
+    }
+    // The following is to append the new data to newData object in order to use it in prisma logic
+    let newData: {
+      startDate?: Date;
+      endDate?: Date;
+      questions?: string;
+      materialUrl?: string;
+    } = {};
+    if (startDate) {
+      newData = { ...newData, startDate };
+    }
+    if (endDate) {
+      newData = { ...newData, endDate };
+    }
+    if (questions) {
+      newData = { ...newData, questions };
+    }
+    if (materialUrl) {
+      newData = { ...newData, materialUrl };
+    }
+    const result = await this.prisma.event.update({
+      where: {
+        id: eventIds.id,
+      },
+      data: {
+        Assignments: {
+          update: {
+            where: {
+              id: assignementId,
+            },
+            data: { ...newData },
+          },
+        },
+      },
+      select: {
+        Assignments: {
+          where: {
+            id: assignementId,
+          },
+          select: {
+            id: true,
+            startDate: true,
+            endDate: true,
+            materialUrl: true,
+            questions: true,
+          },
+        },
+      },
+    });
+    return result?.Assignments[0] ?? []; //to remove the unnecessary structure from the response
+  }
+  async deleteAssignment(assignementId: string, userId: string) {
+    //the following logic is to ensure that the assignment will not be deleted unless the user is authorized to do that
+
+    //retreive eventCreator, moderators, ,presenters, and event ids
+    const eventIds = await this.prisma.event.findFirstOrThrow({
+      //findUnique requires a direct unique attribute for event model, in this case the unique attr. isn't direct
+      where: {
+        Assignments: {
+          some: {
+            id: assignementId, // will check for an event that has an assignment id matches assignmentId
+          },
+        },
+      },
+      select: {
+        id: true,
+        eventCreatorId: true,
+        presenters: { select: { id: true } },
+        moderators: { select: { id: true } },
+      },
+    });
+    // Check if the userId matches any of the roles
+    const isAuthorized =
+      eventIds.eventCreatorId === userId ||
+      eventIds.presenters.some((presenter) => presenter.id === userId) ||
+      eventIds.moderators.some((moderator) => moderator.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to add materials to this event',
+      );
+    }
+    const result = await this.prisma.event.update({
+      where: {
+        id: eventIds.id,
+      },
+      data: {
+        Assignments: {
+          delete: {
+            id: assignementId,
+          },
+        },
+      },
+    });
+    if (result) {
+      return {
+        message: `The assignment with id "${assignementId}" has been deleted successfully`,
+      };
+    } else {
+      throw new InternalServerErrorException(
+        "The assignment couldn't be deleted successfully",
+      );
+    }
+  }
 
   //--------------------------------------------------
   //THE FOLLOWING IS FOR JOINNING/LEAVING AN EVENT LOGIC
