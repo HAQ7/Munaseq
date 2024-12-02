@@ -74,7 +74,7 @@ export class UserService {
         },
       });
     } catch (error) {
-      // Catch specific error when a record is not found
+      // Catch specific errors when a record is not found
       if (error instanceof NotFoundError) {
         throw new HttpException(
           'No account with the provided email has been found',
