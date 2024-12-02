@@ -28,10 +28,10 @@ import {
   SearchEvent,
   UpdateAssignment,
   UpdateEventDto,
+  CreateUpdateRating,
 } from './dtos';
 
 import { multerEventLogic, multerMaterialtLogic } from 'src/utils/multer.logic';
-import { CreateUpdateRating } from './dtos/create-update-rating.dto';
 
 @Controller('event')
 export class EventController {
@@ -108,7 +108,7 @@ export class EventController {
     );
   }
   //Returns all users that attend in certain event
-  @Get('attendeess/:eventId')
+  @Get('attendees/:eventId')
   findUsersAttendEvent(
     @Param('eventId') eventId: string,
     @Query() query: SeacrhUser,
@@ -159,19 +159,22 @@ export class EventController {
       execludedUsers,
     );
   }
-
+  @Get('eventCreator/:eventId')
+  findEventCreator(@Param('eventId') eventId: string) {
+    return this.eventService.findEventCreator(eventId)
+  }
   // what if the event is not public?
-  @Get(':id')
-  getById(@Param('id') id: string) {
-    return this.eventService.getById(id);
+  @Get(':eventId')
+  getById(@Param('eventId') eventId: string) {
+    return this.eventService.getById(eventId);
   }
 
   @UseGuards(AuthGuard)
-  @Patch(':id')
+  @Patch(':eventId')
   @UseInterceptors(multerEventLogic())
   update(
-    @GetCurrentUserId() eventCreatorId: string,
-    @Param('id') id: string,
+    @GetCurrentUserId() userId: string,
+    @Param('eventId') eventId: string,
     @Body() updateEventDto: UpdateEventDto,
     @UploadedFiles()
     files: {
@@ -180,8 +183,8 @@ export class EventController {
   ) {
     const imageUrl = files?.image ? files.image[0].location : null; // S3 location of the Image
     return this.eventService.updateEvent(
-      eventCreatorId,
-      id,
+      userId,
+      eventId,
       updateEventDto,
       imageUrl,
     );
@@ -307,8 +310,11 @@ export class EventController {
   //Deleting Event's endpoint
   //-----------------------------------------
   @UseGuards(AuthGuard)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.eventService.remove(id);
+  @Delete(':eventId')
+  delete(
+    @Param('eventId') eventId: string,
+    @GetCurrentUserId() userId: string,
+  ) {
+    return this.eventService.delete(userId, eventId);
   }
 }

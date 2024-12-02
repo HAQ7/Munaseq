@@ -27,29 +27,74 @@ export class EventService {
     });
   }
   //--------------------------------------------------
-  //THE FOLLOWING IS FOR UPDATING/REMOVING AN EVENT LOGIC
+  //THE FOLLOWING IS FOR UPDATING/DELETING AN EVENT LOGIC
   //--------------------------------------------------
-  updateEvent(
-    eventCreatorId: string,
-    id: string,
+  async updateEvent(
+    userId: string,
+    eventId: string,
     updateEventDto: UpdateEventDto,
     imageUrl?: any,
   ) {
-    return imageUrl
-      ? this.prisma.event.update({
-          where: { id, eventCreatorId },
-          data: { ...updateEventDto, imageUrl },
-        })
-      : this.prisma.event.update({
-          where: { id, eventCreatorId },
-          data: updateEventDto,
-        });
+    const eventIds = await this.prisma.event.findUnique({
+      where: { id: eventId },
+      select: {
+        eventCreatorId: true,
+        moderators: { select: { id: true } },
+      },
+    });
+    //Check wether the event exist or not
+    if (!eventIds) {
+      throw new NotFoundException('Event not found');
+    }
+    // Check if the userId matches any of the roles
+    const isAuthorized =
+      eventIds.eventCreatorId === userId ||
+      eventIds.moderators.some((moderator) => moderator.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to update this event',
+      );
+    }
+
+    if (imageUrl) {
+      return this.prisma.event.update({
+        where: { id: eventId },
+        data: { ...updateEventDto, imageUrl },
+      });
+    } else {
+      return this.prisma.event.update({
+        where: { id: eventId },
+        data: { ...updateEventDto },
+      });
+    }
   }
 
-  remove(id: string) {
-    return this.prisma.event.delete({
-      where: { id },
+  async delete(userId: string, eventId: string) {
+    const eventIds = await this.prisma.event.findUnique({
+      where: { id: eventId },
+      select: {
+        eventCreatorId: true,
+      },
     });
+    //Check wether the event exist or not
+    if (!eventIds) {
+      throw new NotFoundException('Event not found');
+    }
+    // Check if the userId matches any of the roles
+    const isAuthorized = eventIds.eventCreatorId === userId;
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to delete this event',
+      );
+    }
+    await this.prisma.event.delete({
+      where: { id: eventId },
+    });
+    return {
+      message: 'The event has been deleted successfully',
+    };
   }
 
   //----------------------------------------------------------------------
@@ -58,7 +103,7 @@ export class EventService {
 
   //pageSize indicate how many number records the user wants to retreive
   //pageNumber is help the user to indicate how many records will be skipped. The following variable will calculate the number of skipped records
-  // const skipedRecords = (pageNumber - 1) * pageSize;  if the pageNumber =1 (i.e. the user want the first element) then the skipped records will equal 0*5(default pageSize) = 0
+  // const skipedRecords = (pageNumber - 1) * pageSize;  if the pageNumber =1 (i.e. the user want the first elements) then the skipped records will equal 0*5(default pageSize) = 0
 
   getAllEvents(
     title?: string,
@@ -127,10 +172,15 @@ export class EventService {
     }
   }
 
-  getById(id: string) {
-    return this.prisma.event.findUnique({
-      where: { id },
+  async getById(eventId: string) {
+    const result = await this.prisma.event.findUnique({
+      where: { id: eventId },
     });
+    if (result) {
+      return result;
+    } else {
+      throw new NotFoundException('Event not found');
+    }
   }
   //Returns the joined events for certain user
   findJoinedEvents(
@@ -192,7 +242,7 @@ export class EventService {
           id: eventId,
         },
         select: {
-          joinedUsers: {
+          [role]: {
             where: {
               username: {
                 contains: username,
@@ -241,7 +291,20 @@ export class EventService {
       return result.length > 0 ? result[0][role] : []; // to return array contains the selected fields only
     }
   }
-
+  findEventCreator(eventId) {
+    return this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+      select: {
+        eventCreator: {
+          omit: {
+            password: true,
+          },
+        },
+      },
+    });
+  }
   //--------------------------------------------------
   //THE FOLLOWING IS FOR ADDING/DELETING MATERIAL LOGIC
   //--------------------------------------------------
@@ -260,7 +323,10 @@ export class EventService {
         presenters: { select: { id: true } },
         moderators: { select: { id: true } },
       },
-    });
+    }); //Check wether the event exist or not
+    if (!eventIds) {
+      throw new NotFoundException('Event not found');
+    }
     // Check if the userId matches any of the roles
     const isAuthorized =
       eventIds.eventCreatorId === userId ||
@@ -300,7 +366,7 @@ export class EventService {
     //the following logic is to ensure that the material will not be deleted from an event unless the user is authorized to do that
 
     //retreive eventCreator, moderators, and presenters ids
-    const eventIds = await this.prisma.event.findFirstOrThrow({
+    const eventIds = await this.prisma.event.findFirst({
       where: {
         Materials: {
           some: {
@@ -315,6 +381,10 @@ export class EventService {
         moderators: { select: { id: true } },
       },
     });
+    //Check wether the event exist or not
+    if (!eventIds) {
+      throw new NotFoundException('Event not found');
+    }
     // Check if the userId matches any of the roles
     const isAuthorized =
       eventIds.eventCreatorId === userId ||
@@ -323,7 +393,7 @@ export class EventService {
 
     if (!isAuthorized) {
       throw new BadRequestException(
-        'User is not authorized to add materials to this event',
+        'User is not authorized to delete materials to this event',
       );
     }
     const result = await this.prisma.event.update({
@@ -508,7 +578,7 @@ export class EventService {
     //the following logic is to ensure that the assignment will not be deleted unless the user is authorized to do that
 
     //retreive eventCreator, moderators, ,presenters, and event ids
-    const eventIds = await this.prisma.event.findFirstOrThrow({
+    const eventIds = await this.prisma.event.findFirst({
       //findUnique requires a direct unique attribute for event model, in this case the unique attr. isn't direct
       where: {
         Assignments: {
@@ -524,6 +594,10 @@ export class EventService {
         moderators: { select: { id: true } },
       },
     });
+    //Check wether the event exist or not
+    if (!eventIds) {
+      throw new NotFoundException('assignment not found');
+    }
     // Check if the userId matches any of the roles
     const isAuthorized =
       eventIds.eventCreatorId === userId ||
@@ -646,7 +720,7 @@ export class EventService {
     //the following logic is to ensure that the rating will not be add to event unless that the user is authorized to do that
 
     //retreive eventCreator, moderators, ,presenters, and joinedUsers for the given eventId
-    const eventIds = await this.prisma.event.findUniqueOrThrow({
+    const eventIds = await this.prisma.event.findUnique({
       where: {
         id: eventId,
       },
@@ -663,6 +737,10 @@ export class EventService {
         },
       },
     });
+    //Check wether the event exist or not
+    if (!eventIds) {
+      throw new NotFoundException('Event not found');
+    }
     // Check that the user is not conisdered as neither event creator, moderator, nor presenter, but he is considered as joinedUser (attender)
     const isAuthorized =
       eventIds.eventCreatorId !== userId &&
@@ -763,6 +841,10 @@ export class EventService {
         },
       },
     });
+    //Check wether the event exist or not
+    if (!result) {
+      throw new NotFoundException('Event not found');
+    }
     const numberOfRatings = result.GivenFeedbacks.length;
     const sumOfRating = result.GivenFeedbacks.reduce(
       (preRatings, currRating) => preRatings + currRating.rating,
