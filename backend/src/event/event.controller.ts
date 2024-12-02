@@ -31,6 +31,7 @@ import {
 } from './dtos';
 
 import { multerEventLogic, multerMaterialtLogic } from 'src/utils/multer.logic';
+import { CreateUpdateRating } from './dtos/create-update-rating.dto';
 
 @Controller('event')
 export class EventController {
@@ -285,7 +286,23 @@ export class EventController {
   ) {
     return this.eventService.deleteAssignment(assignmentId, userId);
   }
-
+  //-----------------------------------------
+  //Rating Event's endpoints
+  //-----------------------------------------
+  @Post('ratingEvent/:eventId')
+  @UseGuards(AuthGuard)
+  rateEvent(
+    @Param('eventId') eventId: string,
+    @GetCurrentUserId() userId: string,
+    @Body() ratingDto: CreateUpdateRating,
+  ) {
+    const { rating } = ratingDto;
+    return this.eventService.rateEvent(userId, eventId, rating);
+  }
+  @Get('ratings/:eventId')
+  eventRating(@Param('eventId') eventId: string) {
+    return this.eventService.eventRating(eventId);
+  }
   //-----------------------------------------
   //Deleting Event's endpoint
   //-----------------------------------------

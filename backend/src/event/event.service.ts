@@ -10,7 +10,9 @@ import { CreateEventDto, JoinEventDto, UpdateEventDto } from './dtos';
 @Injectable()
 export class EventService {
   constructor(private prisma: PrismaService) {}
-
+  //----------------------------------------------------------------------
+  //THE FOLLOWING IS CREATING EVENT LOGIC
+  //----------------------------------------------------------------------
   createEvent(
     createEventDto: CreateEventDto,
     eventCreatorId: string,
@@ -24,6 +26,32 @@ export class EventService {
       },
     });
   }
+  //--------------------------------------------------
+  //THE FOLLOWING IS FOR UPDATING/REMOVING AN EVENT LOGIC
+  //--------------------------------------------------
+  updateEvent(
+    eventCreatorId: string,
+    id: string,
+    updateEventDto: UpdateEventDto,
+    imageUrl?: any,
+  ) {
+    return imageUrl
+      ? this.prisma.event.update({
+          where: { id, eventCreatorId },
+          data: { ...updateEventDto, imageUrl },
+        })
+      : this.prisma.event.update({
+          where: { id, eventCreatorId },
+          data: updateEventDto,
+        });
+  }
+
+  remove(id: string) {
+    return this.prisma.event.delete({
+      where: { id },
+    });
+  }
+
   //----------------------------------------------------------------------
   //THE FOLLOWING ARE SEARCH METHODS
   //----------------------------------------------------------------------
@@ -213,17 +241,6 @@ export class EventService {
       return result.length > 0 ? result[0][role] : []; // to return array contains the selected fields only
     }
   }
-  //-----------------------------------------------------------------------------------------------------------------
-  //-----------------------------------------------------------------------------------------------------------------
-
-  // this function needs availabilty attribute from the event table
-  //   getById(id: number, userID: number) {
-  //     const availablitity = this.prisma.event.findUnique({
-  //         where: { id },
-  //         data: {
-  //             availabilty:
-  //         });
-  //   }
 
   //--------------------------------------------------
   //THE FOLLOWING IS FOR ADDING/DELETING MATERIAL LOGIC
@@ -279,7 +296,6 @@ export class EventService {
     });
   }
 
-  //TODO: Deleting material
   async deleteMaterial(userId, materialId) {
     //the following logic is to ensure that the material will not be deleted from an event unless the user is authorized to do that
 
@@ -624,28 +640,138 @@ export class EventService {
     });
   }
   //--------------------------------------------------
-  //THE FOLLOWING IS FOR UPDATING/REMOVING AN EVENT LOGIC
+  //THE FOLLOWING IS FOR RATING AN EVENT LOGIC
   //--------------------------------------------------
-  updateEvent(
-    eventCreatorId: string,
-    id: string,
-    updateEventDto: UpdateEventDto,
-    imageUrl?: any,
-  ) {
-    return imageUrl
-      ? this.prisma.event.update({
-          where: { id, eventCreatorId },
-          data: { ...updateEventDto, imageUrl },
-        })
-      : this.prisma.event.update({
-          where: { id, eventCreatorId },
-          data: updateEventDto,
-        });
-  }
+  async rateEvent(userId: string, eventId: string, rating: number) {
+    //the following logic is to ensure that the rating will not be add to event unless that the user is authorized to do that
 
-  remove(id: string) {
-    return this.prisma.event.delete({
-      where: { id },
+    //retreive eventCreator, moderators, ,presenters, and joinedUsers for the given eventId
+    const eventIds = await this.prisma.event.findUniqueOrThrow({
+      where: {
+        id: eventId,
+      },
+      select: {
+        eventCreatorId: true,
+        presenters: { select: { id: true } },
+        moderators: { select: { id: true } },
+        joinedUsers: { select: { id: true } },
+        GivenFeedbacks: {
+          select: {
+            id: true,
+            userId: true,
+          },
+        },
+      },
     });
+    // Check that the user is not conisdered as neither event creator, moderator, nor presenter, but he is considered as joinedUser (attender)
+    const isAuthorized =
+      eventIds.eventCreatorId !== userId &&
+      eventIds.presenters.every((presenter) => presenter.id !== userId) &&
+      eventIds.moderators.every((moderator) => moderator.id !== userId) &&
+      eventIds.joinedUsers.some((joinedUser) => joinedUser.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to add materials to this event',
+      );
+    }
+    //Check wether the user has already rated an event or not
+    const hasRated = eventIds.GivenFeedbacks.some(
+      (feedback) => feedback.userId === userId,
+    );
+    if (!hasRated) {
+      const result = await this.prisma.event.update({
+        where: {
+          id: eventId,
+        },
+        data: {
+          GivenFeedbacks: {
+            create: {
+              rating,
+              userId, //Creating an event rating and assign it to the user
+            },
+          },
+        },
+        select: {
+          GivenFeedbacks: {
+            select: {
+              rating: true,
+            },
+          },
+        },
+      });
+      const numberOfRatings = result.GivenFeedbacks.length;
+      const sumOfRating = result.GivenFeedbacks.reduce(
+        (preRatings, currRating) => preRatings + currRating.rating,
+        0,
+      );
+      const avgRating = sumOfRating / numberOfRatings;
+      return {
+        message: 'The rating has been added successfully',
+        avgRating,
+        numberOfRatings,
+      };
+    } else {
+      const feedbackId = eventIds.GivenFeedbacks.find(
+        (feedback) => feedback.userId === userId,
+      ).id;
+      const result = await this.prisma.event.update({
+        where: {
+          id: eventId,
+        },
+        data: {
+          GivenFeedbacks: {
+            update: {
+              where: { id: feedbackId },
+              data: {
+                rating,
+              },
+            },
+          },
+        },
+        select: {
+          GivenFeedbacks: {
+            select: {
+              rating: true,
+            },
+          },
+        },
+      });
+      const numberOfRatings = result.GivenFeedbacks.length;
+      const sumOfRating = result.GivenFeedbacks.reduce(
+        (preRatings, currRating) => preRatings + currRating.rating,
+        0,
+      );
+      const avgRating = sumOfRating / numberOfRatings;
+      return {
+        message: 'The rating has been updated successfully',
+        avgRating,
+        numberOfRatings,
+      };
+    }
+  }
+  async eventRating(eventId: string) {
+    const result = await this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+      select: {
+        GivenFeedbacks: {
+          select: {
+            rating: true,
+          },
+        },
+      },
+    });
+    const numberOfRatings = result.GivenFeedbacks.length;
+    const sumOfRating = result.GivenFeedbacks.reduce(
+      (preRatings, currRating) => preRatings + currRating.rating,
+      0,
+    );
+    const avgRating = sumOfRating / numberOfRatings;
+    return {
+      avgRating,
+      numberOfRatings,
+    };
   }
 }
