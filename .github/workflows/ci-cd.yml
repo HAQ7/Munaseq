@@ -40,4 +40,5 @@ jobs:
           push: true
           no-cache: true
           tags: |
+            ${{ secrets.DOCKER_REGISTRY_URL }}/backend:${{ steps.get-version.outputs.version  }}
             ${{ secrets.DOCKER_REGISTRY_URL }}/backend:latest
