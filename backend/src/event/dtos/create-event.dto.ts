@@ -25,13 +25,13 @@ export class CreateEventDto {
   @IsArray()
   @IsOptional() //MAKE SURE THAT MUANSEQ TEAM IS INFORMED THAT CATEGORIES OF THE EVENT IS OPTIONAL
   @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
-  categories: string[];
+  categories?: string[];
 
   @IsString()
   @IsOptional()
   location?: string;
 
-  @Type(() => Number) 
+  @Type(() => Number)
   @IsOptional()
   @IsInt()
   seatCapacity: number;
@@ -67,7 +67,7 @@ export class CreateEventDto {
   endDateTime: Date;
 
   @IsOptional()
-  @Type(() => Number) 
+  @Type(() => Number)
   @IsInt()
   price?: number;
 }

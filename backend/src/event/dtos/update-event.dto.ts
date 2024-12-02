@@ -1,6 +1,6 @@
 // src/event/dtos/create-event.dto.ts
 import { Gender } from '@prisma/client';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
@@ -24,6 +24,7 @@ export class UpdateEventDto {
 
   @IsOptional()
   @IsArray()
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   categories?: string[];
 
   @IsString()
@@ -32,12 +33,12 @@ export class UpdateEventDto {
 
   @IsOptional()
   @IsDate()
-  @Transform(({ value }) => new Date(value))
+  @Transform(({ value }) => new Date(+value))
   startDateTime?: Date;
 
   @IsOptional()
   @IsDate()
-  @Transform(({ value }) => new Date(value))
+  @Transform(({ value }) => new Date(+value))
   endDateTime?: Date;
 
   @IsOptional()
@@ -59,6 +60,7 @@ export class UpdateEventDto {
   gender?: Gender;
 
   @IsOptional()
+  @Type(() => Number)
   @IsInt()
   price?: number;
 }

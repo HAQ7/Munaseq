@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 import * as argon2 from 'argon2';
@@ -152,11 +157,15 @@ export class UserService {
     username?: string,
     pageNumber: number = 1,
     pageSize: number = 5,
+    execludedUsers?: string[],
   ) {
     const skipedRecords = (pageNumber - 1) * pageSize;
     if (username) {
       return this.prisma.user.findMany({
         where: {
+          id: {
+            notIn: execludedUsers,
+          },
           username: {
             contains: username,
           },
@@ -169,6 +178,11 @@ export class UserService {
       });
     } else {
       return this.prisma.user.findMany({
+        where: {
+          id: {
+            notIn: execludedUsers,
+          },
+        },
         omit: {
           password: true,
         },
@@ -177,7 +191,50 @@ export class UserService {
       });
     }
   }
+  async getUserRating(userId: string) {
+    const result = await this.prisma.event.findMany({
+      where: {
+        eventCreatorId: userId,
+      },
+      select: {
+        GivenFeedbacks: {
+          select: {
+            rating: true,
+          },
+        },
+      },
+    });
+    if (!result) {
+      throw new NotFoundException('Event not found');
+    }
+    // Calculate the total number of ratings
+    const numberOfRatings = result.reduce(
+      (sum, curr) => sum + curr.GivenFeedbacks.length,
+      0,
+    );
 
+    // Calculate the sum of all ratings
+    const sumOfRating = result.reduce(
+      (sum, curr) =>
+        sum +
+        curr.GivenFeedbacks.reduce(
+          (ratingSum, feedback) => ratingSum + feedback.rating,
+          0,
+        ),
+      0,
+    );
+
+    const avgRating =
+      numberOfRatings > 0 ? sumOfRating / numberOfRatings : null;
+    if (avgRating) {
+      return {
+        avgRating,
+        numberOfRatings,
+      };
+    } else {
+      return { message: "The user hasn't being rated yet" };
+    }
+  }
   async changeUserPassword(
     passwordChangeDto: userChangePasswordDto,
     userId: string,
