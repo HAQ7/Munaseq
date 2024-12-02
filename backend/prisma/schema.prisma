@@ -126,7 +126,7 @@ model TakeAssignment {
 }
 
 // -------------------------------------------------------------------------------------
-// THE FOLLOWING Model IS TO REPRESENT TERNARY RELATIONSHIP FOR STORING USERS' FEEDBACKS
+// THE FOLLOWING Model IS TO REPRESENT TERNARY RELATIONSHIP FOR STORING USERS' FEEDBACKS 
 // -------------------------------------------------------------------------------------
 
 model GiveFeedback {
