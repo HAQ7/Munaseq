@@ -17,6 +17,7 @@ import { GetCurrentUserId } from '../auth/decorators/get-current-user-id.decorat
 import { AuthGuard } from '../auth/auth.guard';
 import { EditUserInfoDto, SeacrhUser, userChangePasswordDto } from './dtos';
 import { multerUserLogic } from 'src/utils/multer.logic';
+import { ExecludeUsers } from 'src/event/dtos';
 
 @Controller('user')
 export class UserController {
@@ -29,8 +30,17 @@ export class UserController {
   }
   //allows to search by username letters (Used in search bar)
   @Get()
-  findAll(@Query() query: SeacrhUser) {
-    return this.userService.findAllUsers();
+  findAll(
+    @Query() query: SeacrhUser,
+    @Body() execludedUsersDto?: ExecludeUsers,
+  ) {
+    const { execludedUsers } = execludedUsersDto;
+    return this.userService.findAllUsers(
+      query.username,
+      query.pageNumber,
+      query.pageSize,
+      execludedUsers,
+    );
   }
 
   @Get(':id')

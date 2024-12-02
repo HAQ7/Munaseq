@@ -152,11 +152,15 @@ export class UserService {
     username?: string,
     pageNumber: number = 1,
     pageSize: number = 5,
+    execludedUsers?: string[],
   ) {
     const skipedRecords = (pageNumber - 1) * pageSize;
     if (username) {
       return this.prisma.user.findMany({
         where: {
+          id: {
+            notIn: execludedUsers,
+          },
           username: {
             contains: username,
           },
@@ -169,6 +173,11 @@ export class UserService {
       });
     } else {
       return this.prisma.user.findMany({
+        where: {
+          id: {
+            notIn: execludedUsers,
+          },
+        },
         omit: {
           password: true,
         },

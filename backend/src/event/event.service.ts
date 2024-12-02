@@ -32,11 +32,19 @@ export class EventService {
   //pageNumber is help the user to indicate how many records will be skipped. The following variable will calculate the number of skipped records
   // const skipedRecords = (pageNumber - 1) * pageSize;  if the pageNumber =1 (i.e. the user want the first element) then the skipped records will equal 0*5(default pageSize) = 0
 
-  getAllEvents(title?: string, pageNumber: number = 1, pageSize: number = 5) {
+  getAllEvents(
+    title?: string,
+    pageNumber: number = 1,
+    pageSize: number = 5,
+    execludedEvents?: string[],
+  ) {
     const skipedRecords = (pageNumber - 1) * pageSize;
     if (title) {
       return this.prisma.event.findMany({
         where: {
+          id: {
+            notIn: execludedEvents,
+          },
           isPublic: true,
           title: {
             contains: title,
@@ -49,6 +57,9 @@ export class EventService {
     } else {
       return this.prisma.event.findMany({
         where: {
+          id: {
+            notIn: execludedEvents,
+          },
           isPublic: true,
         },
         take: pageSize,
@@ -61,11 +72,13 @@ export class EventService {
     title?: string,
     pageNumber: number = 1,
     pageSize: number = 5,
+    execludedEvents?: string[],
   ) {
     const skipedRecords = (pageNumber - 1) * pageSize;
     if (title) {
       return this.prisma.event.findMany({
         where: {
+          id: { notIn: execludedEvents },
           eventCreatorId,
           title: {
             contains: title,
@@ -77,6 +90,7 @@ export class EventService {
     } else {
       return this.prisma.event.findMany({
         where: {
+          id: { notIn: execludedEvents },
           eventCreatorId,
         },
         take: pageSize,
@@ -96,11 +110,15 @@ export class EventService {
     title?: string, //
     pageNumber: number = 1,
     pageSize: number = 5,
+    execludedEvents?: string[],
   ) {
     const skipedRecords = (pageNumber - 1) * pageSize;
     if (title) {
       return this.prisma.event.findMany({
         where: {
+          id: {
+            notIn: execludedEvents,
+          },
           joinedUsers: {
             some: {
               id: userId,
@@ -116,6 +134,9 @@ export class EventService {
     } else {
       return this.prisma.event.findMany({
         where: {
+          id: {
+            notIn: execludedEvents,
+          },
           joinedUsers: {
             some: {
               id: userId,
@@ -134,6 +155,7 @@ export class EventService {
     username?: string, //to enable search by username
     pageNumber: number = 1,
     pageSize: number = 5,
+    execludedUsers?: string[],
   ) {
     const skipedRecords = (pageNumber - 1) * pageSize;
     if (username) {
@@ -142,13 +164,17 @@ export class EventService {
           id: eventId,
         },
         select: {
-          [role]: {
+          joinedUsers: {
             where: {
               username: {
                 contains: username,
               },
+              id: {
+                notIn: execludedUsers, //enables the client (front-end) to explicitly execlude users
+              },
             },
             select: {
+              id: true,
               firstName: true,
               lastName: true,
               profilePictureUrl: true,
@@ -167,7 +193,13 @@ export class EventService {
         },
         select: {
           [role]: {
+            where: {
+              id: {
+                notIn: execludedUsers,
+              },
+            },
             select: {
+              id: true,
               firstName: true,
               lastName: true,
               profilePictureUrl: true,

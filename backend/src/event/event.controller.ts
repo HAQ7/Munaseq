@@ -20,6 +20,8 @@ import { GetCurrentUserId } from '../auth/decorators/get-current-user-id.decorat
 import {
   CreateAssignment,
   CreateEventDto,
+  ExecludeEvents,
+  ExecludeUsers,
   JoinEventDto,
   LeaveEventDto,
   SeacrhUser,
@@ -57,11 +59,16 @@ export class EventController {
 
   // this should only return events that are public
   @Get()
-  getAllEvents(@Query() query: SearchEvent) {
+  getAllEvents(
+    @Query() query: SearchEvent,
+    @Body() execludedEventsDto?: ExecludeEvents,
+  ) {
+    const { execludedEvents } = execludedEventsDto;
     return this.eventService.getAllEvents(
       query.title,
       query.pageNumber,
       query.pageSize,
+      execludedEvents,
     );
   }
   //Returns all event that've been created by current the user
@@ -70,23 +77,33 @@ export class EventController {
   findAllCurrentUserEvents(
     @GetCurrentUserId() eventCreatorId: string,
     @Query() query: SearchEvent,
+    @Body() execludedEventsDto?: ExecludeEvents,
   ) {
+    const { execludedEvents } = execludedEventsDto;
     return this.eventService.findAllCurrentUserEvents(
       eventCreatorId,
       query.title,
       query.pageNumber,
       query.pageSize,
+      execludedEvents,
     );
   }
   //Returns all events that the current user has joined
   @UseGuards(AuthGuard)
   @Get('joinedEvents')
-  findJoinedEvents(@GetCurrentUserId() userId, @Query() query: SearchEvent) {
+  findJoinedEvents(
+    @GetCurrentUserId() userId,
+    @Query() query: SearchEvent,
+    @Body()
+    execludedEventsDto?: ExecludeEvents,
+  ) {
+    const { execludedEvents } = execludedEventsDto;
     return this.eventService.findJoinedEvents(
       userId,
       query.title,
       query.pageNumber,
       query.pageSize,
+      execludedEvents,
     );
   }
   //Returns all users that attend in certain event
@@ -94,13 +111,17 @@ export class EventController {
   findUsersAttendEvent(
     @Param('eventId') eventId: string,
     @Query() query: SeacrhUser,
+    @Body() execludedUsersDto?: ExecludeUsers,
   ) {
+    const { execludedUsers } = execludedUsersDto;
+
     return this.eventService.findUsersParticipateInEvent(
       eventId,
       'joinedUsers',
       query.username,
       query.pageNumber,
       query.pageSize,
+      execludedUsers,
     );
   }
   //Returns all users that moderate in certain event
@@ -108,13 +129,16 @@ export class EventController {
   findUsersModerateEvent(
     @Param('eventId') eventId: string,
     @Query() query: SeacrhUser,
+    @Body() execludedUsersDto?: ExecludeUsers,
   ) {
+    const { execludedUsers } = execludedUsersDto;
     return this.eventService.findUsersParticipateInEvent(
       eventId,
       'moderators',
       query.username,
       query.pageNumber,
       query.pageSize,
+      execludedUsers,
     );
   }
   //Returns all users that attend in certain event
@@ -122,13 +146,16 @@ export class EventController {
   findUsersPresentEvent(
     @Param('eventId') eventId: string,
     @Query() query: SeacrhUser,
+    @Body() execludedUsersDto?: ExecludeUsers,
   ) {
+    const { execludedUsers } = execludedUsersDto;
     return this.eventService.findUsersParticipateInEvent(
       eventId,
       'presenters',
       query.username,
       query.pageNumber,
       query.pageSize,
+      execludedUsers,
     );
   }
 
