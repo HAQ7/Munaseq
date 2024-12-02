@@ -152,7 +152,7 @@ export class UserService {
     }
   }
 
-  // this should not return all the user information including password and such
+  // this should not return all the users information including password and such
   async findAllUsers(
     username?: string,
     pageNumber: number = 1,
