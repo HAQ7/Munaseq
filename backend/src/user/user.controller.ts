@@ -81,7 +81,10 @@ export class UserController {
       profilePictureUrl,
     );
   }
-
+  @Get('rating/:userId')
+  getUserRating(@Param('userId') userId: string) {
+    return this.userService.getUserRating(userId);
+  }
   @UseGuards(AuthGuard)
   @Post('changePassword')
   changePassword(

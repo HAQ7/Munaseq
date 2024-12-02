@@ -306,8 +306,55 @@ export class EventService {
     });
   }
   //--------------------------------------------------
-  //THE FOLLOWING IS FOR ADDING/DELETING MATERIAL LOGIC
+  //THE FOLLOWING IS FOR SHOWING/ADDING/DELETING MATERIAL LOGIC
   //--------------------------------------------------
+  async getMaterials(userId: string, eventId: string) {
+    //the following logic is to ensure that the material will not be shown  unless the user is authorized to do that
+
+    //retreive eventCreator, moderators, and presenters ids
+    const eventIds = await this.prisma.event.findFirst({
+      where: {
+        id: eventId,
+      },
+      select: {
+        eventCreatorId: true,
+        presenters: { select: { id: true } },
+        moderators: { select: { id: true } },
+        joinedUsers: { select: { id: true } },
+      },
+    });
+    //Check wether the event exist or not
+    if (!eventIds) {
+      throw new NotFoundException('Event not found');
+    }
+    // Check if the userId matches any of the roles
+    const isAuthorized =
+      eventIds.eventCreatorId === userId ||
+      eventIds.presenters.some((presenter) => presenter.id === userId) ||
+      eventIds.moderators.some((moderator) => moderator.id === userId) ||
+      eventIds.joinedUsers.some((joinedUsers) => joinedUsers.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to delete materials to this event',
+      );
+    }
+    const result = await this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+      select: {
+        Materials: {
+          select: {
+            materialId: true,
+            materialUrl: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+    return result ?? { message: "The event hasn't any materials" };
+  }
   async addMaterialsToEvent(
     eventId: string,
     userId: string,
@@ -420,8 +467,59 @@ export class EventService {
   }
 
   //--------------------------------------------------
-  //THE FOLLOWING IS FOR ADDING/UPDATING/DELETING MATERIAL LOGIC
+  //THE FOLLOWING IS FOR SHOWING/ADDING/UPDATING/DELETING ASSIGMENNT LOGIC
   //--------------------------------------------------
+  async getAssignments(userId: string, eventId: string) {
+    //the following logic is to ensure that the ass will not be shown  unless the user is authorized to do that
+
+    //retreive eventCreator, moderators, and presenters ids
+    const eventIds = await this.prisma.event.findFirst({
+      where: {
+        id: eventId,
+      },
+      select: {
+        eventCreatorId: true,
+        presenters: { select: { id: true } },
+        moderators: { select: { id: true } },
+        joinedUsers: { select: { id: true } },
+      },
+    });
+    //Check wether the event exist or not
+    if (!eventIds) {
+      throw new NotFoundException('Event not found');
+    }
+    // Check if the userId matches any of the roles
+    const isAuthorized =
+      eventIds.eventCreatorId === userId ||
+      eventIds.presenters.some((presenter) => presenter.id === userId) ||
+      eventIds.moderators.some((moderator) => moderator.id === userId) ||
+      eventIds.joinedUsers.some((joinedUsers) => joinedUsers.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to delete materials to this event',
+      );
+    }
+    const result = await this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+      select: {
+        Assignments: {
+          select: {
+            id: true,
+            materialUrl: true,
+            endDate: true,
+            startDate: true,
+            createdAt: true,
+            updatedAt: true,
+            questions: true,
+          },
+        },
+      },
+    });
+    return result ?? { message: "The event hasn't any assignments" };
+  }
   async addAssignmentToEvent(
     eventId: string,
     userId: string,

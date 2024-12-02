@@ -161,7 +161,7 @@ export class EventController {
   }
   @Get('eventCreator/:eventId')
   findEventCreator(@Param('eventId') eventId: string) {
-    return this.eventService.findEventCreator(eventId)
+    return this.eventService.findEventCreator(eventId);
   }
   // what if the event is not public?
   @Get(':eventId')
@@ -240,9 +240,26 @@ export class EventController {
   ) {
     return this.eventService.deleteMaterial(userid, materialId);
   }
+  @UseGuards(AuthGuard)
+  @Get('materials/:eventId')
+  getMaterials(
+    @Param('eventId') eventId: string,
+    @GetCurrentUserId() userId: string,
+  ) {
+    return this.eventService.getMaterials(userId, eventId);
+  }
+
   //-----------------------------------------
   //Assignment's endpoints
   //-----------------------------------------
+  @UseGuards(AuthGuard)
+  @Get('assignments/:eventId')
+  getAssignments(
+    @Param('eventId') eventId: string,
+    @GetCurrentUserId() userId: string,
+  ) {
+    return this.eventService.getAssignments(userId, eventId);
+  }
   @UseGuards(AuthGuard)
   @UseInterceptors(multerMaterialtLogic())
   @Post('addAssignment/:eventId')
