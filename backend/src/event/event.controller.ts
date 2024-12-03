@@ -107,6 +107,10 @@ export class EventController {
       execludedEvents,
     );
   }
+  @Get('allUsers/:eventId')
+  findAllUsersOfEvent(@Param('eventId') eventId: string) {
+    return this.eventService.findAllUsersOfEvent(eventId);
+  }
   //Returns all users that attend in certain event
   @Get('attendees/:eventId')
   findUsersAttendEvent(
