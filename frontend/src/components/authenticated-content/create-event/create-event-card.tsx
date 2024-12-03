@@ -40,7 +40,7 @@ export default function CreateEventCard({
             variants={variants}
             className={
                 "max-w-[45rem] w-[98%] bg-white shadow-md rounded-3xl overflow-hidden p-5 " + 
-                (goal !== 3 ? "absolute" : "relative")
+                (goal !== 2 ? "absolute" : "relative")
             }
         >
             <Image

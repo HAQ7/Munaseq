@@ -4,7 +4,10 @@ import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default async function createEventAction(formData: FormData) {
+export default async function createEventAction(
+    formData: FormData,
+    formDataRole: FormData
+) {
     // get token from cookie
     const cookiesList = cookies();
     const token = cookiesList.get("token");
@@ -22,7 +25,6 @@ export default async function createEventAction(formData: FormData) {
             },
         });
 
-
         if (!createRes.ok) {
             const errorResponse = await createRes.text(); // Capture the error message
             console.error("Error response:", errorResponse);
@@ -30,6 +32,9 @@ export default async function createEventAction(formData: FormData) {
         }
 
         revalidateTag("event");
+
+        // FETCH HERE
+        console.log(formDataRole);
     } catch (error: any) {
         return {
             message: "ERROR",

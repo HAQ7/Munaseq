@@ -17,72 +17,78 @@ import createEventAction from "@/proxy/create-event-action";
 // };
 
 export default function CreateEvent() {
-  const [step, setStep] = useState(1);
-  const [error, setError] = useState({ message: "" });
-  const nextStepHandler = () => {
-    setStep((prevStep) => prevStep + 1);
-  };
-  const prevStepHandler = () => {
-    setStep((prevStep) => prevStep - 1);
-  };
-  const selectedCategories = useRef([] as string[]);
-  const categoriesHandler = (categories: string[]) => {
-    selectedCategories.current = categories;
-  };
-  return (
-    <div className="overflow-hidden">
-      <Title>
-        <Image src={plusCricle} alt="plus icon" />
-        نسق فعاليتك
-      </Title>
-      <div className="grid place-items-center">
-        {/* <CreateEventProgress step={1} /> */}
-        <form
-          action={async (formData) => {
-            console.log(selectedCategories.current);
-            for (const category of selectedCategories.current) {
-              formData.append("categories", category);
-            }
-            // const formDataRole = new FormData();
-            // const moderators = formData.getAll("moderators");
-            // const presenters = formData.getAll("presenters");
+    const [step, setStep] = useState(1);
+    const [error, setError] = useState({ message: "" });
+    const nextStepHandler = () => {
+        setStep(prevStep => prevStep + 1);
+    };
+    const prevStepHandler = () => {
+        setStep(prevStep => prevStep - 1);
+    };
+    const selectedCategories = useRef([] as string[]);
+    const categoriesHandler = (categories: string[]) => {
+        selectedCategories.current = categories;
+    };
+    const roles = useRef([] as { assignedUserId: string; role: string }[]);
+    const rolesHandler = (newRole: {
+        assignedUserId: string;
+        role: string;
+    }) => {
+        roles.current.push(newRole);
+    };
 
-            // formData.delete("moderators")
-            // formData.delete("presenters")
+    return (
+        <div className="overflow-hidden">
+            <Title>
+                <Image src={plusCricle} alt="plus icon" />
+                نسق فعاليتك
+            </Title>
+            <div className="grid place-items-center">
+                {/* <CreateEventProgress step={1} /> */}
+                <form
+                    action={async formData => {
+                        console.log(selectedCategories.current);
+                        for (const category of selectedCategories.current) {
+                            formData.append("categories", category);
+                        }
+                        const formDataRole = new FormData();
+                        for (const role of roles.current) {
+                            formDataRole.append("roles", JSON.stringify(role));
+                        }
 
-            const error: { message: string } = await createEventAction(
-              formData
-            );
-            if (error.message) {
-              setError(error);
-            }
-          }}
-          className="overflow-hidden p-2 flex justify-center w-full relative"
-        >
-          <div className="absolute overflow-hidden flex justify-center w-full h-full p-2">
-            <MainForm nextStepHandler={nextStepHandler} step={step} />
-
-            <ParticipantsForm
-              nextStepHandler={nextStepHandler}
-              prevStepHandler={prevStepHandler}
-              step={step}
-            />
-          </div>
-          <TimeForm
-            nextStepHandler={nextStepHandler}
-            prevStepHandler={prevStepHandler}
-            onCategoriesChange={categoriesHandler}
-            error={error}
-            step={step}
-          />
-          <ForwhoForm
-            prevStepHandler={prevStepHandler}
-            onCategoriesChange={categoriesHandler}
-            error={error}
-            step={step}
-          />
-        </form>
-      </div>
-    </div>
-  );
+                        const error: { message: string } =
+                            await createEventAction(formData, formDataRole);
+                        if (error.message) {
+                            setError(error);
+                        }
+                    }}
+                    className="overflow-hidden p-2 flex justify-center w-full relative"
+                >
+                    <div className="absolute overflow-hidden flex justify-center w-full h-full p-2">
+                        <MainForm
+                            nextStepHandler={nextStepHandler}
+                            step={step}
+                        />
+                        <TimeForm
+                            nextStepHandler={nextStepHandler}
+                            prevStepHandler={prevStepHandler}
+                            step={step}
+                        />
+                        <ForwhoForm
+                            prevStepHandler={prevStepHandler}
+                            onCategoriesChange={categoriesHandler}
+                            error={error}
+                            step={step}
+                            onRoleChange={rolesHandler}
+                        />
+                    </div>
+                    <ParticipantsForm
+                        nextStepHandler={nextStepHandler}
+                        prevStepHandler={prevStepHandler}
+                        step={step}
+                    />
+                </form>
+            </div>
+        </div>
+    );
 }
