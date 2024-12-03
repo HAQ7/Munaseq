@@ -33,12 +33,12 @@ export class UpdateEventDto {
 
   @IsOptional()
   @IsDate()
-  @Transform(({ value }) => new Date(+value))
+  @Transform(({ value }) => new Date(value))
   startDateTime?: Date;
 
   @IsOptional()
   @IsDate()
-  @Transform(({ value }) => new Date(+value))
+  @Transform(({ value }) => new Date(value))
   endDateTime?: Date;
 
   @IsOptional()

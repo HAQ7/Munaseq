@@ -8,11 +8,11 @@ export class UpdateAssignment {
 
   @IsOptional()
   @IsDate()
-  @Transform(({ value }) => new Date(+value))
+  @Transform(({ value }) => new Date(value))
   startDate?: Date;
 
   @IsOptional()
   @IsDate()
-  @Transform(({ value }) => new Date(+value))
+  @Transform(({ value }) => new Date(value))
   endDate?: Date;
 }
