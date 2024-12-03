@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import SelectEvents from "@/components/common/select-events";
 import { usePathname } from "next/navigation";
-import TabIndicator from "@/components/authenticated-content/event-lists/tab-indicator";
+import TabIndicator from "@/components/common/tab-indicator";
 
 export default function JoinedEvents({
     children,
@@ -23,21 +23,21 @@ export default function JoinedEvents({
                         className="relative text-nowrap"
                     >
                         الفعاليات الحالية
-                        <TabIndicator tab="/joined-events/active" />
+                        <TabIndicator layoutId="active-joined-events-tab" tab="/joined-events/active" />
                     </Link>
                     <Link
                         href="/joined-events/upcoming"
                         className="relative text-nowrap"
                     >
                         الفعاليات القادمة{" "}
-                        <TabIndicator tab="/joined-events/upcoming" />
+                        <TabIndicator layoutId="active-joined-events-tab" tab="/joined-events/upcoming" />
                     </Link>
                     <Link
                         href="/joined-events/past"
                         className="relative text-nowrap"
                     >
                         الفعاليات الماضية{" "}
-                        <TabIndicator tab="/joined-events/past" />
+                        <TabIndicator layoutId="active-joined-events-tab" tab="/joined-events/past" />
                     </Link>
                 </div>
                 <div className="sm:hidden block">

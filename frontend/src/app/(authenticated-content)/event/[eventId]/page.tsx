@@ -42,7 +42,7 @@ export default async function EventPage({
                             className="object-cover rounded-2xl shadow-menu  md:rounded-b-2xl rounded-b-none rounded-t-2xl"
                         />
                     </div>
-                    <div className="flex-1 text-xl gap-5 flex flex-col md:min-w-72 p-8 relative">
+                    <div className="flex-1 text-xl gap-5 flex flex-col md:min-w-72 px-8 pt-4 relative">
                         <Image
                             className="absolute top-0 left-0 block md:hidden"
                             src={decoTop}
@@ -95,8 +95,8 @@ export default async function EventPage({
                         </div>
                     </div>
                 </div>
-                <div className="md:mt-10 md:p-0 p-8">
-                    <div className="flex flex-wrap">
+                <div className="md:p-0 px-8 pb-4">
+                    <div className="md:mt-5 my-5 flex flex-wrap">
                         {event.categories.map((category: string) => {
                             return <Tag key={category}>{category}</Tag>;
                         })}

@@ -23,6 +23,7 @@ export default async function ActiveCoordinatedEvents() {
                             userId={event.eventCreatorId}
                             eventId={event.id}
                             badges={event.categories}
+                            isJoined
                         />
                     );
                 }

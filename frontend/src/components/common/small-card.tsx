@@ -37,6 +37,7 @@ export default function SmallCard({
     badges = [],
     asEventCreator = false,
     asEventParticipant = false,
+    isJoined = false,
 }: {
     image: StaticImport;
     title: string;
@@ -49,6 +50,7 @@ export default function SmallCard({
     badges: string[];
     asEventCreator?: boolean;
     asEventParticipant?: boolean;
+    isJoined?: boolean;
 }) {
     const [user, setUser] = useState<UserDataDto>();
     const [loading, setLoading] = useState(true);
@@ -61,7 +63,7 @@ export default function SmallCard({
         toast({
             duration: 5000,
             title: "تم الخروج من الفعالية",
-        });
+        }); 
     };
     const cancelEvent = async () => {
         const res = await cancelEventAction(eventId);
@@ -217,7 +219,7 @@ export default function SmallCard({
                         <Button gradient>
                             <Link
                                 className="w-full h-full grid place-items-center"
-                                href={`/event/${eventId}`}
+                                href={`/event/${eventId}${isJoined ? "/about" : ""}`}
                             >
                                 التفاصيل
                             </Link>

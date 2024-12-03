@@ -24,6 +24,7 @@ export default async function UpcomingCoordinatedEvents() {
                             userId={event.eventCreatorId}
                             eventId={event.id}
                             badges={event.categories}
+                            isJoined
                         />
                     );
                 }
