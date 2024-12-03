@@ -226,6 +226,57 @@ export class EventService {
       });
     }
   }
+  //Retrieve all users of certain event
+  async findAllUsersOfEvent(eventId: string) {
+    const result = await this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+      select: {
+        eventCreator: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            profilePictureUrl: true,
+          },
+        },
+        joinedUsers: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            profilePictureUrl: true,
+          },
+        },
+        presenters: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            profilePictureUrl: true,
+          },
+        },
+        moderators: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            username: true,
+            profilePictureUrl: true,
+          },
+        },
+      },
+    });
+    if (result) {
+      return result;
+    } else {
+      throw new NotFoundException("The event doesn't exist");
+    }
+  }
   //Return all users that have the specified role in certain event
   async findUsersParticipateInEvent(
     eventId: string,
