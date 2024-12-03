@@ -29,6 +29,7 @@ import {
   UpdateAssignment,
   UpdateEventDto,
   CreateUpdateRating,
+  AssignRoles,
 } from './dtos';
 
 import { multerEventLogic, multerMaterialtLogic } from 'src/utils/multer.logic';
@@ -105,6 +106,20 @@ export class EventController {
       query.pageNumber,
       query.pageSize,
       execludedEvents,
+    );
+  }
+  @UseGuards(AuthGuard)
+  @Post('assignRole/:eventId')
+  assignRole(
+    @Param('eventId') eventId: string,
+    @GetCurrentUserId() userId: string,
+    @Body() assignRoleDto: AssignRoles,
+  ) {
+    return this.eventService.assignRole(
+      userId,
+      eventId,
+      assignRoleDto.assignedUserId,
+      assignRoleDto.role,
     );
   }
   @Get('allUsers/:eventId')

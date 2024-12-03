@@ -1005,4 +1005,57 @@ export class EventService {
       numberOfRatings,
     };
   }
+  async assignRole(
+    userId: string,
+    eventId: string,
+    assignedUserId: string,
+    role: string,
+  ) {
+    const eventIds = await this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+      select: {
+        eventCreatorId: true,
+        moderators: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    //Check wether the event exist or not
+    if (!eventIds) {
+      throw new NotFoundException('Event not found');
+    }
+
+    const isAuthorized =
+      eventIds.eventCreatorId === userId ||
+      eventIds.moderators.every((moderator) => moderator.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to add materials to this event',
+      );
+    }
+    return this.prisma.event.update({
+      where: {
+        id: eventId,
+      },
+      data: {
+        [role]: {
+          connect: {
+            id: assignedUserId,
+          },
+        },
+      },
+      select: {
+        [role]: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+  }
 }
