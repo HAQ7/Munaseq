@@ -5,10 +5,11 @@ import { cookies } from "next/headers";
 
 export default async function leaveEventAction(eventId: string) {
     const cookiesList = cookies();
+    process.env.BACKEND_URL;
     const token = cookiesList.get("token");
 
     try {
-        const leaveRes = await fetch("http://localhost:3002/event/leave", {
+        const leaveRes = await fetch(`${process.env.BACKEND_URL}/event/leave`, {
             method: "DELETE",
             body: JSON.stringify({ eventId }),
             headers: {

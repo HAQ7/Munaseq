@@ -3,7 +3,7 @@
 export default async function isUsernameUniqueAction(username: string) {
     try {
         const response = await fetch(
-            `http://localhost:3002/user/username/${username}`,
+            `${process.env.BACKEND_URL}/user/username/${username}`,
             {
                 method: "GET",
                 headers: {

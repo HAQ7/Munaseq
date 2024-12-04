@@ -2,7 +2,7 @@
 
 export default async function getUserAction(username: string) {
     try {
-        const response = await fetch(`http://localhost:3002/user/username/${username}`, {
+        const response = await fetch(`${process.env.BACKEND_URL}/user/username/${username}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

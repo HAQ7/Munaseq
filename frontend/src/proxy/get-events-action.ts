@@ -2,7 +2,7 @@
 
 export default async function getEventsAction() {
     try {
-        const eventsRes = await fetch("http://localhost:3002/event/", {
+        const eventsRes = await fetch(`${process.env.BACKEND_URL}/event/`, {
             next: {
                 tags: ["event"],
             },

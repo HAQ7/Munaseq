@@ -18,7 +18,7 @@ export default async function createEventAction(
   }
 
   try {
-    const createRes = await fetch("http://localhost:3002/event", {
+    const createRes = await fetch(`${process.env.BACKEND_URL}/event`, {
       method: "POST",
       body: formData,
       headers: {

@@ -9,6 +9,7 @@ import userIcon from "@/assets/icons/user-gradiant.svg";
 import starIcon from "@/assets/icons/rating-star.svg";
 import Link from "next/link";
 import TabIndicator from "@/components/common/tab-indicator";
+import Tag from "@/components/common/category";
 
 export default async function EventLayout({
     children,
@@ -42,7 +43,18 @@ export default async function EventLayout({
                     alt="deco"
                 />
 
-                <div className="absolute z-20 text-white bottom-0 right-0 grid p-4">
+                <div className="absolute z-20 flex gap-1 top-3 right-3">
+                    {event.categories.map(category => (
+                        <span
+                        key={category}
+                        className="rounded-full bg-white text-primary px-2.5 py-1 ml-2 text-md font-medium "
+                    >
+                        {category}
+                    </span>
+                    ))}
+                </div>
+
+                <div className="absolute z-20 text-white bottom-0 right-0 grid p-4 pb-2">
                     <div className="mb-10">
                         <h1 className="text-4xl font-bold mb-1">
                             {event.title}
@@ -68,7 +80,7 @@ export default async function EventLayout({
                         </div>
                     </div>
                     <div>
-                        <div className="gap-8 sm:flex hidden text-xl">
+                        <div className="gap-8 sm:flex hidden text-xl ">
                             <Link
                                 href="./about"
                                 className="relative text-nowrap"
@@ -124,7 +136,7 @@ export default async function EventLayout({
                     </div>
                 </div>
             </div>
-            <div>{children}</div>
+            <div className="pt-4 px-7">{children}</div>
         </div>
     );
 }

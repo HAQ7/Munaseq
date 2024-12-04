@@ -6,7 +6,7 @@ import Image from "next/image";
 import userCircle from "@/assets/icons/user-circle.svg";
 import Label from "@/components/common/lable";
 import Subtitle from "@/components/common/subtitle";
-import Tag from "@/components/common/category";
+import Category from "@/components/common/category";
 import { cookies } from "next/headers";
 import getProfileAction from "@/proxy/get-profile-action";
 import cvIcon from "@/assets/auth-content-assets/CV-Icon.svg";
@@ -101,7 +101,7 @@ export default async function Account() {
 
             <div className="flex flex-wrap gap-2">
               {data.categories.map((category) => (
-                <Tag key={category}>{category}</Tag>
+                <Category key={category}>{category}</Category>
               ))}
             </div>
           </div>
