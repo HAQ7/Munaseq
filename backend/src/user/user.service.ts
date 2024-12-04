@@ -81,7 +81,7 @@ export class UserService {
           HttpStatus.NOT_FOUND,
         );
       }
-      // Handle other known request errors (if applicable)
+      // Handle other known request error (if applicable)
       if (error instanceof PrismaClientKnownRequestError) {
         throw new HttpException('Database error', HttpStatus.BAD_REQUEST);
       }
