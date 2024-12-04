@@ -2,7 +2,7 @@
 
 export default async function getUserAction(id: string) {
     try {
-        const response = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app//user/${id}`, {
+        const response = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app/user/${id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

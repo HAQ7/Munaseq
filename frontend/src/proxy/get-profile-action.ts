@@ -3,7 +3,7 @@
 export default async function getProfileAction(token: any) {
     try {
         
-        const response = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app//user/me`, {
+        const response = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app/user/me`, {
             next: {
                 tags: ['user']
             },

@@ -7,7 +7,7 @@ export default async function getMaterialsAction(eventId: string) {
     const token = cookieStore.get("token");
     try {
         const materials = await fetch(
-            `https://munaseq-backend-jrsyk.ondigitalocean.app//event/materials/${eventId}`,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app/event/materials/${eventId}`,
             {
                 headers: {
                     "Content-Type": "application/json",

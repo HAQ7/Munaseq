@@ -9,7 +9,7 @@ export default async function leaveEventAction(eventId: string) {
     const token = cookiesList.get("token");
 
     try {
-        const leaveRes = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app//event/leave`, {
+        const leaveRes = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app/event/leave`, {
             method: "DELETE",
             body: JSON.stringify({ eventId }),
             headers: {

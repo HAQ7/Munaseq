@@ -12,7 +12,7 @@ export default async function GetUserEventsAction() {
 
     try {
         const userEventsRes = await fetch(
-            `https://munaseq-backend-jrsyk.ondigitalocean.app//event/current`,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app/event/current`,
             {
                 next: {
                     tags: ["event"],

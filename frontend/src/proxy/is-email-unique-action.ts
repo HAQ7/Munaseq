@@ -3,7 +3,7 @@
 export default async function isEmailUniqueAction(email: string) {
     try {
         const response = await fetch(
-            `https://munaseq-backend-jrsyk.ondigitalocean.app//user/email/${email}`,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app/user/email/${email}`,
             {
                 method: "GET",
                 headers: {

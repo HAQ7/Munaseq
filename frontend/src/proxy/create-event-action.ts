@@ -18,7 +18,7 @@ export default async function createEventAction(
   }
 
   try {
-    const createRes = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app//event`, {
+    const createRes = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app/event`, {
       method: "POST",
       body: formData,
       headers: {
@@ -56,7 +56,7 @@ export default async function createEventAction(
         for (const role of rolesArray) {
           try {
             const response = await fetch(
-              `https://munaseq-backend-jrsyk.ondigitalocean.app//event/assignRole/${eventData.id}`,
+              `https://munaseq-backend-jrsyk.ondigitalocean.app/event/assignRole/${eventData.id}`,
               {
                 method: "POST",
                 headers: {
@@ -85,7 +85,7 @@ export default async function createEventAction(
     }
 
     // const ratingRes = await fetch(
-    //   `https://munaseq-backend-jrsyk.ondigitalocean.app//event/assignRole/${eventData.id}`,
+    //   `https://munaseq-backend-jrsyk.ondigitalocean.app/event/assignRole/${eventData.id}`,
     //   {
     //     method: "POST",
     //     body:{

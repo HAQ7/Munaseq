@@ -28,7 +28,7 @@ export async function signupAction(formData: FormData) {
 
 
   try {
-    const createResponse = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app//auth/signup`, {
+    const createResponse = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app/auth/signup`, {
       method: "POST",
       body: mappedFormData,
     });

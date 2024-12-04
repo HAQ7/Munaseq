@@ -6,7 +6,7 @@ export default async function getAssignmentAction(eventID: string) {
     const token = cookieStore.get("token");
     try {
         const materials = await fetch(
-            `https://munaseq-backend-jrsyk.ondigitalocean.app//event/assignments/${eventID}`,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app/event/assignments/${eventID}`,
             {
                 headers: {
                     "Content-Type": "application/json",

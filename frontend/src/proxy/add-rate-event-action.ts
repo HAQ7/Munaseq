@@ -13,14 +13,14 @@ export default async function rateEventAction(eventId: string, rating: number) {
 
   console.log(
     "Sending request to:",
-    `https://munaseq-backend-jrsyk.ondigitalocean.app//event/ratingEvent/${eventId}`
+    `https://munaseq-backend-jrsyk.ondigitalocean.app/event/ratingEvent/${eventId}`
   );
   console.log("Request body:", JSON.stringify({ rating }));
   console.log(eventId);
 
   try {
     const response = await fetch(
-      `https://munaseq-backend-jrsyk.ondigitalocean.app//event/ratingEvent/${eventId}`,
+      `https://munaseq-backend-jrsyk.ondigitalocean.app/event/ratingEvent/${eventId}`,
       {
         method: "POST",
         headers: {

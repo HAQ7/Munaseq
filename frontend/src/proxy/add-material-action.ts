@@ -20,7 +20,7 @@ export default async function addMateiralAction(
 
     try {
         const createRes = await fetch(
-            `https://munaseq-backend-jrsyk.ondigitalocean.app//event/addMaterial/${eventID}`,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app/event/addMaterial/${eventID}`,
             {
                 method: "POST",
                 body: formData,

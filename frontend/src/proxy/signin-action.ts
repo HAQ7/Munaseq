@@ -10,7 +10,7 @@ export async function signinAction(formData: FormData) {
   };
 
   try {
-    const response = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app//auth/signin`, {
+    const response = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app/auth/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

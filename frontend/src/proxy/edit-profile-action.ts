@@ -16,7 +16,7 @@ export default async function editProfileAction(
     }
 
     try {
-        const editResponse = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app//user/`, {
+        const editResponse = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app/user/`, {
             method: "PATCH",
             body: formData,
             headers: {
