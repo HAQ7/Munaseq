@@ -69,28 +69,28 @@ model Event {
 }
 
 model Question {
-  id          String   @id @default(uuid())
-  text        String   // The question text
-  questionType QuestionType // e.g., multiple-choice, true/false
-  options     Json     // Array of options (if multiple choice)
+  id            String       @id @default(uuid())
+  text          String // The question text
+  questionType  QuestionType // e.g., multiple-choice, true/false
+  options       Json // Array of options (if multiple choice)
   correctAnswer String // The correct answer(s) (could be a string, or an array if multiple answers)
-  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  quizId      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  quiz          Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  quizId        String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
-
 model Assignment {
-  id          String   @id @default(uuid())
-  startDate   DateTime
-  endDate     DateTime
-  questions   String?
-  materialUrl String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  Event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade) // Event has MANY Assignment, while Assignment belongs to ONLY ONE Event (One-To-Many)
-  eventId     String
+  id             String           @id @default(uuid())
+  startDate      DateTime
+  endDate        DateTime
+  questions      String?
+  materialUrl    String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  Event          Event            @relation(fields: [eventId], references: [id], onDelete: Cascade) // Event has MANY Assignment, while Assignment belongs to ONLY ONE Event (One-To-Many)
+  eventId        String
+  TakeAssignment TakeAssignment[]
 }
 
 model Material {
@@ -107,46 +107,43 @@ model Material {
 
 //To represent many-to-many relationship that conatains "answers" attribute
 model TakeQuiz {
-  id         String   @id @default(uuid())
-  userId     String
-  quizId     String
-  score      Float?   // Score out of 100
-  answers    Json?    // Answers are stored as JSON (array of question-answer pairs)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String   @id @default(uuid())
+  userId    String
+  quizId    String
+  score     Float? // Score out of 100
+  answers   Json? // Answers are stored as JSON (array of question-answer pairs)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  User       User     @relation(fields: [userId], references: [id])
-  Quiz       Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade) // Cascade delete
+  User User @relation(fields: [userId], references: [id])
+  Quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade) // Cascade delete
 }
 
 model Quiz {
   id        String     @id @default(uuid())
   startDate DateTime
   endDate   DateTime
-  timeLimit Int        // Time limit in minutes
+  timeLimit Int // Time limit in minutes
   questions Question[] // One-to-many relation with the Question model
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
-  Event     Event      @relation(fields: [eventId], references: [id], onDelete: Cascade) // Event cascade delete
-  eventId   String
-  TakeQuiz  TakeQuiz[] // Relation to TakeQuiz model
-
+  Event    Event      @relation(fields: [eventId], references: [id], onDelete: Cascade) // Event cascade delete
+  eventId  String
+  TakeQuiz TakeQuiz[] // Relation to TakeQuiz model
 }
-
-
-
-
 
 //To represent many-to-many relationship that conatains "textAnswers" and "answerMaterialUrl" attributes
 model TakeAssignment {
-  id                String   @id @default(uuid())
+  id                String     @id @default(uuid())
   textAnswers       String?
   answerMaterialUrl String? //Store the uploaded answerfile in AWS S3
-  User              User     @relation(fields: [userId], references: [id])
+  User              User       @relation(fields: [userId], references: [id])
   userId            String
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  Assignment        Assignment @relation(fields: [assignmentId], references: [id])
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  assignmentId      String
 }
 
 // -------------------------------------------------------------------------------------

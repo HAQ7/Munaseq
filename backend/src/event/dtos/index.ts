@@ -10,3 +10,4 @@ export * from './create-assignment.dto';
 export * from './update-assignment.dto';
 export * from './create-update-rating.dto';
 export * from './assign-role.dto';
+export * from './take-assignment.dto';

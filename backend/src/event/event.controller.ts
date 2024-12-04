@@ -30,6 +30,7 @@ import {
   UpdateEventDto,
   CreateUpdateRating,
   AssignRoles,
+  TakeAssigment,
 } from './dtos';
 
 import { multerEventLogic, multerMaterialtLogic } from 'src/utils/multer.logic';
@@ -354,7 +355,11 @@ export class EventController {
     @Param('quizId') quizId: string,
     @GetCurrentUserId() userId: string,
   ) {
-    return this.eventService.getAllParticipantsQuizResults(userId, eventId, quizId);
+    return this.eventService.getAllParticipantsQuizResults(
+      userId,
+      eventId,
+      quizId,
+    );
   }
 
   @UseGuards(AuthGuard)
@@ -379,7 +384,24 @@ export class EventController {
   ) {
     return this.eventService.getAssignments(userId, eventId);
   }
-
+  @UseGuards(AuthGuard)
+  @Post('submitAssignment/:assignmentId')
+  @UseInterceptors(multerMaterialtLogic())
+  submitAssignemt(
+    @Param('assignmentId') assignmentId: string,
+    @GetCurrentUserId() userId: string,
+    @UploadedFiles() files: { materials: any },
+    @Body() questionsDto: TakeAssigment,
+  ) {
+    const { questions } = questionsDto;
+    const materialUrl = files?.materials[0].location;
+    return this.eventService.submitAssignemnt(
+      userId,
+      assignmentId,
+      materialUrl,
+      questions,
+    );
+  }
   @UseGuards(AuthGuard)
   @UseInterceptors(multerMaterialtLogic())
   @Post('addAssignment/:eventId')
