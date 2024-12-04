@@ -10,13 +10,14 @@ export async function signinAction(formData: FormData) {
   };
 
   try {
-    const response = await fetch(`http://localhost:3002/auth/signin`, {
+    const response = await fetch(`${process.env.BACKEND_URL}/auth/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(signinData),
     });
+
 
     if (response.status === 404 || response.status === 401) {
       throw new Error('AUTHENTICATION_FAILED');

@@ -21,6 +21,7 @@ export default async function PastJoinedEvents() {
                             userId={event.eventCreatorId}
                             eventId={event.id}
                             badges={event.categories}
+                            isJoined
                         />
                     );
                 }

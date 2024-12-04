@@ -9,6 +9,7 @@ import MainForm from "@/components/authenticated-content/create-event/main-form"
 import { useRef, useState } from "react";
 import ParticipantsForm from "@/components/authenticated-content/create-event/participants-form";
 import TimeForm from "@/components/authenticated-content/create-event/time-form";
+import ForwhoForm from "@/components/authenticated-content/create-event/forwho-form";
 import createEventAction from "@/proxy/create-event-action";
 
 // export const metadata: Metadata = {
@@ -28,6 +29,14 @@ export default function CreateEvent() {
     const categoriesHandler = (categories: string[]) => {
         selectedCategories.current = categories;
     };
+    const roles = useRef([] as { assignedUserId: string; role: string }[]);
+    const rolesHandler = (newRole: {
+        assignedUserId: string;
+        role: string;
+    }) => {
+        roles.current.push(newRole);
+    };
+
     return (
         <div className="overflow-hidden">
             <Title>
@@ -38,12 +47,17 @@ export default function CreateEvent() {
                 {/* <CreateEventProgress step={1} /> */}
                 <form
                     action={async formData => {
-                        console.log(selectedCategories.current)
+                        console.log(selectedCategories.current);
                         for (const category of selectedCategories.current) {
                             formData.append("categories", category);
                         }
+                        const formDataRole = new FormData();
+                        for (const role of roles.current) {
+                            formDataRole.append("roles", JSON.stringify(role));
+                        }
+
                         const error: { message: string } =
-                            await createEventAction(formData);
+                            await createEventAction(formData, formDataRole);
                         if (error.message) {
                             setError(error);
                         }
@@ -55,17 +69,22 @@ export default function CreateEvent() {
                             nextStepHandler={nextStepHandler}
                             step={step}
                         />
-
-                        <ParticipantsForm
+                        <TimeForm
                             nextStepHandler={nextStepHandler}
                             prevStepHandler={prevStepHandler}
                             step={step}
                         />
+                        <ForwhoForm
+                            prevStepHandler={prevStepHandler}
+                            onCategoriesChange={categoriesHandler}
+                            error={error}
+                            step={step}
+                            onRoleChange={rolesHandler}
+                        />
                     </div>
-                    <TimeForm
+                    <ParticipantsForm
+                        nextStepHandler={nextStepHandler}
                         prevStepHandler={prevStepHandler}
-                        onCategoriesChange={categoriesHandler}
-                        error={error}
                         step={step}
                     />
                 </form>

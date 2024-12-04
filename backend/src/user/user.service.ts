@@ -191,6 +191,35 @@ export class UserService {
       });
     }
   }
+  async findUserRoles(userId: string) {
+    const result = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      select: {
+        createdEvents: {
+          select: {
+            id: true,
+          },
+        },
+        joinedEvents: {
+          select: {
+            id: true,
+          },
+        },
+        moderatedEvents: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    if (result) {
+      return result;
+    } else {
+      throw new NotFoundException("The userId dosen't exist");
+    }
+  }
   async getUserRating(userId: string) {
     const result = await this.prisma.event.findMany({
       where: {

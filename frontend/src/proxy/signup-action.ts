@@ -28,7 +28,7 @@ export async function signupAction(formData: FormData) {
 
 
   try {
-    const createResponse = await fetch(`http://localhost:3002/auth/signup`, {
+    const createResponse = await fetch(`${process.env.BACKEND_URL}/auth/signup`, {
       method: "POST",
       body: mappedFormData,
     });

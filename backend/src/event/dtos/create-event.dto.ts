@@ -10,8 +10,8 @@ import {
   IsNumber,
   IsBoolean,
 } from 'class-validator';
-import { Gender } from '@prisma/client';
 import { Transform, Type } from 'class-transformer';
+import { Gender } from '@prisma/client';
 
 export class CreateEventDto {
   @IsString()
@@ -37,7 +37,6 @@ export class CreateEventDto {
   seatCapacity: number;
 
   @IsEnum(Gender)
-  @IsNotEmpty()
   gender: Gender;
 
   @IsOptional()
@@ -59,11 +58,11 @@ export class CreateEventDto {
   isPublic?: boolean;
 
   @IsDate()
-  @Transform(({ value }) => new Date(+value))
+  @Transform(({ value }) => new Date(value))
   startDateTime: Date;
 
   @IsDate()
-  @Transform(({ value }) => new Date(+value))
+  @Transform(({ value }) => new Date(value))
   endDateTime: Date;
 
   @IsOptional()

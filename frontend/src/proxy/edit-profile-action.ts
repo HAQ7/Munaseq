@@ -16,7 +16,7 @@ export default async function editProfileAction(
     }
 
     try {
-        const editResponse = await fetch(`http://localhost:3002/user/`, {
+        const editResponse = await fetch(`${process.env.BACKEND_URL}/user/`, {
             method: "PATCH",
             body: formData,
             headers: {

@@ -37,6 +37,7 @@ export default function SmallCard({
     badges = [],
     asEventCreator = false,
     asEventParticipant = false,
+    isJoined = false,
 }: {
     image: StaticImport;
     title: string;
@@ -49,6 +50,7 @@ export default function SmallCard({
     badges: string[];
     asEventCreator?: boolean;
     asEventParticipant?: boolean;
+    isJoined?: boolean;
 }) {
     const [user, setUser] = useState<UserDataDto>();
     const [loading, setLoading] = useState(true);
@@ -61,7 +63,7 @@ export default function SmallCard({
         toast({
             duration: 5000,
             title: "تم الخروج من الفعالية",
-        });
+        }); 
     };
     const cancelEvent = async () => {
         const res = await cancelEventAction(eventId);
@@ -90,7 +92,7 @@ export default function SmallCard({
     }, []);
 
     return (
-        <div className="max-w-[340px] w-full min-h-[350px] bg-white border border-gray-200 rounded-3xl shadow-lg ">
+        <div className="max-w-[340px] w-full min-h-[350px] bg-white border border-gray-200 rounded-3xl shadow-lg relative">
             <div className="p-0 relative h-40">
                 {!loading ? (
                     <>
@@ -149,7 +151,7 @@ export default function SmallCard({
             </div>
 
             <div className="p-5 pt-0">
-                <div className="mb-2 mt-2">
+                <div className="mb-2 mt-2 absolute top-0">
                     {badges.map((badge, index) => (
                         <span
                             key={index}
@@ -160,7 +162,7 @@ export default function SmallCard({
                     ))}
                 </div>
 
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-custom-black">
+                <h5 className="my-2 text-2xl font-bold tracking-tight text-custom-black">
                     {!loading ? (
                         title
                     ) : (
@@ -217,7 +219,7 @@ export default function SmallCard({
                         <Button gradient>
                             <Link
                                 className="w-full h-full grid place-items-center"
-                                href={`/event/${eventId}`}
+                                href={`/event/${eventId}${isJoined ? "/about" : ""}`}
                             >
                                 التفاصيل
                             </Link>

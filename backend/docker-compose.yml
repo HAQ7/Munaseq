@@ -1,4 +1,3 @@
-
 services:
   munaseq_db:
     image: postgres

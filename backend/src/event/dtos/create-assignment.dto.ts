@@ -7,10 +7,10 @@ export class CreateAssignment {
   questions?: string;
 
   @IsDate()
-  @Transform(({ value }) => new Date(+value))
+  @Transform(({ value }) => new Date(value))
   startDate: Date;
 
   @IsDate()
-  @Transform(({ value }) => new Date(+value))
+  @Transform(({ value }) => new Date(value))
   endDate: Date;
 }

@@ -1,6 +1,6 @@
 import Subtitle from "@/components/common/subtitle";
 import Link from "next/link";
-import TabIndicator from "@/components/authenticated-content/event-lists/tab-indicator";
+import TabIndicator from "@/components/common/tab-indicator";
 import SelectEvents from "@/components/common/select-events";
 
 export default function CoordinatedEvents({
@@ -17,21 +17,21 @@ export default function CoordinatedEvents({
                         className="relative text-nowrap"
                     >
                         الفعاليات الحالية
-                        <TabIndicator tab="/coordinated-events/active" />
+                        <TabIndicator layoutId="active-coordinated-events-tab" tab="/coordinated-events/active" />
                     </Link>
                     <Link
                         href="/coordinated-events/upcoming"
                         className="relative text-nowrap"
                     >
                         الفعاليات القادمة{" "}
-                        <TabIndicator tab="/coordinated-events/upcoming" />
+                        <TabIndicator layoutId="active-coordinated-events-tab" tab="/coordinated-events/upcoming" />
                     </Link>
                     <Link
                         href="/coordinated-events/past"
                         className="relative text-nowrap"
                     >
                         الفعاليات الماضية{" "}
-                        <TabIndicator tab="/coordinated-events/past" />
+                        <TabIndicator layoutId="active-coordinated-events-tab" tab="/coordinated-events/past" />
                     </Link>
                 </div>
                 <div className="sm:hidden block">

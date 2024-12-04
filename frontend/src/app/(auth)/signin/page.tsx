@@ -123,7 +123,7 @@ export default function SignIn() {
               <motion.div layout>
                 <TextField
                   ref={emailRef}
-                  placeholder="الايميل الالكتروني"
+                  placeholder="البريد الالكتروني"
                   name="email"
                   className="w-full"
                   onBlur={checkEmailNotEmpty}

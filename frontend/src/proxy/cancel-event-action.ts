@@ -9,7 +9,7 @@ export default async function cancelEventAction(eventId: string) {
 
     try {
         const cancelRes = await fetch(
-            "http://localhost:3002/event/" + eventId,
+            `${process.env.BACKEND_URL}/event/` + eventId,
             {
                 method: "DELETE",
                 headers: {

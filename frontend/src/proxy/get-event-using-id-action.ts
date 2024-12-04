@@ -3,7 +3,7 @@
 export default async function getEventAction({ eventId }: { eventId: string }) {
     try {
         const eventsRes = await fetch(
-            "http://localhost:3002/event/" + eventId,
+            `${process.env.BACKEND_URL}/event/` + eventId,
             {
                 next: {
                     tags: ["event"],

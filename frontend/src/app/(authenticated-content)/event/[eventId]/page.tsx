@@ -1,7 +1,7 @@
 import getEventAction from "@/proxy/get-event-using-id-action";
 import Image from "next/image";
 import { EventDataDto } from "@/dtos/event-data.dto";
-import Tag from "@/components/common/category";
+import Category from "@/components/common/category";
 import userIcon from "@/assets/icons/user-gradiant.svg";
 import { UserDataDto } from "@/dtos/user-data.dto";
 import calendarIcon from "@/assets/icons/calender.svg";
@@ -12,6 +12,10 @@ import decoTop from "@/assets/event/top.png";
 import decoBottom from "@/assets/event/bottom.png";
 import Return from "@/components/authenticated-content/event/return";
 import JoinButton from "@/components/authenticated-content/event/join";
+import isInEventAction from "@/proxy/is-in-event-action";
+import getProfileAction from "@/proxy/get-profile-action";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export default async function EventPage({
     params,
@@ -21,6 +25,19 @@ export default async function EventPage({
     const event: EventDataDto = await getEventAction({
         eventId: params.eventId,
     });
+    const cookiesStore = cookies();
+    const token = cookiesStore.get("token");
+    if (!token) {
+        redirect("/signin");
+    }
+    const loggedInUser: UserDataDto = await getProfileAction(token?.value);
+    const isUserInEvent = await isInEventAction(
+        event.id,
+        loggedInUser.username
+    );
+    if (isUserInEvent) {
+        redirect("/event/" + event.id + "/about");
+    }
     const user: UserDataDto = await getUserAction(event.eventCreatorId);
 
     return (
@@ -42,7 +59,7 @@ export default async function EventPage({
                             className="object-cover rounded-2xl shadow-menu  md:rounded-b-2xl rounded-b-none rounded-t-2xl"
                         />
                     </div>
-                    <div className="flex-1 text-xl gap-5 flex flex-col md:min-w-72 p-8 relative">
+                    <div className="flex-1 text-xl gap-5 flex flex-col md:min-w-72 px-8 pt-4 relative">
                         <Image
                             className="absolute top-0 left-0 block md:hidden"
                             src={decoTop}
@@ -95,10 +112,12 @@ export default async function EventPage({
                         </div>
                     </div>
                 </div>
-                <div className="md:mt-10 md:p-0 p-8">
-                    <div className="flex flex-wrap">
+                <div className="md:p-0 px-8 pb-4">
+                    <div className="md:mt-5 my-5 flex flex-wrap">
                         {event.categories.map((category: string) => {
-                            return <Tag key={category}>{category}</Tag>;
+                            return (
+                                <Category key={category}>{category}</Category>
+                            );
                         })}
                     </div>
                     <div className="grid gap-3">

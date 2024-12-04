@@ -16,7 +16,7 @@ import Tag from '@/components/common/category';
 import { UserDataDto } from '@/dtos/user-data.dto';
 import getUserAction from '@/proxy/get-user-using-username-action';
 
-export function generateImageMetadata({
+export function generateMetadata({
   params,
 }: {
   params: { username: string };
@@ -140,7 +140,7 @@ export default async function UserProfile({
 
         <div className="mt-5 flex gap-1">
           <Image src={tag} alt="catigory icon" className="w-10" />
-          <div className="flex flex-wrap">
+          <div className="flex flex-wrap gap-1">
             {data.categories.map((category: string) => {
               return <Tag key={category}>{category}</Tag>;
             })}

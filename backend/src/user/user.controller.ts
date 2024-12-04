@@ -43,11 +43,6 @@ export class UserController {
     );
   }
 
-  @Get(':id')
-  findById(@Param('id') id: string) {
-    return this.userService.findById(id);
-  }
-
   @Get('email/:email')
   findByEmail(@Param('email') email: string) {
     return this.userService.findByEmail(email);
@@ -57,7 +52,10 @@ export class UserController {
   findByUsername(@Param('username') username: string) {
     return this.userService.findByUsername(username);
   }
-
+  @Get('roles/:userId')
+  findUserRoles(@Param('userId') userId: string) {
+    return this.userService.findUserRoles(userId);
+  }
   @UseGuards(AuthGuard)
   @Patch()
   @UseInterceptors(multerUserLogic())
@@ -93,7 +91,10 @@ export class UserController {
   ) {
     return this.userService.changeUserPassword(passwordChangeDto, userId);
   }
-
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    return this.userService.findById(id);
+  }
   @UseGuards(AuthGuard)
   @Delete()
   async deleteUser(@GetCurrentUserId() id) {

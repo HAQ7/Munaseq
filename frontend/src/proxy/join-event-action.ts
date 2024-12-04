@@ -20,7 +20,7 @@ export default async function joinEventAction(eventId: string) {
     }
 
     try {
-        const joinRes = await fetch("http://localhost:3002/event/join", {
+        const joinRes = await fetch(`${process.env.BACKEND_URL}/event/join`, {
             method: "POST",
             body: JSON.stringify({ eventId }),
             headers: {

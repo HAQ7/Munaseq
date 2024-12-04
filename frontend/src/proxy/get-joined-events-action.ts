@@ -12,7 +12,7 @@ export default async function getJoinedUserEventsAction() {
 
     try {
         const userEventsRes = await fetch(
-            "http://localhost:3002/event/joinedEvents",
+            `${process.env.BACKEND_URL}/event/joinedEvents`,
             {
                 next: {
                     tags: ["event"],
