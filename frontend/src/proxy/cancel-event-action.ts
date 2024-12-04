@@ -9,7 +9,7 @@ export default async function cancelEventAction(eventId: string) {
 
     try {
         const cancelRes = await fetch(
-            `${process.env.BACKEND_URL}/event/` + eventId,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app//event/` + eventId,
             {
                 method: "DELETE",
                 headers: {

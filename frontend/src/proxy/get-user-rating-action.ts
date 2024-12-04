@@ -3,7 +3,7 @@
 export default async function getUserRating(userId: string) {
     try {
         const response = await fetch(
-            `${process.env.BACKEND_URL}/user/rating/${userId}`,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app//user/rating/${userId}`,
             {
                 next: {
                     tags: ["user"],

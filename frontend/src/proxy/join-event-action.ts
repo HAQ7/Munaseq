@@ -20,7 +20,7 @@ export default async function joinEventAction(eventId: string) {
     }
 
     try {
-        const joinRes = await fetch(`${process.env.BACKEND_URL}/event/join`, {
+        const joinRes = await fetch(`https://munaseq-backend-jrsyk.ondigitalocean.app//event/join`, {
             method: "POST",
             body: JSON.stringify({ eventId }),
             headers: {
