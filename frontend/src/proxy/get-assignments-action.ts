@@ -1,28 +1,28 @@
-"use server";
-
 import { cookies } from "next/headers";
 
-export default async function getMaterialsAction(eventId: string) {
+export default async function getAssignmentAction(eventID: string) {
+
     const cookieStore = cookies();
     const token = cookieStore.get("token");
     try {
         const materials = await fetch(
-            `https://munaseq-backend-jrsyk.ondigitalocean.app/event/materials/${eventId}`,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app/event/assignments/${eventID}`,
             {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token?.value}`,
                 },
                 next: {
-                    tags: ["material"],
+                    tags: ["assignment"],
                 },
             }
         );
 
         const data = await materials.json();
 
-        return data.Materials;
+        return data.Assignments;
     } catch (error: any) {
         return [];
     }
+
 }

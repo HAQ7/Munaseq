@@ -3,7 +3,7 @@ import { UserDataDto } from "@/dtos/user-data.dto";
 const isEventPresenterAction = async (eventId: string, username: string) => {
     try {
         const eventAttendeesReq = await fetch(
-            `${process.env.BACKEND_URL}/event/allUsers/` + eventId,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app/event/allUsers/` + eventId,
             {
                 method: "GET",
                 headers: {

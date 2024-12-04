@@ -12,7 +12,7 @@ export default async function getJoinedUserEventsAction() {
 
     try {
         const userEventsRes = await fetch(
-            `${process.env.BACKEND_URL}/event/joinedEvents`,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app/event/joinedEvents`,
             {
                 next: {
                     tags: ["event"],

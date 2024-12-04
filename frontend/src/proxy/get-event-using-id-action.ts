@@ -3,7 +3,7 @@
 export default async function getEventAction({ eventId }: { eventId: string }) {
     try {
         const eventsRes = await fetch(
-            `${process.env.BACKEND_URL}/event/` + eventId,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app/event/` + eventId,
             {
                 next: {
                     tags: ["event"],

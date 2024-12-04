@@ -3,7 +3,7 @@
 export default async function isUsernameUniqueAction(username: string) {
     try {
         const response = await fetch(
-            `${process.env.BACKEND_URL}/user/username/${username}`,
+            `https://munaseq-backend-jrsyk.ondigitalocean.app/user/username/${username}`,
             {
                 method: "GET",
                 headers: {

@@ -16,7 +16,7 @@ export default function TimeForm({
   prevStepHandler: () => void;
   nextStepHandler: () => void;
 }>) {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString();
   const [endDateMin, setEndDateMin] = useState(today);
   const [endDateVal, setEndDateVal] = useState(today);
   const [startDate, setStartDate] = useState(today);

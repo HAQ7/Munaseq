@@ -10,6 +10,7 @@ import starIcon from "@/assets/icons/rating-star.svg";
 import Link from "next/link";
 import TabIndicator from "@/components/common/tab-indicator";
 import Tag from "@/components/common/category";
+import getUserRating from "@/proxy/get-user-rating-action";
 
 export default async function EventLayout({
     children,
@@ -22,6 +23,9 @@ export default async function EventLayout({
         eventId: params.eventId,
     });
     const eventCreator: UserDataDto = await getUserAction(event.eventCreatorId);
+    // const rating: any = await getUserRating(event.eventCreatorId);
+    // console.log(rating);
+    
     return (
         <div className="bg-white shadow-strong min-h-screen rounded-3xl overflow-hidden">
             <div className="h-96 rounded-t-3xl relative">
@@ -76,7 +80,9 @@ export default async function EventLayout({
                                 alt="star icon"
                                 className="w-10"
                             />{" "}
-                            <span>4.6</span>
+                            {/* {rating?.avgRating ? (<span>
+                                {rating?.avgRating}
+                                </span>) : (<span>0</span>)} */}
                         </div>
                     </div>
                     <div>
@@ -101,7 +107,7 @@ export default async function EventLayout({
                                     tab="/content"
                                 />
                             </Link>
-                            <Link
+                            {/* <Link
                                 href="./activities"
                                 className="relative text-nowrap"
                             >
@@ -110,7 +116,7 @@ export default async function EventLayout({
                                     layoutId="active-event-tab"
                                     tab="/activities"
                                 />
-                            </Link>
+                            </Link> */}
                             <Link
                                 href="./members"
                                 className="relative text-nowrap"
