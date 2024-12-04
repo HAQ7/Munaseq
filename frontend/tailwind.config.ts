@@ -10,8 +10,8 @@ const config: Config = {
     extend: {
       boxShadow: {
         strong: "0 0 50px 0 #D7D7D7",
-        menu: "-8px 4px 7px 0 rgba(0, 0, 0, 0.1)",
-        custom: 'rgba(0, 0, 0, 0.24) 0px 3px 8px;'
+        menu: "-8px 4px 7px 0 rgba(0,0,0,0.1)",
+        custom: 'rgba(0,0,0,0.24) 0 3px 8px'
       },
       animation: {
         rotate: "rotate 10s infinite linear",
@@ -38,7 +38,7 @@ const config: Config = {
         
       },
       backgroundImage: {
-        "custom-gradient": "linear-gradient(90deg, #ae00fe 0%, #652bb7 100%)",
+        "custom-gradient": "linear-gradient(90deg,#ae00fe 0%,#652bb7 100%)",
       },
     },
   },

@@ -16,7 +16,7 @@ import Tag from '@/components/common/category';
 import { UserDataDto } from '@/dtos/user-data.dto';
 import getUserAction from '@/proxy/get-user-using-username-action';
 
-export function generateImageMetadata({
+export function generateMetadata({
   params,
 }: {
   params: { username: string };
