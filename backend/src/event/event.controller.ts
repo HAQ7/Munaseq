@@ -33,12 +33,14 @@ import {
 } from './dtos';
 
 import { multerEventLogic, multerMaterialtLogic } from 'src/utils/multer.logic';
+import { CreateQuizDto } from './dtos/create-quiz.dto';
+import { UpdateQuizDto } from './dtos/update-quiz.dto';
+import { SubmitQuizDto } from './dtos/submit-quiz.dto';
 
 @Controller('event')
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
-  // dtos for createEvent and updateEvent will probably need to be updated
   @UseGuards(AuthGuard)
   @UseInterceptors(multerEventLogic())
   @Post()
@@ -73,6 +75,7 @@ export class EventController {
       execludedEvents,
     );
   }
+
   //Returns all event that've been created by current the user
   @UseGuards(AuthGuard)
   @Get('current')
@@ -90,6 +93,7 @@ export class EventController {
       execludedEvents,
     );
   }
+
   //Returns all events that the current user has joined
   @UseGuards(AuthGuard)
   @Get('joinedEvents')
@@ -108,6 +112,7 @@ export class EventController {
       execludedEvents,
     );
   }
+
   @UseGuards(AuthGuard)
   @Post('assignRole/:eventId')
   assignRole(
@@ -122,10 +127,12 @@ export class EventController {
       assignRoleDto.role,
     );
   }
+
   @Get('allUsers/:eventId')
   findAllUsersOfEvent(@Param('eventId') eventId: string) {
     return this.eventService.findAllUsersOfEvent(eventId);
   }
+
   //Returns all users that attend in certain event
   @Get('attendees/:eventId')
   findUsersAttendEvent(
@@ -144,6 +151,7 @@ export class EventController {
       execludedUsers,
     );
   }
+
   //Returns all users that moderate in certain event
   @Get('moderators/:eventId')
   findUsersModerateEvent(
@@ -161,13 +169,22 @@ export class EventController {
       execludedUsers,
     );
   }
+
   //Returns all users that attend in certain event
   @Get('presenters/:eventId')
   findUsersPresentEvent(
     @Param('eventId') eventId: string,
     @Query() query: SeacrhUser,
     @Body() execludedUsersDto?: ExecludeUsers,
-  ) {
+  ): Promise<
+    {
+      id: string;
+      firstName: string;
+      lastName: string;
+      username: string;
+      profilePictureUrl: string;
+    }[]
+  > {
     const { execludedUsers } = execludedUsersDto;
     return this.eventService.findUsersParticipateInEvent(
       eventId,
@@ -178,6 +195,7 @@ export class EventController {
       execludedUsers,
     );
   }
+
   @Get('eventCreator/:eventId')
   findEventCreator(@Param('eventId') eventId: string) {
     return this.eventService.findEventCreator(eventId);
@@ -208,9 +226,11 @@ export class EventController {
       imageUrl,
     );
   }
+
   //-----------------------------------------
   //Joining/Leaving Event's endpoints
   //-----------------------------------------
+
   @UseGuards(AuthGuard)
   @Post('join')
   async joinEvent(
@@ -220,6 +240,7 @@ export class EventController {
     await this.eventService.joinEvent(userId, joinEventDto);
     return { message: 'Successfully joined the event' };
   }
+
   @UseGuards(AuthGuard)
   @Delete('leave')
   async leaveEvent(
@@ -233,6 +254,7 @@ export class EventController {
   //-----------------------------------------
   //Material's endpoints
   //-----------------------------------------
+
   @UseGuards(AuthGuard)
   @UseInterceptors(multerMaterialtLogic())
   @Post('addMaterial/:eventId')
@@ -251,6 +273,7 @@ export class EventController {
     }));
     return this.eventService.addMaterialsToEvent(eventId, userId, materialUrls);
   }
+
   @UseGuards(AuthGuard)
   @Delete('deleteMaterial/:materialId')
   deleteMaterial(
@@ -259,6 +282,7 @@ export class EventController {
   ) {
     return this.eventService.deleteMaterial(userid, materialId);
   }
+
   @UseGuards(AuthGuard)
   @Get('materials/:eventId')
   getMaterials(
@@ -269,8 +293,84 @@ export class EventController {
   }
 
   //-----------------------------------------
+  // Quiz endpoints
+  //-----------------------------------------
+
+  @UseGuards(AuthGuard)
+  @Get('quiz/:eventId')
+  getQuiz(
+    @Param('eventId') eventId: string,
+    @GetCurrentUserId() userId: string,
+  ) {
+    return this.eventService.getQuiz(userId, eventId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('quiz/:eventId')
+  addQuiz(
+    @Param('eventId') eventId: string,
+    @GetCurrentUserId() userId: string,
+    @Body() CreateQuizDto: CreateQuizDto,
+  ) {
+    return this.eventService.addQuizToEvent(userId, eventId, CreateQuizDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('quiz/:eventId/:quizId')
+  updateQuiz(
+    @Param('eventId') eventId: string,
+    @Param('quizId') quizId: string,
+    @GetCurrentUserId() userId: string,
+    @Body() UpdateQuizDto: UpdateQuizDto,
+  ) {
+    return this.eventService.updateQuiz(userId, eventId, quizId, UpdateQuizDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('quiz/start/:eventId/:quizId')
+  startQuiz(
+    @Param('eventId') eventId: string,
+    @Param('quizId') quizId: string,
+    @GetCurrentUserId() userId: string,
+  ) {
+    return this.eventService.startQuiz(userId, eventId, quizId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('quiz/submit/:eventId/:quizId')
+  submitQuiz(
+    @Param('eventId') eventId: string,
+    @Param('quizId') quizId: string,
+    @GetCurrentUserId() userId: string,
+    @Body() submitQuizDto: SubmitQuizDto,
+  ) {
+    return this.eventService.submitQuiz(userId, quizId, submitQuizDto.answers);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('quiz/results/:eventId/:quizId')
+  getAllQuizResults(
+    @Param('eventId') eventId: string,
+    @Param('quizId') quizId: string,
+    @GetCurrentUserId() userId: string,
+  ) {
+    return this.eventService.getAllParticipantsQuizResults(userId, eventId, quizId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('quiz/:eventId/:quizId')
+  deleteQuiz(
+    @Param('eventId') eventId: string,
+    @Param('quizId') quizId: string,
+    @GetCurrentUserId() userId: string,
+  ) {
+    return this.eventService.deleteQuiz(userId, eventId, quizId);
+  }
+
+  //-----------------------------------------
   //Assignment's endpoints
   //-----------------------------------------
+
   @UseGuards(AuthGuard)
   @Get('assignments/:eventId')
   getAssignments(
@@ -279,6 +379,7 @@ export class EventController {
   ) {
     return this.eventService.getAssignments(userId, eventId);
   }
+
   @UseGuards(AuthGuard)
   @UseInterceptors(multerMaterialtLogic())
   @Post('addAssignment/:eventId')
@@ -298,6 +399,7 @@ export class EventController {
       materialUrl,
     );
   }
+
   @UseGuards(AuthGuard)
   @UseInterceptors(multerMaterialtLogic())
   @Patch('updateAssignment/:assignmentId')
@@ -317,6 +419,7 @@ export class EventController {
       materialUrl,
     );
   }
+
   @UseGuards(AuthGuard)
   @Delete('deleteAssignment/:assignmentId')
   deleteAssignment(
@@ -328,6 +431,7 @@ export class EventController {
   //-----------------------------------------
   //Rating Event's endpoints
   //-----------------------------------------
+
   @Post('ratingEvent/:eventId')
   @UseGuards(AuthGuard)
   rateEvent(
@@ -338,13 +442,16 @@ export class EventController {
     const { rating } = ratingDto;
     return this.eventService.rateEvent(userId, eventId, rating);
   }
+
   @Get('ratings/:eventId')
   eventRating(@Param('eventId') eventId: string) {
     return this.eventService.eventRating(eventId);
   }
+
   //-----------------------------------------
   //Deleting Event's endpoint
   //-----------------------------------------
+
   @UseGuards(AuthGuard)
   @Delete(':eventId')
   delete(
