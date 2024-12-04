@@ -56,7 +56,7 @@ export default async function createEventAction(
         for (const role of rolesArray) {
           try {
             const response = await fetch(
-              `http://localhost:3002/event/assignRole/${eventData.id}`,
+              `${process.env.BACKEND_URL}/event/assignRole/${eventData.id}`,
               {
                 method: "POST",
                 headers: {
@@ -85,7 +85,7 @@ export default async function createEventAction(
     }
 
     // const ratingRes = await fetch(
-    //   `http://localhost:3002/event/assignRole/${eventData.id}`,
+    //   `${process.env.BACKEND_URL}/event/assignRole/${eventData.id}`,
     //   {
     //     method: "POST",
     //     body:{

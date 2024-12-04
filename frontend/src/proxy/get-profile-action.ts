@@ -3,7 +3,7 @@
 export default async function getProfileAction(token: any) {
     try {
         
-        const response = await fetch(`http://localhost:3002/user/me`, {
+        const response = await fetch(`${process.env.BACKEND_URL}/user/me`, {
             next: {
                 tags: ['user']
             },

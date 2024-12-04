@@ -13,19 +13,22 @@ export default async function rateEventAction(eventId: string, rating: number) {
 
   console.log(
     "Sending request to:",
-    `http://localhost:3002/event/ratingEvent/${eventId}`
+    `${process.env.BACKEND_URL}/event/ratingEvent/${eventId}`
   );
   console.log("Request body:", JSON.stringify({ rating }));
   console.log(eventId);
 
   try {
     const response = await fetch(
-      `http://localhost:3002/event/ratingEvent/${eventId}`,
+      `${process.env.BACKEND_URL}/event/ratingEvent/${eventId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token.value}`,
+        },
+        next: {
+          tags: ['user']
         },
         body: JSON.stringify({ rating: rating }),
       }

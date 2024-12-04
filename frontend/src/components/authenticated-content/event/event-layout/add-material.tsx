@@ -52,6 +52,7 @@ export default function AddMaterial({ eventId }: { eventId: string }) {
                     <DialogTitle>اضافة محتوى</DialogTitle>
                     <DialogDescription>
                         <form
+                        className="grid gap-4"
                             action={async (formData: FormData) => {
 
                                 if (!ref.current.value) {
