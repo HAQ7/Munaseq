@@ -4,7 +4,7 @@ import Link from 'next/link';
 import edit from '@/assets/icons/edit.svg';
 import Subtitle from '@/components/common/subtitle';
 import { cookies } from 'next/headers';
-import getProfileAction from '@/proxy/get-profile-action';
+import getProfileAction from '@/proxy/user/get-profile-action';
 import { notFound, redirect } from 'next/navigation';
 import tag from '@/assets/auth-content-assets/tag.svg';
 import rateIcon from '@/assets/auth-content-assets/Rate-Icon.svg';
@@ -14,7 +14,7 @@ import cvIcon from '@/assets/auth-content-assets/CV-Icon.svg';
 import emailIcon from '@/assets/auth-content-assets/Email-Icon.svg';
 import Tag from '@/components/common/category';
 import { UserDataDto } from '@/dtos/user-data.dto';
-import getUserAction from '@/proxy/get-user-using-username-action';
+import getUserAction from '@/proxy/user/get-user-using-username-action';
 
 export function generateMetadata({
   params,

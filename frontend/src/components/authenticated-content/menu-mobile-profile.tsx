@@ -1,4 +1,4 @@
-import getProfileAction from "@/proxy/get-profile-action";
+import getProfileAction from "@/proxy/user/get-profile-action";
 import userCircle from "@/assets/icons/user-circle.svg";
 import Image from "next/image";
 

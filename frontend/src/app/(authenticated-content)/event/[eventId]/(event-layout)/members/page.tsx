@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import userIcon from "@/assets/icons/user-gradiant.svg";
 import Subtitle from "@/components/common/subtitle";
-import getAllUsers from "@/proxy/get-all-user-event-action";
+import getAllUsers from "@/proxy/user/get-all-user-event-action";
 import { UserDataDto } from "@/dtos/user-data.dto";
 
 type Material = {

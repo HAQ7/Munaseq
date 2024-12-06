@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/components/common/button";
 import { useToast } from "@/hooks/use-toast";
-import joinEventAction from "@/proxy/join-event-action";
+import joinEventAction from "@/proxy/event/join-event-action";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { motion } from "framer-motion";

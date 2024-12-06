@@ -13,10 +13,10 @@ import { motion } from "framer-motion";
 import { Input } from "@/components/common/shadcn-ui/input";
 import Button from "@/components/common/button";
 import LoadingWapper from "@/components/common/loading-wrapper";
-import isUsernameUniqueAction from "@/proxy/is-username-unique-action";
-import isEmailUniqueAction from "@/proxy/is-email-unique-action";
+import isUsernameUniqueAction from "@/proxy/user/is-username-unique-action";
+import isEmailUniqueAction from "@/proxy/user/is-email-unique-action";
 import Link from "next/link";
-import editProfileAction from "@/proxy/edit-profile-action";
+import editProfileAction from "@/proxy/user/edit-profile-action";
 
 export default function EditForm({
     userData,

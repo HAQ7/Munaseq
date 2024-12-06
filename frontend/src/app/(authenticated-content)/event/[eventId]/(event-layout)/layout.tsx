@@ -1,16 +1,16 @@
 import { EventDataDto } from "@/dtos/event-data.dto";
-import getEventAction from "@/proxy/get-event-using-id-action";
+import getEventAction from "@/proxy/event/get-event-using-id-action";
 import Image from "next/image";
 import leftDeco from "@/assets/event/left-deco.png";
 import rightDeco from "@/assets/event/right-deco.png";
 import { UserDataDto } from "@/dtos/user-data.dto";
-import getUserAction from "@/proxy/get-user-using-id-action";
+import getUserAction from "@/proxy/user/get-user-using-id-action";
 import userIcon from "@/assets/icons/user-gradiant.svg";
 import starIcon from "@/assets/icons/rating-star.svg";
 import Link from "next/link";
 import TabIndicator from "@/components/common/tab-indicator";
 import Tag from "@/components/common/category";
-import getUserRating from "@/proxy/get-user-rating-action";
+import getUserRating from "@/proxy/user/get-user-rating-action";
 
 export default async function EventLayout({
     children,
@@ -19,12 +19,10 @@ export default async function EventLayout({
     children: React.ReactNode;
     params: { eventId: string };
 }) {
-    const event: EventDataDto = await getEventAction({
-        eventId: params.eventId,
-    });
+    const event: EventDataDto = await getEventAction(params.eventId);
     const eventCreator: UserDataDto = await getUserAction(event.eventCreatorId);
     // const rating: any = await getUserRating(event.eventCreatorId);
-    // console.log(rating);
+    
     
     return (
         <div className="bg-white shadow-strong min-h-screen rounded-3xl overflow-hidden">

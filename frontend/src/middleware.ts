@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-import getProfileAction from "./proxy/get-profile-action";
-import isInEventAction from "./proxy/is-in-event-action";
+import getProfileAction from "./proxy/user/get-profile-action";
+import isInEventAction from "./proxy/user/is-in-event-action";
 
 export const config = {
     matcher: [
@@ -42,7 +42,7 @@ const checkAuth = async (req: NextRequest) => {
     }
 
     try {
-        const { username } = await getProfileAction(token);
+        const { username } = await getProfileAction();
         if (!username) {
             return NextResponse.redirect(new URL("/signin", req.url));
         }
@@ -67,7 +67,7 @@ const isInEvent = async (req: NextRequest, eventId: string) => {
     }
 
     try {
-        const { username } = await getProfileAction(token);
+        const { username } = await getProfileAction();
         if (!username) {
             return NextResponse.redirect(new URL("/signin", req.url));
         }
@@ -104,7 +104,7 @@ export async function middleware(req: NextRequest) {
 
         if (eventId && pathname.split("/").length >= 4) {
             // Check if user is in event
-            console.log("checking if user is in event");
+            
             return await isInEvent(req, eventId);
         }
     }
@@ -113,7 +113,7 @@ export async function middleware(req: NextRequest) {
         const token = req.cookies.get("token")?.value;
         if (token) {
             try {
-                const { username } = await getProfileAction(token);
+                const { username } = await getProfileAction();
                 if (username) {
                     // Avoid redirect loop by checking if user is already on /discover
                     if (req.nextUrl.pathname !== "/discover") {

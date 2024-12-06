@@ -11,7 +11,7 @@ import {
     DialogTrigger,
 } from "@/components/common/shadcn-ui/dialog";
 import { Input } from "@/components/common/shadcn-ui/input";
-import addMateiralAction from "@/proxy/add-material-action";
+import addMateiralAction from "@/proxy/material/add-material-action";
 import { useState, useRef } from "react";
 
 export default function AddMaterial({ eventId }: { eventId: string }) {

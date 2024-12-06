@@ -3,7 +3,7 @@ import Image from "next/image";
 import Dropdown from "../common/dropdown-options";
 import { UserDataDto } from "@/dtos/user-data.dto";
 
-export default function MenuProfile({ profileData }: { profileData: UserDataDto }) {
+export default function MenuProfile({ profileData, onLinkClick }: { profileData: UserDataDto, onLinkClick?: () => void }) {
  
     return (
       <div className="flex gap-3 p-5 items-center">
@@ -27,7 +27,7 @@ export default function MenuProfile({ profileData }: { profileData: UserDataDto 
             {profileData.username}
           </div>
         </div>
-        <Dropdown />
+        <Dropdown onLinkClick={onLinkClick} />
       </div>
     );
 }

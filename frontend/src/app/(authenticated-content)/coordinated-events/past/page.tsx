@@ -1,37 +1,8 @@
-import SmallCard from "@/components/common/small-card";
-import GetUserEventsAction from "@/proxy/get-user-events-action";
-import { checkData } from "@/util/check-date";
-import getDate from "@/util/get-date";
+import Events from "@/components/authenticated-content/event-lists/events";
+
 
 export default async function PastCoordinatedEvents() {
-    const eventList = await GetUserEventsAction();
-    let numEventRendered = 0;
     return (
-        <div className="flex mt-4 gap-8 flex-wrap lg:justify-start justify-center">
-            {eventList.map(async (event: any) => {
-                if (
-                    checkData(event.startDateTime, event.endDateTime) === "past"
-                ) {
-                    numEventRendered++;
-                    return (
-                        <SmallCard
-                            image={event.imageUrl}
-                            title={event.title}
-                            date={getDate(event.startDateTime)}
-                            userId={event.eventCreatorId}
-                            eventId={event.id}
-                            badges={event.categories}
-                            isJoined
-                        />
-                    );
-                }
-            })}
-
-            {numEventRendered === 0 && (
-                <div className="mt-5 text-custom-gray">
-                    لا يوجد لديك فعاليات سابقة
-                </div>
-            )}
-        </div>
+        <Events dateFilter="past"/>
     );
 }

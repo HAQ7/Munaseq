@@ -6,7 +6,7 @@ import { Metadata } from "next";
 import SmallCard from "@/components/common/small-card";
 import getDate from "@/util/get-date";
 
-import getEventsAction from "@/proxy/get-events-action";
+import getEventsAction from "@/proxy/event/get-events-action";
 
 export const metadata: Metadata = {
     title: "اكتشف",
@@ -30,7 +30,7 @@ export default async function Discover() {
             </Title>
             <Subtitle>من أعلى المنسقين تقييما </Subtitle>
             <div className="flex mt-4 gap-8 flex-wrap lg:justify-start justify-center">
-                {eventList?.map(async (event: any) => (
+                {eventList?.map((event: any) => (
                     <SmallCard
                         image={event.imageUrl}
                         title={event.title}

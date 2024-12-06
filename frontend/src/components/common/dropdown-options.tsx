@@ -12,16 +12,26 @@ import Link from "next/link";
 import { Separator } from "./shadcn-ui/separator";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export default function Dropdown() {
+export default function Dropdown({
+    onLinkClick,
+}: {
+    onLinkClick?: () => void;
+}) {
     const router = useRouter();
+    const [open, setOpen] = useState(false);
     return (
-        <DropdownMenu dir="rtl">
-            <DropdownMenuTrigger className="absoulte left-2">
+        <DropdownMenu onOpenChange={setOpen} open={open} dir="rtl">
+            <DropdownMenuTrigger asChild className="absoulte left-2 cursor-pointer">
                 <Image className="left-2" src={dots} alt="options" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="bg-white relative p-0">
                 <Link
+                    onClick={() => {
+                        if (onLinkClick) onLinkClick();
+                        setOpen(false);
+                    }}
                     href={"/account"}
                     className="flex gap-3 items-center p-3 transition-colors hover:bg-[#ebebeb]"
                 >

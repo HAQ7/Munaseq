@@ -10,7 +10,7 @@ import { useRef, useState } from "react";
 import ParticipantsForm from "@/components/authenticated-content/create-event/participants-form";
 import TimeForm from "@/components/authenticated-content/create-event/time-form";
 import ForwhoForm from "@/components/authenticated-content/create-event/forwho-form";
-import createEventAction from "@/proxy/create-event-action";
+import createEventAction from "@/proxy/event/create-event-action";
 
 // export const metadata: Metadata = {
 //     title: "انشاء فعالية",
@@ -47,7 +47,7 @@ export default function CreateEvent() {
                 {/* <CreateEventProgress step={1} /> */}
                 <form
                     action={async formData => {
-                        console.log(selectedCategories.current);
+                        
                         for (const category of selectedCategories.current) {
                             formData.append("categories", category);
                         }

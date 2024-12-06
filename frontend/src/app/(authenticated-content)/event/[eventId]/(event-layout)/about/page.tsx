@@ -1,12 +1,12 @@
 import { EventDataDto } from "@/dtos/event-data.dto";
-import getEventAction from "@/proxy/get-event-using-id-action";
+import getEventAction from "@/proxy/event/get-event-using-id-action";
 import calendarIcon from "@/assets/icons/calender.svg";
 import groupIcon from "@/assets/icons/participants.svg";
 import loactionIcon from "@/assets/icons/location.svg";
 import Category from "@/components/common/category";
 import Image from "next/image";
 import { UserDataDto } from "@/dtos/user-data.dto";
-import getUserAction from "@/proxy/get-user-using-id-action";
+import getUserAction from "@/proxy/user/get-user-using-id-action";
 import userIcon from "@/assets/icons/user-gradiant.svg";
 
 export default async function AboutPage({
@@ -14,9 +14,7 @@ export default async function AboutPage({
 }: {
     params: { eventId: string };
 }) {
-    const event: EventDataDto = await getEventAction({
-        eventId: params.eventId,
-    });
+    const event: EventDataDto = await getEventAction(params.eventId);
 
     const user: UserDataDto = await getUserAction(event.eventCreatorId);
 

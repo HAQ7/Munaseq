@@ -25,7 +25,7 @@
 
 //     try {
 //         const createRes = await fetch(
-//             `https://munaseq-backend-jrsyk.ondigitalocean.app/event/addAssignment/${eventID}`,
+//             `${process.env.BACKEND_URL}/event/addAssignment/${eventID}`,
 //             {
 //                 method: "POST",
 //                 body: formData,
