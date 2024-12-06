@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "@/assets/logo/munaseq-logo-dark-white.svg";
 import Image from "next/image";
+import Link from "next/link";
 export default function footerSection() {
   return (
     <div>
@@ -25,9 +26,6 @@ export default function footerSection() {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:underline me-4 md:me-6">
-                  سياسة الخصوصية
-                </a>
               </li>
               <li>
                 <a href="#" className="hover:underline me-4 md:me-6">
@@ -35,9 +33,9 @@ export default function footerSection() {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <Link href="signup" className="hover:underline">
                   تسجيل
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

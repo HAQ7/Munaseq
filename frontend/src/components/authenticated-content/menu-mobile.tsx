@@ -28,7 +28,7 @@ export default function MenuMobile() {
             <SheetTrigger className="lg:hidden block">
                 <Image src={bars} alt="menu" className="w-10 min-w-10" />
             </SheetTrigger>
-            <SheetContent className="max-w-[22rem] w-screen h-screen rounded-e-3xl fixed p-0 pt-10 bg-white ">
+            <SheetContent className="max-w-[22rem] w-screen h-screen rounded-e-3xl fixed p-0 pt-10 bg-white flex">
                 <SheetTitle className="hidden">القائمة</SheetTitle>
                 <SheetDescription className="hidden">القائمة</SheetDescription>
                 <Menu mobile onLinkClick={() => setIsOpen(false)} />

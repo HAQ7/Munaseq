@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation";
 
 export default function TabIndicator({ tab, layoutId }: { tab: string, layoutId: string }) {
     const pathname = usePathname();
-    console.log(pathname, tab);
     return (
         <>
             {pathname.includes(tab) && (

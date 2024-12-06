@@ -6,7 +6,7 @@ import ratingIcon from "@/assets/icons/rating-star.svg";
 import ratingFilledIcon from "@/assets/icons/rating-star.svg"; // Replace with filled star icon
 import ratingEmptyIcon from "@/assets/icons/rating-empty-star.svg"; // Replace with empty star icon
 import Button from "@/components/common/button";
-import rateEventAction from "@/proxy/add-rate-event-action";
+import rateEventAction from "@/proxy/event/add-rate-event-action";
 
 export default function RatePage({ params }: { params: { eventId: string } }) {
     const [rating, setRating] = useState(0);
@@ -27,7 +27,7 @@ export default function RatePage({ params }: { params: { eventId: string } }) {
         setMessage(null);
 
         try {
-            console.log("Submitting rating:", rating);
+            
             const data = await rateEventAction(params.eventId, rating); // Call the backend action
             setMessage("تم إرسال تقييمك بنجاح.");
         } catch (error: any) {

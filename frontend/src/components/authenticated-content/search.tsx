@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { Card } from "@/components/common/shadcn-ui/card";
 // import Button from "@/components/common/button";
 import LogoLoading from "../common/logo-loading";
-import getEventsAction from "@/proxy/get-events-action";
+import getEventsAction from "@/proxy/event/get-events-action";
 import { EventDataDto } from "@/dtos/event-data.dto";
 import Link from "next/link";
 

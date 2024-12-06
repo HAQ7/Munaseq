@@ -13,6 +13,7 @@ import glow from "@/assets/land-assets/glow.svg";
 import { Calendar } from "@/components/common/shadcn-ui/calendar";
 import { motion } from "framer-motion";
 import AnimatedCounter from "../common/animatedCounter";
+import Link from "next/link";
 
 export default function HeroSection() {
     return (
@@ -48,7 +49,7 @@ export default function HeroSection() {
                         و الالكترونية مثل الدورات و ورش العمل و المحاضرات
                     </p>
                     <div className="flex justify-center">
-                        <Button gradient>انضم الينا</Button>
+                        <Link href="signin"> <Button gradient>انضم الينا</Button></Link>
                     </div>
                 </motion.div>
                 <motion.div

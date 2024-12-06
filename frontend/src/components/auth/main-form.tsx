@@ -3,8 +3,8 @@ import Button from "@/components/common/button";
 import { motion, Variants } from "framer-motion";
 import { useRef, useState } from "react";
 import LogoLoading from "../common/logo-loading";
-import isEmailUniqueAction from "@/proxy/is-email-unique-action";
-import isUsernameUniqueAction from "@/proxy/is-username-unique-action";
+import isEmailUniqueAction from "@/proxy/user/is-email-unique-action";
+import isUsernameUniqueAction from "@/proxy/user/is-username-unique-action";
 
 export default function mainForm(props: {
     step: number;

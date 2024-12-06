@@ -211,7 +211,7 @@ import { useState, useEffect } from "react";
 import LoadingWrapper from "@/components/common/loading-wrapper";
 import Catagory from "@/components/common/category";
 import AddCatagoryDropdown from "@/components/common/add-category-dropdown";
-import getUserAction from "@/proxy/get-user-using-username-action";
+import getUserAction from "@/proxy/user/get-user-using-username-action";
 import { UserDataDto } from "@/dtos/user-data.dto";
 
 export default function forwhoForm({

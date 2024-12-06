@@ -24,7 +24,7 @@
     - 🔒 POST /user/changePassword
     - 🗑️ DELETE /user
 
-> Base URL: https://munaseq-backend-jrsyk.ondigitalocean.app
+> Base URL: ${process.env.BACKEND_URL}
 > 
 
 ### 🔐 Authentication Module
@@ -67,8 +67,8 @@
                   "البرمجة",
                   "التكنولوجيا"
                 ],
-            "profilePictureUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/images/munaseq-logo-1728968171728.png",
-            "cvUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/pdfs/infection_4-1728968171730.pdf",
+            "profilePictureUrl": "${process.env.BACKEND_URL}/images/munaseq-logo-1728968171728.png",
+            "cvUrl": "${process.env.BACKEND_URL}/pdfs/infection_4-1728968171730.pdf",
             "socialAccounts": {
                   "twitter": "https://x.com/KSU_HSS",
                   "linkedin": "https://www.linkedin.com/in/hisham-alsuhaibani-649a8a238/"
@@ -419,8 +419,8 @@
               "lastName": "Alsuhaibani",
               "username": "krcherheadx",
               "email": "hisham@gmail.com",
-              "profilePictureUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/images/munaseq-logo-1728968171728.png",
-              "cvUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/pdfs/infection_4-1728968171730.pdf",
+              "profilePictureUrl": "${process.env.BACKEND_URL}/images/munaseq-logo-1728968171728.png",
+              "cvUrl": "${process.env.BACKEND_URL}/pdfs/infection_4-1728968171730.pdf",
               "visibleName": "Krcher",
               "gender": "MALE",
               "socialAccounts": {
@@ -456,8 +456,8 @@
               "lastName": "Alsuhaibani",
               "username": "krcherheadx",
               "email": "hisham@gmail.com",
-              "profilePictureUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/images/munaseq-logo-1728968171728.png",
-              "cvUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/pdfs/infection_4-1728968171730.pdf",
+              "profilePictureUrl": "${process.env.BACKEND_URL}/images/munaseq-logo-1728968171728.png",
+              "cvUrl": "${process.env.BACKEND_URL}/pdfs/infection_4-1728968171730.pdf",
               "visibleName": "Krcher",
               "gender": "MALE",
               "socialAccounts": {
@@ -494,8 +494,8 @@
               "lastName": "Alsuhaibani",
               "username": "krcherheadx",
               "email": "hisham@gmail.com",
-              "profilePictureUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/images/munaseq-logo-1728968171728.png",
-              "cvUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/pdfs/infection_4-1728968171730.pdf",
+              "profilePictureUrl": "${process.env.BACKEND_URL}/images/munaseq-logo-1728968171728.png",
+              "cvUrl": "${process.env.BACKEND_URL}/pdfs/infection_4-1728968171730.pdf",
               "visibleName": "Krcher",
               "gender": "MALE",
               "socialAccounts": {
@@ -541,8 +541,8 @@
               "lastName": "Alsuhaibani",
               "username": "krcherheadx",
               "email": "hisham@gmail.com",
-              "profilePictureUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/images/munaseq-logo-1728968171728.png",
-              "cvUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/pdfs/infection_4-1728968171730.pdf",
+              "profilePictureUrl": "${process.env.BACKEND_URL}/images/munaseq-logo-1728968171728.png",
+              "cvUrl": "${process.env.BACKEND_URL}/pdfs/infection_4-1728968171730.pdf",
               "visibleName": "Krcher",
               "gender": "MALE",
               "socialAccounts": {
@@ -579,8 +579,8 @@
                   "lastName": "Alsuhaibani",
                   "username": "krcherheadx",
                   "email": "hisham@gmail.com",
-                  "profilePictureUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/images/munaseq-logo-1728968171728.png",
-                  "cvUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/pdfs/infection_4-1728968171730.pdf",
+                  "profilePictureUrl": "${process.env.BACKEND_URL}/images/munaseq-logo-1728968171728.png",
+                  "cvUrl": "${process.env.BACKEND_URL}/pdfs/infection_4-1728968171730.pdf",
                   "visibleName": "Krcher",
                   "gender": "MALE",
                   "socialAccounts": {
@@ -627,8 +627,8 @@
                       "lastName": "AlOsaimi",
                       "username": "bestDevelopers",
                       "email": "hisham@gmail.com",
-                      "profilePictureUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/images/munaseq-logo-1728967909364.png",
-                      "cvUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/pdfs/infection_4-1728967909366.pdf",
+                      "profilePictureUrl": "${process.env.BACKEND_URL}/images/munaseq-logo-1728967909364.png",
+                      "cvUrl": "${process.env.BACKEND_URL}/pdfs/infection_4-1728967909366.pdf",
                       "visibleName": "Krcher",
                       "gender": "MALE",
                       "socialAccounts": {
@@ -691,8 +691,8 @@
               "lastName": "AlOsaimi",
               "username": "bestDevelopers",
               "email": "hisham@gmail.com",
-              "profilePictureUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/images/munaseq-logo-1728967909364.png",
-              "cvUrl": "https://munaseq-backend-jrsyk.ondigitalocean.app/pdfs/infection_4-1728967909366.pdf",
+              "profilePictureUrl": "${process.env.BACKEND_URL}/images/munaseq-logo-1728967909364.png",
+              "cvUrl": "${process.env.BACKEND_URL}/pdfs/infection_4-1728967909366.pdf",
               "visibleName": "Krcher",
               "gender": "MALE",
               "socialAccounts": {

@@ -1,4 +1,4 @@
-import getProfileAction from "@/proxy/get-profile-action";
+import getProfileAction from "@/proxy/user/get-profile-action";
 import userCircle from "@/assets/icons/user-circle.svg";
 import Image from "next/image";
 
@@ -12,7 +12,7 @@ export default async function MenuProfile() {
   const token = cookiesStore.get("token");
   let data: UserDataDto;
   if (token) {
-    data = await getProfileAction(token.value);
+    data = await getProfileAction();
     return (
       <div className="flex gap-3 p-5 items-center">
         <div className="w-20 aspect-square relative rounded-full overflow-hidden">

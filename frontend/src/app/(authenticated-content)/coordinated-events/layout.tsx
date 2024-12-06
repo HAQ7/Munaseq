@@ -1,45 +1,22 @@
-import Subtitle from "@/components/common/subtitle";
-import Link from "next/link";
-import TabIndicator from "@/components/common/tab-indicator";
-import SelectEvents from "@/components/common/select-events";
+import calenderIcon from "@/assets/icons/calender-active.svg";
+import GetUserEventsAction from "@/proxy/user/get-user-events-action";
+import EventsLayout from "@/components/authenticated-content/event-lists/events-layout";
+import { EventType } from "@/components/authenticated-content/event-lists/events-layout";
 
-export default function CoordinatedEvents({
+export default async function CoordinatedEvents({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const eventList = await GetUserEventsAction();
     return (
-        <>
-            <Subtitle>
-                <div className="gap-8 sm:flex hidden">
-                    <Link
-                        href="/coordinated-events/active"
-                        className="relative text-nowrap"
-                    >
-                        الفعاليات الحالية
-                        <TabIndicator layoutId="active-coordinated-events-tab" tab="/coordinated-events/active" />
-                    </Link>
-                    <Link
-                        href="/coordinated-events/upcoming"
-                        className="relative text-nowrap"
-                    >
-                        الفعاليات القادمة{" "}
-                        <TabIndicator layoutId="active-coordinated-events-tab" tab="/coordinated-events/upcoming" />
-                    </Link>
-                    <Link
-                        href="/coordinated-events/past"
-                        className="relative text-nowrap"
-                    >
-                        الفعاليات الماضية{" "}
-                        <TabIndicator layoutId="active-coordinated-events-tab" tab="/coordinated-events/past" />
-                    </Link>
-                </div>
-                <div className="sm:hidden block">
-                    
-                <SelectEvents />
-                </div>
-            </Subtitle>
+        <EventsLayout
+            eventType={EventType.COORDINATED}
+            eventString="الفعاليات القادمة"
+            eventIcon={calenderIcon}
+            eventData={eventList}
+        >
             {children}
-        </>
+        </EventsLayout>
     );
 }

@@ -212,6 +212,11 @@ export class UserService {
             id: true,
           },
         },
+presentedEvents:{
+         select:{
+            id:true,
+          },
+        },
       },
     });
     if (result) {

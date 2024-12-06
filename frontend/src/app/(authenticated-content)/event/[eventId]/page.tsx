@@ -1,4 +1,4 @@
-import getEventAction from "@/proxy/get-event-using-id-action";
+import getEventAction from "@/proxy/event/get-event-using-id-action";
 import Image from "next/image";
 import { EventDataDto } from "@/dtos/event-data.dto";
 import Category from "@/components/common/category";
@@ -7,13 +7,13 @@ import { UserDataDto } from "@/dtos/user-data.dto";
 import calendarIcon from "@/assets/icons/calender.svg";
 import groupIcon from "@/assets/icons/participants.svg";
 import loactionIcon from "@/assets/icons/location.svg";
-import getUserAction from "@/proxy/get-user-using-id-action";
+import getUserAction from "@/proxy/user/get-user-using-id-action";
 import decoTop from "@/assets/event/top.png";
 import decoBottom from "@/assets/event/bottom.png";
 import Return from "@/components/authenticated-content/event/return";
 import JoinButton from "@/components/authenticated-content/event/join";
-import isInEventAction from "@/proxy/is-in-event-action";
-import getProfileAction from "@/proxy/get-profile-action";
+import isInEventAction from "@/proxy/user/is-in-event-action";
+import getProfileAction from "@/proxy/user/get-profile-action";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -22,15 +22,13 @@ export default async function EventPage({
 }: {
     params: { eventId: string };
 }) {
-    const event: EventDataDto = await getEventAction({
-        eventId: params.eventId,
-    });
+    const event: EventDataDto = await getEventAction(params.eventId);
     const cookiesStore = cookies();
     const token = cookiesStore.get("token");
     if (!token) {
         redirect("/signin");
     }
-    const loggedInUser: UserDataDto = await getProfileAction(token?.value);
+    const loggedInUser: UserDataDto = await getProfileAction();
     const isUserInEvent = await isInEventAction(
         event.id,
         loggedInUser.username

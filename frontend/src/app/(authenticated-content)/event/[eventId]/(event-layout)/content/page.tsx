@@ -1,11 +1,11 @@
 import fileIcon from "@/assets/event/file-gradient.svg";
 import Image from "next/image";
-import getMaterialsAction from "@/proxy/get-material-action";
-import isEventPresenterAction from "@/proxy/is-event-presenter-action";
+import getMaterialsAction from "@/proxy/material/get-material-action";
+import isEventPresenterAction from "@/proxy/user/is-event-presenter-action";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { UserDataDto } from "@/dtos/user-data.dto";
-import getProfileAction from "@/proxy/get-profile-action";
+import getProfileAction from "@/proxy/user/get-profile-action";
 import AddMaterial from "@/components/authenticated-content/event/event-layout/add-material";
 
 type Material = {
@@ -26,7 +26,7 @@ export default async function ContentPage({
     if (!token) {
         redirect("/signin");
     }
-    const loggedUser: UserDataDto = await getProfileAction(token.value);
+    const loggedUser: UserDataDto = await getProfileAction();
     const isPresenter: boolean = await isEventPresenterAction(
         params.eventId,
         loggedUser.username

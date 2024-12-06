@@ -3,7 +3,7 @@ import Title from "@/components/common/title";
 import penIcon from "@/assets/icons/edit-gradient.svg";
 import xIcon from '@/assets/icons/x.svg'
 import Image from "next/image";
-import getProfileAction from "@/proxy/get-profile-action";
+import getProfileAction from "@/proxy/user/get-profile-action";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { UserDataDto } from "@/dtos/user-data.dto";
@@ -19,7 +19,7 @@ export default async function Account() {
   const token = cookiesStore.get("token");
   let data: UserDataDto;
   if (token) {
-    data = await getProfileAction(token.value);
+    data = await getProfileAction();
 
     return (
       <section className="relative pb-10">
