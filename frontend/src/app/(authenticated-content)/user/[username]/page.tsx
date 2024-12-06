@@ -40,7 +40,7 @@ export default async function UserProfile({
     if (!data) {
       notFound();
     }
-    const profile: UserDataDto = await getProfileAction(token.value);
+    const profile: UserDataDto = await getProfileAction();
     const hisProfile: boolean = data.username === profile.username;
     data.socialAccounts = JSON.parse(data.socialAccounts as string);
     return (

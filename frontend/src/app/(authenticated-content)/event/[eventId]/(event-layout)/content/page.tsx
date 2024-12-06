@@ -26,7 +26,7 @@ export default async function ContentPage({
     if (!token) {
         redirect("/signin");
     }
-    const loggedUser: UserDataDto = await getProfileAction(token.value);
+    const loggedUser: UserDataDto = await getProfileAction();
     const isPresenter: boolean = await isEventPresenterAction(
         params.eventId,
         loggedUser.username

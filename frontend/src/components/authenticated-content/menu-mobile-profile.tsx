@@ -12,7 +12,7 @@ export default async function MenuProfile() {
   const token = cookiesStore.get("token");
   let data: UserDataDto;
   if (token) {
-    data = await getProfileAction(token.value);
+    data = await getProfileAction();
     return (
       <div className="flex gap-3 p-5 items-center">
         <div className="w-20 aspect-square relative rounded-full overflow-hidden">

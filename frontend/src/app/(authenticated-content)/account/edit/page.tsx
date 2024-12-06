@@ -19,7 +19,7 @@ export default async function Account() {
   const token = cookiesStore.get("token");
   let data: UserDataDto;
   if (token) {
-    data = await getProfileAction(token.value);
+    data = await getProfileAction();
 
     return (
       <section className="relative pb-10">

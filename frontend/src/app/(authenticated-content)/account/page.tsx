@@ -24,7 +24,7 @@ export default async function Account() {
   let data: UserDataDto;
 
   if (token) {
-    data = await getProfileAction(token.value);
+    data = await getProfileAction();
     data.socialAccounts = JSON.parse(data.socialAccounts as string);
     return (
       <section className="relative pb-10">
