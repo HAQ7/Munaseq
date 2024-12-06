@@ -44,7 +44,7 @@ Munasiq is a comprehensive platform designed to streamline the creation, managem
 
 - **Node.js**: Ensure you have Node.js installed. [Download Node.js](https://nodejs.org/)
 - **PostgreSQL**: Install and set up PostgreSQL for local development.
-- **Git**: Version control system to clone and manage the repository. [Install Git](https://git-scm.com/)
+- **Git**: Version control system to clone and manage the repository. [Install Git](https://git-scm.com/).
 
 ### Installation
 
