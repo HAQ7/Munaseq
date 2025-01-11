@@ -1,0 +1,43 @@
+name: Build and Push Docker Image
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-munaseq-backend:
+    if: ${{ contains(github.event.head_commit.message, 'build:') }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        # with:
+        #   sparse-checkout: .
+
+      - name: Get Version
+        id: get-version
+        uses: beaconbrigade/package-json-version@v0.3
+        with:
+          path: .
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY_URL }}
+          username: ${{ secrets.DOCKER_REGISTRY_USER }}
+          password: ${{ secrets.DOCKER_REGISTRY_PASS }}
+
+      - name: List files
+        run: ls -la .
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend/
+          push: true
+          no-cache: true
+          tags: |
+            ${{ secrets.DOCKER_REGISTRY_URL }}/backend:latest

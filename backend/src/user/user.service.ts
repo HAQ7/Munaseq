@@ -74,14 +74,14 @@ export class UserService {
         },
       });
     } catch (error) {
-      // Catch specific error when a record is not found
+      // Catch specific errors when a record is not found
       if (error instanceof NotFoundError) {
         throw new HttpException(
           'No account with the provided email has been found',
           HttpStatus.NOT_FOUND,
         );
       }
-      // Handle other known request errors (if applicable)
+      // Handle other known request error (if applicable)
       if (error instanceof PrismaClientKnownRequestError) {
         throw new HttpException('Database error', HttpStatus.BAD_REQUEST);
       }
@@ -152,7 +152,7 @@ export class UserService {
     }
   }
 
-  // this should not return all the user information including password and such
+  // this should not return all the users information including password and such
   async findAllUsers(
     username?: string,
     pageNumber: number = 1,
