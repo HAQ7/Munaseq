@@ -2,6 +2,7 @@
 
 import Button from "@/components/common/button";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function HeroText() {
     return (
@@ -23,9 +24,11 @@ export default function HeroText() {
                 منسق هي منصة متكاملة لإدارة الفعاليات التعليمية الحضورية و
                 الالكترونية مثل الدورات و ورش العمل و المحاضرات
             </p>
-            <Button className="w-min px-9" gradient>
-                انضم الينا
-            </Button>
+            <Link href={'/signup'}>
+                <Button className="w-min px-9" gradient>
+                    انضم الينا
+                </Button>
+            </Link>
         </motion.div>
     );
 }
