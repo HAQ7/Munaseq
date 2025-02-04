@@ -13,6 +13,7 @@ import { Separator } from "./shadcn-ui/separator";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { signOut } from "@/proxy/signout-action";
 
 export default function Dropdown({
     onLinkClick,
@@ -41,9 +42,8 @@ export default function Dropdown({
                 </Link>
                 <Separator orientation="horizontal" className="bg-[#d3d3d3]" />
                 <button
-                    onClick={() => {
-                        document.cookie = "token=;max-age=0;path=/";
-                        router.push("/signin");
+                    onClick={async () => {
+                        await signOut();
                     }}
                     className="flex gap-3  items-center p-3 transition-colors hover:bg-[#ebebeb] w-full"
                 >

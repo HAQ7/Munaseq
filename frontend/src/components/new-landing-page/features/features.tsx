@@ -25,7 +25,7 @@ export default function Features() {
                     منسق
                 </span>
             </h2>
-            <div className="relative overflow-x-hidden">
+            <div className="relative overflow-x-hidden mt-3">
                 <motion.div
                     initial={{ x: 0 }}
                     whileInView={{ x: "100%" }}
