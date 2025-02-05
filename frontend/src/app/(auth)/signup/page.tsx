@@ -149,12 +149,12 @@ export default function SignUp() {
                             <Progress step={step} />
                             <Link
                                 ref={linkHeightTrackRef}
-                                className="w-full h-full"
+                                className="w-full h-full md:block hidden"
                                 href={"/"}
                             >
                                 <motion.div
                                     animate={{ height: observedLinkHeight }}
-                                    className="w-full h-full rounded-[50px] bg-gradient-to-br from-primary to-secondary overflow-hidden items-center md:flex flex-col justify-center gap-14 hidden "
+                                    className="w-full h-full rounded-[50px] bg-gradient-to-br from-primary to-secondary overflow-hidden items-center flex flex-col justify-center gap-14  "
                                 >
                                     <Image
                                         src={logoIcon}
