@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import LogoLoading from "../common/logo-loading";
 import isEmailUniqueAction from "@/proxy/user/is-email-unique-action";
 import isUsernameUniqueAction from "@/proxy/user/is-username-unique-action";
+import useFormVariants from "./hooks/use-form-variants";
 
 export default function mainForm(props: {
     step: number;
@@ -17,18 +18,7 @@ export default function mainForm(props: {
     const [formError, setFormError] = useState([] as string[]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const variants: Variants = {
-        past: {
-            x: "50%",
-            opacity: 0,
-            visibility: "hidden",
-        },
-        active: {
-            x: 0,
-            opacity: 1,
-            visibility: "visible",
-        },
-    };
+    const variants: Variants = useFormVariants()
     const isEmailCorrect: () => boolean = () => {
         const re = /\S+@\S+\.\S+/;
         if (!re.test(emailRef.current.value)) {
@@ -161,7 +151,7 @@ export default function mainForm(props: {
             transition={{ type: "spring", duration: 0.5, bounce: 0 }}
             animate={props.step === 1 ? "active" : "past"}
             variants={variants}
-            className="absolute w-full"
+            className="w-full"
         >
             <motion.h1 layout className="font-bold text-3xl text-center">
                 {" "}

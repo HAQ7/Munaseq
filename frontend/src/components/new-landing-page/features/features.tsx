@@ -38,7 +38,7 @@ export default function Features() {
                     <Image
                         src={topRightDeco}
                         alt="deco"
-                        className="absolute right-0 top-0 -z-10"
+                        className="absolute right-0 top-0 -z-10 sm:block hidden"
                     />
                 </div>
 
@@ -116,7 +116,7 @@ export default function Features() {
                     <Image
                         src={bottomLeftDeco}
                         alt="deco"
-                        className="absolute left-0 bottom-0 -z-10"
+                        className="absolute left-0 bottom-0 -z-10 sm:block hidden"
                     />
                 </div>
             </div>

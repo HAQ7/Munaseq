@@ -20,7 +20,7 @@ export default function HeroText() {
                 </span>{" "}
                 من الالف الى الياء
             </h1>
-            <p className="text-xl text-custom-gray">
+            <p className="sm:text-xl text-lg text-custom-gray">
                 منسق هي منصة متكاملة لإدارة الفعاليات التعليمية الحضورية و
                 الالكترونية مثل الدورات و ورش العمل و المحاضرات
             </p>

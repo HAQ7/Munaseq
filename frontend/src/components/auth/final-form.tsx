@@ -7,6 +7,7 @@ import user from "@/assets/icons/user-gradiant.svg";
 import userCircle from "@/assets/icons/user-circle.svg";
 import { MutableRefObject, useRef } from "react";
 import LogoLoading from "../common/logo-loading";
+import useFormVariants from "./hooks/use-form-variants";
 
 export default function FinalForm(props: {
     step: number;
@@ -36,23 +37,7 @@ export default function FinalForm(props: {
         lastName: props.formData.get("lastName"),
     };
 
-    const variants: Variants = {
-        next: {
-            x: "-50%",
-            opacity: 0,
-            visibility: "hidden",
-        },
-        past: {
-            x: "50%",
-            opacity: 0,
-            visibility: "hidden",
-        },
-        active: {
-            x: 0,
-            opacity: 1,
-            visibility: "visible",
-        },
-    };
+    const variants: Variants = useFormVariants();
     return (
         <motion.div
             transition={{ type: "spring", duration: 0.5, bounce: 0 }}
@@ -61,7 +46,7 @@ export default function FinalForm(props: {
                 props.step === 4 ? "active" : props.step > 4 ? "past" : "next"
             }
             variants={variants}
-            className="absolute w-full"
+            className="w-full"
         >
             <h1 className="font-bold text-3xl text-center">
                 {" "}
