@@ -32,7 +32,6 @@ export default function SignUp() {
 
     const modalHeightTrackRef = useRef<HTMLDivElement | null>(null);
     const linkHeightTrackRef = useRef<HTMLAnchorElement | null>(null);
-    const formHeightTrackRef = useRef<HTMLFormElement | null>(null);
 
     const categories: MutableRefObject<string[]> = useRef([]);
     const ref = useRef({} as HTMLFormElement);
@@ -138,12 +137,12 @@ export default function SignUp() {
                 }}
                 transition={transition}
                 id="card"
-                className="bg-white w-[min(900px,90vw)] shadow-strong rounded-[50px] overflow-hidden grid"
+                className="bg-white w-[min(900px,90vw)] shadow-strong rounded-[50px] overflow-hidden grid items-center"
             >
                 <div ref={modalHeightTrackRef} className="">
                     <div
                         ref={scope}
-                        className="grid md:grid-cols-2 md:gap-0 gap-3 h-full place-items-center relative p-14"
+                        className="grid md:grid-cols-2 md:gap-0 gap-3 md:h-full place-items-center relative md:p-14 p-10"
                     >
                         <div className="h-full w-full flex flex-col md:gap-5 ">
                             <Progress step={step} />
@@ -170,7 +169,7 @@ export default function SignUp() {
                             </Link>
                         </div>
 
-                        <div className="w-full sm:px-10 flex flex-col items-center exit-right overflow-hidden pt-5">
+                        <div className="w-full md:p-10 flex flex-col items-center justify-center exit-right overflow-hidden pt-5">
                             <form
                                 ref={ref}
                                 onSubmit={async e => {
@@ -190,6 +189,7 @@ export default function SignUp() {
                                     <>
                                         <MainForm
                                             step={step}
+                                            transitionToSignUpHandler={transitionToSignUpHandler}
                                             nextStepHandler={nextStepHandler}
                                         />
                                         <ProfileForm
@@ -214,15 +214,7 @@ export default function SignUp() {
                                     <ErrorForm message={error.message} />
                                 )}
                             </form>
-                            <p className="mt-5 text-[#949494] text-center">
-                                لديك حساب؟{" "}
-                                <span
-                                    onClick={transitionToSignUpHandler}
-                                    className="text-primary text-nowrap cursor-pointer"
-                                >
-                                    سجل دخولك الآن!
-                                </span>
-                            </p>
+                            
                         </div>
                     </div>
                 </div>

@@ -50,7 +50,7 @@ export default function FinalForm(props: {
         >
             <h1 className="font-bold text-3xl text-center">
                 {" "}
-                تأكد من المعلومات 🔍
+                تأكد من المعلومات
             </h1>
 
             {categories.length > 0 && (
@@ -97,7 +97,7 @@ export default function FinalForm(props: {
                         <Button
                             disabled={props.step !== 3}
                             onClick={props.prevStepHandler}
-                            className="bg-transparent !text-custom-gray"
+                            className="bg-transparent !text-custom-gray hover:!bg-[hsl(0,0%,92%)]"
                         >
                             السابق
                         </Button>

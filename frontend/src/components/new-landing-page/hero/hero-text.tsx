@@ -9,7 +9,7 @@ export default function HeroText() {
         <motion.div
             animate={{ x: 0, opacity: 1 }}
             initial={{ x: 100, opacity: 0 }}
-            transition={{ bounce: 0, type: "spring" }}
+            transition={{ bounce: 0, type: "spring" , delay: 0.5}}
             className="grid gap-5 p-5 lg:max-w-[700px] max-w-[500px]"
         >
             <h1 className="font-semibold text-[clamp(2.5em,4vw,4em)]">

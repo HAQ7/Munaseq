@@ -71,9 +71,9 @@ export default function ProfileForm(props: {
                 <motion.div layout>
                     <h1 className="font-bold text-3xl text-center">
                         {" "}
-                        بيشوفونها الناس 😎
+                        انشئ ملك الشخصي
                     </h1>
-                    <div className="grid grid-cols-2 gap-5">
+                    <div className="grid grid-cols-2 gap-5 mt-10">
                         <TextField
                             placeholder="الاسم الاول*"
                             name="firstName"
@@ -154,7 +154,7 @@ export default function ProfileForm(props: {
                     <Button
                         disabled={props.step !== 2}
                         onClick={props.prevStepHandler}
-                        className="bg-transparent !text-custom-gray"
+                        className="bg-transparent !text-custom-gray hover:!bg-[hsl(0,0%,92%)]"
                     >
                         السابق
                     </Button>

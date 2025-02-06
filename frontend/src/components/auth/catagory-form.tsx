@@ -37,7 +37,7 @@ export default function CatagoryForm(props: {
         >
             <motion.h1 layout className="font-bold text-3xl text-center">
                 {" "}
-                اختر اللي تحب 🎒
+                اختر اهتماماتك
             </motion.h1>
 
             <motion.div className="flex flex-wrap gap-2 mt-10 sm:text-[0.75rem] text-xs ">
@@ -80,7 +80,7 @@ export default function CatagoryForm(props: {
                     <Button
                         disabled={props.step !== 3}
                         onClick={props.prevStepHandler}
-                        className="mt-10 bg-transparent !text-custom-gray"
+                        className="mt-10 bg-transparent !text-custom-gray hover:!bg-[hsl(0,0%,92%)]"
                     >
                         السابق
                     </Button>
