@@ -29,7 +29,7 @@ export default function Step({
             </div>
             <div className="pt-5 px-5 gap-2 flex flex-col relative">
                 <h2 className="font-semibold text-2xl z-10">{title}</h2>
-                <p className="text-xs text-custom-gray z-10">{desc}</p>
+                <p className="text-custom-gray z-10">{desc}</p>
                 <Image
                     src={bottomLeftDeco}
                     alt="deco"

@@ -27,14 +27,14 @@ export default function Steps() {
                 whileInView={"afterSlide"}
                 viewport={{ margin: "-100px 0px", once: true }}
                 transition={{ staggerChildren: 0.1, delayChildren: 0.4 }}
-                className="flex lg:flex-row flex-col justify-center items-center gap-20 mb-10 px-2"
+                className="flex lg:flex-row flex-col justify-center items-center gap-20 mb-10 px-5"
             >
                 <motion.div variants={variants}>
                     <Step
                         title="كون ملفك الشخصي"
                         icon={userIcon}
                         number={"١"}
-                        desc="تقدم هذه الدورة مقدمة شاملة في مهارات الحاسب الآلي الأساسية، وتهدف إلى تمكين المشاركين من استخدام الكمبيوتر بكفاءة في حياتهم اليومية والعملية. تتضمن الدورة التعرف على مكونات الحاسب، أنظمة التشغيل، وتطبيقات المكتب الأساسية."
+                        desc="أنشئ حسابك وأضف معلوماتك الأساسية لتنطلق في تنظيم فعالياتك بسهولة."
                     />
                 </motion.div>
                 <motion.div variants={variants}>
@@ -42,7 +42,7 @@ export default function Steps() {
                         title="ادخل معلومات الفعالية"
                         icon={infoIcon}
                         number={"٢"}
-                        desc="تقدم هذه الدورة مقدمة شاملة في مهارات الحاسب الآلي الأساسية، وتهدف إلى تمكين المشاركين من استخدام الكمبيوتر بكفاءة في حياتهم اليومية والعملية. تتضمن الدورة التعرف على مكونات الحاسب، أنظمة التشغيل، وتطبيقات المكتب الأساسية."
+                        desc="حدد تفاصيل الفعالية مثل العنوان، الموعد، المكان (حضوري أو إلكتروني)، والفئة المستهدفة."
                     />
                 </motion.div>
                 <motion.div variants={variants}>
@@ -50,7 +50,7 @@ export default function Steps() {
                         title="نظم فعاليتك"
                         icon={optionsIcon}
                         number={"٣"}
-                        desc="تقدم هذه الدورة مقدمة شاملة في مهارات الحاسب الآلي الأساسية، وتهدف إلى تمكين المشاركين من استخدام الكمبيوتر بكفاءة في حياتهم اليومية والعملية. تتضمن الدورة التعرف على مكونات الحاسب، أنظمة التشغيل، وتطبيقات المكتب الأساسية."
+                        desc="أضف الأنشطة، إدارة التسجيلات، تفاعل مع المشاركين، واستخدم أدوات الذكاء الاصطناعي لجعل فعاليتك أكثر احترافية."
                     />
                 </motion.div>
             </motion.div>

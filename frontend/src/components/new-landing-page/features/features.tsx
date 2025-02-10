@@ -47,7 +47,7 @@ export default function Features() {
                     whileInView={"afterSlide"}
                     viewport={{ margin: "-300px 0px", once: true }}
                     transition={{ staggerChildren: 0.1, delayChildren: 0.4 }}
-                    className="bg-gradient-to-r to-[#AE00FE] from-[#652BB7] w-screen text-white flex lg:flex-row flex-col justify-around items-center lg:py-10 py-20 lg:gap-2 gap-20"
+                    className="bg-gradient-to-r to-[#AE00FE] from-[#652BB7] w-screen text-white flex lg:flex-row flex-col justify-center  items-center lg:py-10 py-20 gap-20"
                 >
                     <motion.div
                         variants={variants}
@@ -63,9 +63,7 @@ export default function Features() {
                         </h2>
                         <p>
                             أنشئ فعالياتك التعليمية وأدر جميع تفاصيلها بكل
-                            مرونة. من إدارة التسجيلات إلى تنظيم المحتوى والتفاعل
-                            مع المشاركين، نوفر لك الأدوات اللازمة لضمان تجربة
-                            سلسة واحترافية.
+                            مرونة.
                         </p>
                     </motion.div>
                     <motion.div
@@ -82,9 +80,7 @@ export default function Features() {
                         </h2>
                         <p>
                             ابحث عن الفعاليات التعليمية التي تهمك وسجل فيها
-                            بسهولة. استمتع بتجربة سلسة تتيح لك الوصول إلى
-                            المحتوى، التفاعل مع المدربين والمشاركين، والمشاركة
-                            في الأنشطة مباشرةً من أي مكان.
+                            بسهولة. 
                         </p>
                     </motion.div>
                     <motion.div
@@ -102,8 +98,6 @@ export default function Features() {
                         <p>
                             استمتع بتجربة تعليمية متطورة مع أدوات الذكاء
                             الاصطناعي التي تساعد في إنتاج الأنشطة تلقائيًا.
-                            ابتكر تمارين وأسئلة تفاعلية بسرعة، مما يضمن محتوى
-                            متجدد ومناسب لمجال فعاليتك بكل سهولة.
                         </p>
                     </motion.div>
                 </motion.div>

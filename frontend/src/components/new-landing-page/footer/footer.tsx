@@ -11,7 +11,7 @@ export default function Footer() {
                 className="w-screen z-10 relative"
                 alt="wave top"
             />
-            <Image src={deco} className="absolute right-0 top-0" alt="deco" />
+            <Image src={deco} className="absolute right-0 top-0 sm:block hidden" alt="deco" />
             <div className="bg-gradient-to-r to-[#AE00FE] from-[#652BB7] w-screen grid place-items-center z-10 relative py-10 gap-10">
                 <Image className="w-40" src={logo} alt="Icon" />
                 <p className="text-white">

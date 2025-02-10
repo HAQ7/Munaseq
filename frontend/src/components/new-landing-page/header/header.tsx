@@ -24,7 +24,7 @@ export default function Header() {
             </div>
 
             <div className="gap-2 sm:flex hidden">
-                <Button className="bg-transparent border-white border hover:bg-white hover:text-black">
+                <Button className="bg-transparent border-white border hover:bg-white hover:!text-black">
                     <Link href={"/signin"}>تسجيل دخول</Link>
                 </Button>
                 <Button>
