@@ -3,6 +3,7 @@ import Button from "@/components/common/button";
 import { motion, Variants } from "framer-motion";
 import { catagories } from "@/util/categories";
 import { MutableRefObject, useRef, useState } from "react";
+import useFormVariants from "./hooks/use-form-variants";
 
 export default function CatagoryForm(props: {
     step: number;
@@ -13,23 +14,7 @@ export default function CatagoryForm(props: {
     const [formError, setFormError] = useState(false);
     const [selectedCatagories, setSelectedCatagories] = useState<string[]>([]);
 
-    const variants: Variants = {
-        next: {
-            x: "-50%",
-            opacity: 0,
-            visibility: "hidden",
-        },
-        past: {
-            x: "50%",
-            opacity: 0,
-            visibility: "hidden",
-        },
-        active: {
-            x: 0,
-            opacity: 1,
-            visibility: "visible",
-        },
-    };
+    const variants: Variants = useFormVariants();
 
     const validateInputs: () => boolean = () => {
         if (selectedCatagories.length === 0) {
@@ -48,11 +33,11 @@ export default function CatagoryForm(props: {
                 props.step === 3 ? "active" : props.step > 3 ? "past" : "next"
             }
             variants={variants}
-            className="absolute w-full"
+            className="w-full"
         >
             <motion.h1 layout className="font-bold text-3xl text-center">
                 {" "}
-                اختر اللي تحب 🎒
+                اختر اهتماماتك
             </motion.h1>
 
             <motion.div className="flex flex-wrap gap-2 mt-10 sm:text-[0.75rem] text-xs ">
@@ -95,7 +80,7 @@ export default function CatagoryForm(props: {
                     <Button
                         disabled={props.step !== 3}
                         onClick={props.prevStepHandler}
-                        className="mt-10 bg-transparent !text-custom-gray"
+                        className="mt-10 bg-transparent !text-custom-gray hover:!bg-[hsl(0,0%,92%)]"
                     >
                         السابق
                     </Button>

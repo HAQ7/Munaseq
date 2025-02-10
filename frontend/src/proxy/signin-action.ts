@@ -35,7 +35,7 @@ export async function signinAction(formData: FormData) {
     }
 
     const cookieStore = cookies();
-    cookieStore.set('token', token, { maxAge: 259200, path: '/' });
+    cookieStore.set('token', token, { maxAge: 259200, path: '/', httpOnly: true });
   } catch (error: any) {
     return { message: error.message };
   }

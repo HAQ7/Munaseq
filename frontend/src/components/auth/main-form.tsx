@@ -5,9 +5,11 @@ import { useRef, useState } from "react";
 import LogoLoading from "../common/logo-loading";
 import isEmailUniqueAction from "@/proxy/user/is-email-unique-action";
 import isUsernameUniqueAction from "@/proxy/user/is-username-unique-action";
+import useFormVariants from "./hooks/use-form-variants";
 
 export default function mainForm(props: {
     step: number;
+    transitionToSignUpHandler: () => void
     nextStepHandler: (e: MouseEvent) => void;
 }) {
     const emailRef = useRef({} as HTMLInputElement);
@@ -17,18 +19,7 @@ export default function mainForm(props: {
     const [formError, setFormError] = useState([] as string[]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const variants: Variants = {
-        past: {
-            x: "50%",
-            opacity: 0,
-            visibility: "hidden",
-        },
-        active: {
-            x: 0,
-            opacity: 1,
-            visibility: "visible",
-        },
-    };
+    const variants: Variants = useFormVariants()
     const isEmailCorrect: () => boolean = () => {
         const re = /\S+@\S+\.\S+/;
         if (!re.test(emailRef.current.value)) {
@@ -161,11 +152,11 @@ export default function mainForm(props: {
             transition={{ type: "spring", duration: 0.5, bounce: 0 }}
             animate={props.step === 1 ? "active" : "past"}
             variants={variants}
-            className="absolute w-full"
+            className="w-full"
         >
             <motion.h1 layout className="font-bold text-3xl text-center">
                 {" "}
-                متحمسين لدخولك 🔥
+                انشئ حسابك
             </motion.h1>
             <motion.div layout>
                 <TextField
@@ -253,6 +244,15 @@ export default function mainForm(props: {
                         />
                     )}
                 </motion.div>
+                <motion.p layout className="mt-5 text-[#949494] text-center">
+                                لديك حساب؟{" "}
+                                <span
+                                    onClick={props.transitionToSignUpHandler}
+                                    className="text-primary text-nowrap cursor-pointer"
+                                >
+                                    سجل دخولك الآن!
+                                </span>
+                            </motion.p>
             </motion.div>
         </motion.div>
     );

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import logoIcon from '@/assets/logo/logo-small-white.svg';
 import munaseq from '@/assets/logo/munaseq-text.svg';
+import fullLogo from '@/assets/logo/munaseq-logo-dark-white.svg'
 import logo from '@/assets/logo/munaseq-logo.svg';
 import TextField from '@/components/common/text-field';
 import { motion, Transition, useAnimate } from 'framer-motion';
@@ -103,21 +104,21 @@ export default function SignIn() {
         animate={animation}
         transition={transition}
         id="card"
-        className="bg-white w-[min(900px,90vw)] min-h-[600px] shadow-strong rounded-[50px] md:p-14 p-8 overflow-hidden grid"
+        className="bg-white w-[min(900px,90vw)] md:min-h-[600px] shadow-2xl rounded-[50px] md:p-14 p-8 overflow-hidden grid"
       >
-        <div className="grid md:grid-cols-2 md:gap-0 gap-3 h-full place-items-center relative">
-          <Link className="md:hidden" href={'/'}>
-            <div className="md:hidden grid ">
-              <Image src={logo} className="w-64" alt="logo" />
+        <div className="flex md:flex-row flex-col h-full relative ">
+          <Link className="md:hidden bg-gradient-to-br from-primary to-secondary w-full grid place-items-center rounded-3xl py-12" href={'/'}>
+            <div className="md:hidden grid">
+              <Image src={fullLogo} priority alt="logo" />
             </div>
           </Link>
           <motion.div
             layout
-            className="w-full md:p-10 flex flex-col items-center exit-right"
+            className="w-full md:py-10 md:px-10 py-14 flex flex-col items-center justify-center exit-right"
           >
             <motion.h1 layout className="font-bold text-3xl text-center">
               {' '}
-              أهلاً بعودتك 👋
+              سجل دخولك
             </motion.h1>
             <form onSubmit={formSubmitHandler} className="max-w-96 w-full">
               <motion.div layout>
@@ -156,7 +157,7 @@ export default function SignIn() {
                 <SubmitButton isLoading={isLoading}>تسجيل الدخول</SubmitButton>
               </motion.div>
             </form>
-            <motion.p layout className="mt-4 text-[#949494]">
+            <motion.p layout className="mt-4 text-[#949494] text-center">
               ليس لديك حساب؟{' '}
               <span
                 onClick={transitionToSignUpHandler}
@@ -166,8 +167,8 @@ export default function SignIn() {
               </span>
             </motion.p>
           </motion.div>
-          <Link className="w-full h-full" href={'/'}>
-            <div className="w-full h-full rounded-[50px] bg-gradient-to-br from-primary to-secondary overflow-hidden items-center md:flex flex-col justify-center gap-14 hidden ">
+          <Link className="w-full h-full md:block hidden" href={'/'}>
+            <div className="w-full h-full rounded-[50px] bg-gradient-to-br from-primary to-secondary overflow-hidden items-center flex flex-col justify-center gap-14  ">
               <Image src={logoIcon} className="w-32" alt="logo" />
               <Image src={munaseq} className="w-48" alt="munaseq" />
             </div>
