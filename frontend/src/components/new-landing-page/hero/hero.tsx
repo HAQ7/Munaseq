@@ -2,17 +2,27 @@
 
 import Image from "next/image";
 import heroBg from "@/assets/new-landing-assets/hero/hero-bg.svg";
+import titleGlow from "@/assets/new-landing-assets/hero/title-glow.png";
 import heroLeftDeco from "@/assets/new-landing-assets/hero/hero-left-deco.png";
 import HeroLottie from "./hero-lottie";
 import HeroText from "./hero-text";
 import heroRightDeco from "@/assets/new-landing-assets/hero/hero-right-deco.png";
 import { motion } from "framer-motion";
+import ParticlesBg from "./particles-bg";
 
 export default function Hero() {
     return (
         <section className="flex lg:justify-end items-end lg:items-stretch lg:flex-row flex-col-reverse">
+            <div className="lg:block hidden">
+                <ParticlesBg />
+            </div>
             <div className="flex lg:justify-between justify-center items-center flex-1  lg:w-auto w-full">
-                <div className="h-full lg:block hidden ">
+                <div className="h-full lg:block hidden relative ">
+                    <Image
+                        src={titleGlow}
+                        alt="glow"
+                        className=" h-full absolute"
+                    />
                     <Image
                         src={heroRightDeco}
                         alt="deco"
