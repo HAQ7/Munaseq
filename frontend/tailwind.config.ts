@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      dropShadow: {
+        'pink': '0px 5px 5px #CE64FF',
+        'wave': '0 0px 3px black'
+      },
       boxShadow: {
         strong: "0 0 50px 0 #D7D7D7",
         menu: "-8px 4px 7px 0 rgba(0,0,0,0.1)",

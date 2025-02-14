@@ -34,7 +34,7 @@ export default function Features() {
                     className="absolute bg-gradient-to-r from-transparent to-50% to-white h-full w-[200%] z-10"
                 />
                 <div className=" relative overflow-hidden pt-10">
-                    <Image className="w-screen" src={waveTop} alt="wave top" />
+                    <Image className="w-screen drop-shadow-wave" src={waveTop} alt="wave top" />
                     <Image
                         src={topRightDeco}
                         alt="deco"
@@ -103,7 +103,7 @@ export default function Features() {
                 </motion.div>
                 <div className="overflow-hidden relative pb-10">
                     <Image
-                        className="w-screen"
+                        className="w-screen drop-shadow-wave"
                         src={waveBottom}
                         alt="wave bottom"
                     />

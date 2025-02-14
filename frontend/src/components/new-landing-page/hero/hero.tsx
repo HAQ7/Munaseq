@@ -13,16 +13,16 @@ import ParticlesBg from "./particles-bg";
 export default function Hero() {
     return (
         <section className="flex lg:justify-end items-end lg:items-stretch lg:flex-row flex-col-reverse">
-            <div className="lg:block hidden">
+            {/* <div className="lg:block hidden">
                 <ParticlesBg />
-            </div>
+            </div> */}
             <div className="flex lg:justify-between justify-center items-center flex-1  lg:w-auto w-full">
                 <div className="h-full lg:block hidden relative ">
-                    <Image
+                    {/* <Image
                         src={titleGlow}
                         alt="glow"
                         className=" h-full absolute"
-                    />
+                    /> */}
                     <Image
                         src={heroRightDeco}
                         alt="deco"
@@ -31,29 +31,32 @@ export default function Hero() {
                 </div>
                 <HeroText />
             </div>
-            <div className="grid place-items-center relative overflow-y-hidden  overflow-x-clip">
-                <motion.div
-                    initial={{ y: 0 }}
-                    animate={{ y: "-200%" }}
-                    transition={{ duration: 1 }}
-                    className="w-full h-full absolute z-10"
-                >
-                    <div className="bg-white w-full h-full" />
-                    <div className=" bg-gradient-to-b from-white to-transparent h-full" />
-                </motion.div>
-                <Image
-                    className="md:w-[45vw] md:min-w-[600px] w-full drop-shadow-xl"
-                    src={heroBg}
-                    alt="background image"
-                    priority
-                />
-                <div className="absolute w-[90%] max-w-[900px] grid place-items-center">
-                    <HeroLottie />
+            <div className="grid place-items-center relative">
+                <ParticlesBg />
+                <div className="grid place-items-center relative overflow-y-hidden  overflow-x-clip lg:ps-5">
+                    <motion.div
+                        initial={{ y: 0 }}
+                        animate={{ y: "-200%" }}
+                        transition={{ duration: 1 }}
+                        className="w-full h-full absolute z-10"
+                    >
+                        <div className="bg-white w-full h-full" />
+                        <div className=" bg-gradient-to-b from-white to-transparent h-full" />
+                    </motion.div>
                     <Image
-                        src={heroLeftDeco}
-                        alt="deco"
-                        className="absolute -z-10 w-full aspect-square"
+                        className="md:w-[45vw] md:min-w-[600px] w-full drop-shadow-pink"
+                        src={heroBg}
+                        alt="background image"
+                        priority
                     />
+                    <div className="absolute w-[90%] max-w-[900px] grid place-items-center">
+                        <HeroLottie />
+                        <Image
+                            src={heroLeftDeco}
+                            alt="deco"
+                            className="absolute -z-10 w-full aspect-square"
+                        />
+                    </div>
                 </div>
             </div>
         </section>

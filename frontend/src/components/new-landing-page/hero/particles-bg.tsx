@@ -22,16 +22,17 @@ export default function ParticlesBg() {
                 enable: false,
                 zIndex: -1,
             },
+            pauseOnOutsideViewport: true,
             particles: {
 
                 number: {
-                    value: 500,
+                    value: 800,
                     density: {
                         enable: true,
                     },
                 },
                 color: {
-                    value: "#AE00FE",
+                    value: "#CE64FF",
                 },
                 shape: {
                     type: "circle",
@@ -43,12 +44,12 @@ export default function ParticlesBg() {
                     },
                 },
                 size: {
-                    value: 2,
+                    value: {min: 2, max:3},
                 },
                 move: {
                     enable: true,
                     speed: 2,
-                    direction: "left",
+                    direction: "bottom-right",
                     straight: true,
                 },
                 wobble: {
@@ -75,7 +76,7 @@ export default function ParticlesBg() {
     if (init) {
         return (
             <Particles
-                className="h-full w-full absolute"
+                className="md:h-full h-[150%] md:w-[150%] w-full absolute"
                 id="tsparticles"
                 options={options}
             />
