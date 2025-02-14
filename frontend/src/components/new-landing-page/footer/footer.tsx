@@ -8,7 +8,7 @@ export default function Footer() {
         <footer className="pt-10 overflow-hidden relative">
             <Image
                 src={waveTop}
-                className="w-screen z-10 relative"
+                className="w-screen z-10 relative drop-shadow-wave"
                 alt="wave top"
             />
             <Image src={deco} className="absolute right-0 top-0 sm:block hidden" alt="deco" />
