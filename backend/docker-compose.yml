@@ -12,9 +12,13 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8000:3002
+      - 3002:3002
+    depends_on:
+      - munaseq_db
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: postgres://munaseq:1234@munaseq_db:5432/munaseq_db
+      DATABASE_URL: "postgres://munaseq:1234@munaseq_db:5432/munaseq_db"
 
 networks:
   munaseq-network:
