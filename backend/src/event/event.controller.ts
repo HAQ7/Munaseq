@@ -214,6 +214,7 @@ export class EventController {
     @GetCurrentUserId() userId: string,
     @Param('eventId') eventId: string,
     @Body() updateEventDto: UpdateEventDto,
+    @Query('removeImage') removeImage:boolean, 
     @UploadedFiles()
     files: {
       image?: any;
@@ -225,6 +226,7 @@ export class EventController {
       eventId,
       updateEventDto,
       imageUrl,
+      removeImage,
     );
   }
 
