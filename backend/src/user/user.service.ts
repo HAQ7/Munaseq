@@ -132,6 +132,10 @@ export class UserService {
       });
       cvUrl = cvUrl ?? user.cvUrl;
       profilePictureUrl = profilePictureUrl ?? user.profilePictureUrl;
+      
+      EditUserDto.categories = Array.isArray(EditUserDto.categories)
+      ? EditUserDto.categories
+      : [EditUserDto.categories];
 
       return this.prisma.user.update({
         where: { id: id },
