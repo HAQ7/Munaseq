@@ -38,6 +38,8 @@ model User {
   TakeQuiz          TakeQuiz[]
   TakeAssignment    TakeAssignment[]
   GiveFeedback      GiveFeedback[]
+  sent_messages     Message[]        @relation("Sender")
+  received_messages Message[]        @relation("Receiver")
 }
 
 model Event {
@@ -66,6 +68,7 @@ model Event {
   Assignments    Assignment[]
   GivenFeedbacks GiveFeedback[]
   Materials      Material[]
+  GroupMessages  Message[]      @relation("GroupMessages")
 }
 
 model Question {
@@ -159,6 +162,25 @@ model GiveFeedback {
   eventId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+///CHATTING Models
+model Message {
+  id          String  @id @default(uuid())
+  content     String
+  //Sender id one-to-many 
+  sender_id   String
+  Sender      User    @relation("Sender", fields: [sender_id], references: [id])
+  //Receiver id (only for direct messages) one-to-many
+  receiver_id String?
+  Receiver    User?   @relation("Receiver", fields: [receiver_id], references: [id])
+
+  //event id (only for event group message) one-to-many 
+  event_id  String
+  Event     Event    @relation("GroupMessages", fields: [event_id], references: [id])
+  createdAt DateTime @default(now())
+
+  //St
 }
 
 enum Gender {

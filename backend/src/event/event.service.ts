@@ -13,9 +13,11 @@ import { UpdateQuizDto } from './dtos/update-quiz.dto';
 @Injectable()
 export class EventService {
   constructor(private prisma: PrismaService) {}
-  //----------------------------------------------------------------------
+  //
+  // ----------------------------------------------------------------------
   //THE FOLLOWING IS CREATING EVENT LOGIC
   //----------------------------------------------------------------------
+
   createEvent(
     createEventDto: CreateEventDto,
     eventCreatorId: string,
