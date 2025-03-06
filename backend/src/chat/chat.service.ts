@@ -1,5 +1,7 @@
 import {
+  BadRequestException,
   HttpException,
+  HttpExceptionBody,
   HttpExceptionOptions,
   Injectable,
   NotFoundException,
@@ -16,11 +18,15 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
+
+//This an enum of the listened events by the user
 enum events {
-  JoinRoom = 'JoinRoom',
-  Rooms = 'Rooms',
-  Message = 'Message',
-  sever = 'server',
+  JoinRoom = 'JoinRoom', // to join certain room -> it seems incorrect
+  JoinedRooms = 'JoinedRooms', // to view the joined rooms, means the current sockets' rooms
+  Rooms = 'Rooms', // retrieve all room in db
+  Message = 'Message', // to retrieve a message
+  sever = 'server', // to listen to server messages -> it recommend that it appears as notification (similar to event creation notification)
+  Error = 'Error',
 }
 @WebSocketGateway()
 @Injectable()
@@ -30,7 +36,7 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
-
+  //TODO -> online rooms and check if the available room for the user
   //Map of online users' info, where the key is clientId. CTU => Client To User
   onlineClientsCTU = new Map<string, string>();
   //Map of online users' info, where the key is userId. UTC => User To Client
@@ -69,8 +75,8 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
         },
       });
 
-      //Retrieve all chats
-      const chats = await this.prisma.privateChat.findMany({
+      //Retrieve all rooms
+      const rooms = await this.prisma.privateChat.findMany({
         where: {
           Users: {
             some: {
@@ -88,13 +94,14 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
         events.sever,
         `Hello ${name}, you're connected successfully `,
       );
-      if (chats.length) {
-        client.emit(events.Rooms, chats);
+      if (rooms.length) {
+        client.emit(events.sever, 'This is the list of rooms');
+        client.emit(events.Rooms, rooms);
       } else {
-        client.emit(events.sever, "You haven't any chats yet..");
+        client.emit(events.sever, "You haven't any rooms yet..");
       }
 
-      //TODO RETREIVE ALL MESSAGES
+      //TODO RETREIVE ALL MESSAGES ---> DONE
     } catch (err) {
       this.handleErrors(client, err);
     }
@@ -106,6 +113,8 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
     this.onlineClientsUTC.delete(userId);
     client.disconnect(true);
   }
+
+  //TODO Leaving rooms
   //the client wants to start chatting with the receiver in private room.
   @SubscribeMessage('JoinRoomDM')
   async handleRoomJoining(
@@ -120,7 +129,7 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
       const senderId = this.onlineClientsCTU.get(client.id);
       /////-------------
       //check if there's already a private chat between the users, if so, join both of them in it
-      let roomId = await this.prisma.privateChat.findFirst({
+      let room = await this.prisma.privateChat.findFirst({
         where: {
           AND: [
             {
@@ -144,7 +153,7 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
         },
       });
       //if the users hasn't a chat between them, then create a new one
-      if (!roomId?.id) {
+      if (!room?.id) {
         //retrive users'ids in order to connect them with the new PrivateChat
         const usersIds = await this.prisma.user.findMany({
           where: {
@@ -155,7 +164,7 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
           select: { id: true },
         });
         //Cretaing a new PrivateChat and connect users to it
-        roomId = await this.prisma.privateChat.create({
+        room = await this.prisma.privateChat.create({
           data: {
             Users: { connect: usersIds },
           },
@@ -164,35 +173,84 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
           },
         });
       }
+      ///TODO: make a online status that is handled by the front-end
       //check if the receiver is online
       const receiverClientId = this.onlineClientsUTC.get(receiverId);
       if (receiverClientId) {
         //joining the sender to the private chat (i.e. room)
-        client.join(roomId.id);
+        client.join(room.id);
+        //Telling the user that you've joined successfully
+        client.emit(
+          events.sever,
+          `You've joined the room with the id: "${room.id}" successfully`,
+        );
         //joining the receiver to the room by getting its socket via server and join
         const receiverClient =
           this.server.sockets.sockets.get(receiverClientId);
-        receiverClient.join(roomId.id);
+        receiverClient.join(room.id);
+        receiverClient.emit(
+          events.sever,
+          `You've joined the room with the id: "${room.id}" successfully`,
+        );
       } else {
         //only join the sender to the room
-        client.join(roomId.id);
+        client.join(room.id);
+        client.emit(
+          events.sever,
+          `You've joined the room with the id: "${room.id}" successfully`,
+        );
       }
-      client.emit('JoinRoomDM', {
-        roomId,
-      });
-      this.server.to(roomId.id).emit('JoinRoomDM', 'ارحبوا نفداكم');
+      ///TODO: try to make it generic, meaning that also the group logic is handled by this event
       ///------------
     } catch (err) {
       this.handleErrors(client, err);
     }
   }
-  @SubscribeMessage('RoomMessage')
-  handleRoomMessage(
+
+  //it's better to name mere "message" event
+  @SubscribeMessage('Message')
+  async handleRoomMessage(
     client: Socket,
     { message, roomId }: { message: string; roomId: string },
-  ) {}
+  ) {
+    try {
+      const senderId = this.onlineClientsCTU.get(client.id);
+      //check if the room exist and the user has joined it
+      const room = await this.prisma.privateChat.findUnique({
+        where: {
+          id: roomId,
+          Users: {
+            some: { id: senderId },
+          },
+        },
+      });
+      if (!room) {
+        throw new BadRequestException("the room doesn't exist");
+      }
+      // create a message
+      await this.prisma.message.create({
+        data: {
+          content: message,
+          sender_id: senderId,
+          privateChat_id: roomId,
+        },
+      });
+
+      //emitting the message to the room, the sender will also receive it (front end will check the roomId and sender(to arrange the message to right if the sender is the same as user))
+      this.server.to(room.id).emit('Message', {
+        roomId: room.id,
+        senderId,
+        content: message,
+      });
+
+      //check if the client has joined this room
+    } catch (err) {
+      client.emit(events.Error, err.message);
+    }
+  }
 
   // Helper methods
+  //disconnecting is a little bit harsh, try to send an error that's handled by the front easily
   private handleErrors(
     client: Socket,
 
