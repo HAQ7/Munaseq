@@ -40,6 +40,7 @@ model User {
   GiveFeedback      GiveFeedback[]
   sent_messages     Message[]        @relation("Sender")
   received_messages Message[]        @relation("Receiver")
+  PrivateChats      PrivateChat[]    @relation("PrivateChat")
 }
 
 model Event {
@@ -166,21 +167,33 @@ model GiveFeedback {
 
 ///CHATTING Models
 model Message {
-  id          String  @id @default(uuid())
-  content     String
+  id             String      @id @default(uuid())
+  content        String
   //Sender id one-to-many 
-  sender_id   String
-  Sender      User    @relation("Sender", fields: [sender_id], references: [id])
+  sender_id      String
+  Sender         User        @relation("Sender", fields: [sender_id], references: [id])
+  privateChat_id String
+  PrivateChat    PrivateChat @relation("BelongsTo", fields: [privateChat_id], references: [id])
+  //Check whether the beneath relations are feasible or not
   //Receiver id (only for direct messages) one-to-many
-  receiver_id String?
-  Receiver    User?   @relation("Receiver", fields: [receiver_id], references: [id])
+  receiver_id    String?
+  Receiver       User?       @relation("Receiver", fields: [receiver_id], references: [id])
 
   //event id (only for event group message) one-to-many 
-  event_id  String
-  Event     Event    @relation("GroupMessages", fields: [event_id], references: [id])
+  event_id String?
+  Event    Event?  @relation("GroupMessages", fields: [event_id], references: [id])
+
   createdAt DateTime @default(now())
 
   //St
+}
+
+model PrivateChat {
+  id       String    @id @default(uuid())
+  Users    User[]    @relation("PrivateChat")
+  Messages Message[] @relation("BelongsTo")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Gender {
