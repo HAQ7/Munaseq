@@ -7,8 +7,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateEventDto, JoinEventDto, UpdateEventDto } from './dtos';
-import { UpdateQuizDto } from './dtos/update-quiz.dto';
+import { CreateEventDto, JoinEventDto, UpdateEventDto, UpdateQuizDto } from './dtos';
 
 @Injectable()
 export class EventService {
@@ -112,15 +111,11 @@ export class EventService {
     title?: string,
     pageNumber: number = 1,
     pageSize: number = 5,
-    execludedEvents?: string[],
   ) {
     const skipedRecords = (pageNumber - 1) * pageSize;
     if (title) {
       return this.prisma.event.findMany({
         where: {
-          id: {
-            notIn: execludedEvents,
-          },
           isPublic: true,
           title: {
             contains: title,
@@ -133,9 +128,6 @@ export class EventService {
     } else {
       return this.prisma.event.findMany({
         where: {
-          id: {
-            notIn: execludedEvents,
-          },
           isPublic: true,
         },
         take: pageSize,
@@ -148,13 +140,11 @@ export class EventService {
     title?: string,
     pageNumber: number = 1,
     pageSize: number = 5,
-    execludedEvents?: string[],
   ) {
     const skipedRecords = (pageNumber - 1) * pageSize;
     if (title) {
       return this.prisma.event.findMany({
         where: {
-          id: { notIn: execludedEvents },
           eventCreatorId,
           title: {
             contains: title,
@@ -166,7 +156,6 @@ export class EventService {
     } else {
       return this.prisma.event.findMany({
         where: {
-          id: { notIn: execludedEvents },
           eventCreatorId,
         },
         take: pageSize,
@@ -191,15 +180,11 @@ export class EventService {
     title?: string, //
     pageNumber: number = 1,
     pageSize: number = 5,
-    execludedEvents?: string[],
   ) {
     const skipedRecords = (pageNumber - 1) * pageSize;
     if (title) {
       return this.prisma.event.findMany({
         where: {
-          id: {
-            notIn: execludedEvents,
-          },
           joinedUsers: {
             some: {
               id: userId,
@@ -215,9 +200,6 @@ export class EventService {
     } else {
       return this.prisma.event.findMany({
         where: {
-          id: {
-            notIn: execludedEvents,
-          },
           joinedUsers: {
             some: {
               id: userId,
@@ -287,7 +269,6 @@ export class EventService {
     username?: string, //to enable search by username
     pageNumber: number = 1,
     pageSize: number = 5,
-    execludedUsers?: string[],
   ) {
     const skipedRecords = (pageNumber - 1) * pageSize;
     if (username) {
@@ -300,9 +281,6 @@ export class EventService {
             where: {
               username: {
                 contains: username,
-              },
-              id: {
-                notIn: execludedUsers, //enables the client (front-end) to explicitly execlude users
               },
             },
             select: {
@@ -326,9 +304,6 @@ export class EventService {
         select: {
           [role]: {
             where: {
-              id: {
-                notIn: execludedUsers,
-              },
             },
             select: {
               id: true,
