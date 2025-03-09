@@ -1,8 +1,6 @@
 import {
   BadRequestException,
   HttpException,
-  HttpExceptionBody,
-  HttpExceptionOptions,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -20,14 +18,22 @@ import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 
 //This an enum of the listened events by the user
-enum events {
-  JoinRoom = 'JoinRoom', // to join certain room -> it seems incorrect
-  JoinedRooms = 'JoinedRooms', // to view the joined rooms, means the current sockets' rooms
-  Rooms = 'Rooms', // retrieve all room in db
+enum ClientEvents {
+  Chat = 'Chat',
+  NewChat = 'JoinChat', // to join certain chat
+  JoinedChats = 'JoinedChats', // to view the joined rooms, means the current sockets' rooms
+  Chats = 'Chats', // retrieve all chats in db
   Message = 'Message', // to retrieve a message
-  sever = 'server', // to listen to server messages -> it recommend that it appears as notification (similar to event creation notification)
+  server = 'server', // to listen to server messages -> it recommend that it appears as notification (similar to event creation notification)
   Error = 'Error',
 }
+enum ChatCategory {
+  Direct_Message_Chat = 'Direct_Message_Chat',
+  Group_Message_Chat = 'Group_Message_Chat',
+}
+
+//TODO WHEN APPLYING INVITATION FEATURE ADD THE USER IF HE ACCEPTS
+
 @WebSocketGateway()
 @Injectable()
 export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
@@ -41,8 +47,10 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
   onlineClientsCTU = new Map<string, string>();
   //Map of online users' info, where the key is userId. UTC => User To Client
   onlineClientsUTC = new Map<string, string>();
+  //Map of online chats where the value is array of clientsId, it shows the online rooms(AKA chats) and their users
+  onlineChats = new Map<string, string[]>();
 
-  //socket.io server
+  //socket.io server instance
   @WebSocketServer()
   server: Server;
 
@@ -61,22 +69,20 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
       });
       userId = payload.sub;
 
+      // Terminate a connection that has the same userId, because the new connection will overwrite the clientId in the onlineClientsUTC therefore the old client will not receive any messages
+      const existClientId = this.onlineClientsUTC.get(userId);
+      //if there's an existing client, then terminate its connection
+      if (existClientId) {
+        const existClient = this.server.sockets.sockets.get(existClientId);
+        this.handleDisconnect(existClient);
+      }
+
       //Add the user's info to onlineClients maps
       this.onlineClientsCTU.set(client.id, userId);
       this.onlineClientsUTC.set(userId, client.id);
 
-      //it's better to remove it
-      const { firstName: name } = await this.prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-        select: {
-          firstName: true,
-        },
-      });
-
-      //Retrieve all rooms
-      const rooms = await this.prisma.privateChat.findMany({
+      //Retrieve all chats that user has, and order them based on the las
+      const directChats = await this.prisma.chat.findMany({
         where: {
           Users: {
             some: {
@@ -85,52 +91,161 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
               },
             },
           },
+          category: 'Direct_Message_Chat',
         },
-        orderBy: { createdAt: 'desc' },
-        select: { id: true, Messages: { take: 1 } },
-      });
-      //greeting message
-      client.emit(
-        events.sever,
-        `Hello ${name}, you're connected successfully `,
-      );
-      if (rooms.length) {
-        client.emit(events.sever, 'This is the list of rooms');
-        client.emit(events.Rooms, rooms);
-      } else {
-        client.emit(events.sever, "You haven't any rooms yet..");
-      }
+        select: {
+          id: true,
+          category: true,
+          Users: {
+            where: {
+              id: { not: userId },
+            },
 
-      //TODO RETREIVE ALL MESSAGES ---> DONE
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePictureUrl: true,
+            },
+          },
+
+          Messages: { take: 1, orderBy: { createdAt: 'desc' } },
+        }, //Retrieve the last message (same as whatsapp)
+        orderBy: { updatedAt: 'desc' },
+      });
+      const EventChats = await this.prisma.chat.findMany({
+        where: {
+          Users: {
+            some: {
+              id: {
+                in: [userId],
+              },
+            },
+          },
+          category: 'Group_Message_Chat',
+        },
+
+        select: {
+          id: true,
+          category: true,
+          Event: {
+            select: {
+              title: true,
+              imageUrl: true,
+              eventCreator: {
+                select: {
+                  id: true,
+                  firstName: true,
+                  lastName: true,
+                  username: true,
+                  profilePictureUrl: true,
+                },
+              },
+            },
+          },
+
+          Messages: { take: 1, orderBy: { createdAt: 'desc' } },
+        },
+        orderBy: { updatedAt: 'desc' },
+      });
+      //greeting message ---> REMOVE IT
+      client.emit(
+        ClientEvents.server,
+        `Hello , you're connected successfully `,
+      );
+      const chats = {
+        //group chats and direct chats are separated, because the direct chats are more important (similar to discord's approach )
+        directChats,
+        EventChats,
+      };
+      //check if there's a stored chats
+      if (chats.directChats.length > 0 || chats.EventChats.length > 0) {
+        //If so, send the chats to the client and register him with every online chats
+
+        client.emit(ClientEvents.Chats, chats);
+        chats.directChats.map((chat) => {
+          const chatOnlineUsers = this.onlineChats.get(chat.id); //return the users of chat if the chat online, else, it will return undefined. NOTE that it's guranteed that every online chat has at least one online user(AKA client)
+          if (chatOnlineUsers) {
+            chatOnlineUsers.push(client.id); //add the user to the online clients of this chat
+            client.join(chat.id);
+            client.emit(
+              ClientEvents.Chats,
+              `You've joined the chat ${chat.id}`, //REMOVE it
+            );
+          }
+        });
+        chats.EventChats.map((chat) => {
+          const chatOnlineUsers = this.onlineChats.get(chat.id);
+          if (chatOnlineUsers) {
+            chatOnlineUsers.push(client.id);
+            client.join(chat.id);
+            client.emit(
+              ClientEvents.Chats,
+              `You've joined the chat ${chat.id}`, //REMOVE it
+            );
+          }
+        });
+      } else {
+        client.emit(ClientEvents.server, "You haven't any chat yet..");
+      }
     } catch (err) {
-      this.handleErrors(client, err);
+      this.handleErrors(client, err, true);
     }
   }
   handleDisconnect(client: Socket) {
-    client.emit(events.sever, 'Disconnected Successfully');
     const userId = this.onlineClientsCTU.get(client.id);
-    this.onlineClientsCTU.delete(client.id);
+    //Dergister the user from every online chat
+    this.onlineChats.forEach((onlineChatClientIds, chatId) => {
+      //gives me the array of users of this chat and the chat id
+      const userIndex = onlineChatClientIds.findIndex(
+        (clientId) => clientId === client.id,
+      ); //finding user index in this chat
+      if (userIndex !== -1) {
+        //check if the client is the only client of this chat
+        if (onlineChatClientIds.length === 1) {
+          //if so, deregister the whole chat
+          this.onlineChats.delete(chatId);
+          client.emit(ClientEvents.server, `the chat ${chatId} deleted`); //REMOVE IT
+        } else {
+          onlineChatClientIds.splice(userIndex, 1); //else, deregister the user from the chat users
+        }
+      }
+    });
     this.onlineClientsUTC.delete(userId);
+    this.onlineClientsCTU.delete(client.id); //deregister from client related maps
+
     client.disconnect(true);
   }
 
-  //TODO Leaving rooms
-  //the client wants to start chatting with the receiver in private room.
-  @SubscribeMessage('JoinRoomDM')
-  async handleRoomJoining(
+  //----------------------------__________-------------------------------------
+  //============================| EVENTS |=====================================
+  //____________________________----------_____________________________________
+
+  //TODO Leaving rooms -> is it necessary ??
+
+  //Make the client able to create a new chat with other user (Note that eventChats will be automatically created once the event have been created )
+  @SubscribeMessage('NewChat')
+  async handleChatCreating(
     client: Socket,
     { receiverId }: { receiverId: string },
   ) {
     try {
-      if (!receiverId) {
-        throw new NotFoundException('Please provide a receiver id');
+      //Extracting the senderId
+      const senderId = this.onlineClientsCTU.get(client.id);
+      let receiver = await this.prisma.user.findUnique({
+        where: { id: receiverId },
+      });
+      if (!receiverId || senderId === receiverId || !receiver?.id) {
+        throw new NotFoundException(
+          'Please ensure that you provide a correct receiverId',
+        );
       }
 
-      const senderId = this.onlineClientsCTU.get(client.id);
-      /////-------------
       //check if there's already a private chat between the users, if so, join both of them in it
-      let room = await this.prisma.privateChat.findFirst({
+      let room = await this.prisma.chat.findFirst({
         where: {
+          category: ChatCategory.Direct_Message_Chat,
           AND: [
             {
               Users: {
@@ -152,9 +267,10 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
           id: true,
         },
       });
-      //if the users hasn't a chat between them, then create a new one
+
+      //if the users haven't a chat between them, then create a new one
       if (!room?.id) {
-        //retrive users'ids in order to connect them with the new PrivateChat
+        //retrieve users'ids in order to connect them with the new PrivateChat
         const usersIds = await this.prisma.user.findMany({
           where: {
             id: {
@@ -163,89 +279,184 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
           },
           select: { id: true },
         });
-        //Cretaing a new PrivateChat and connect users to it
-        room = await this.prisma.privateChat.create({
+        //creating a new Chat and connect users to it
+        room = await this.prisma.chat.create({
           data: {
             Users: { connect: usersIds },
+            category: ChatCategory.Direct_Message_Chat,
           },
           select: {
             id: true,
+            Users: {
+              where: {
+                id: receiverId,
+              },
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                username: true,
+                profilePictureUrl: true,
+              },
+            },
           },
         });
+      } else {
+        throw new BadRequestException(
+          'You already have a room with the respective receiver Or the rece',
+        );
       }
+      //add the chat to online chats' map
+
+      //check if the room isn't registered yet
+      if (!this.onlineChats.get(room.id)) {
+        //register the room
+        this.onlineChats.set(room.id, []);
+      }
+      const onlineClientsArray = this.onlineChats.get(room.id);
+
       ///TODO: make a online status that is handled by the front-end
+
+      //joining the sender to the direct chat (i.e. room)
+      client.join(room.id);
+      //Telling the user that you've joined successfully -> REMOVE IT
+      client.emit(
+        ClientEvents.server,
+        `You've joined the room with the id: "${room.id}" successfully`,
+      );
       //check if the receiver is online
       const receiverClientId = this.onlineClientsUTC.get(receiverId);
       if (receiverClientId) {
-        //joining the sender to the private chat (i.e. room)
-        client.join(room.id);
-        //Telling the user that you've joined successfully
-        client.emit(
-          events.sever,
-          `You've joined the room with the id: "${room.id}" successfully`,
-        );
-        //joining the receiver to the room by getting its socket via server and join
+        //joining the receiver to the room by getting its socket via server instance and join him
         const receiverClient =
           this.server.sockets.sockets.get(receiverClientId);
         receiverClient.join(room.id);
         receiverClient.emit(
-          events.sever,
+          ClientEvents.server,
           `You've joined the room with the id: "${room.id}" successfully`,
         );
+        onlineClientsArray.push(client.id, receiverClientId);
       } else {
         //only join the sender to the room
-        client.join(room.id);
-        client.emit(
-          events.sever,
-          `You've joined the room with the id: "${room.id}" successfully`,
-        );
+        onlineClientsArray.push(client.id);
       }
-      ///TODO: try to make it generic, meaning that also the group logic is handled by this event
-      ///------------
     } catch (err) {
       this.handleErrors(client, err);
     }
   }
 
-  //it's better to name mere "message" event
   @SubscribeMessage('Message')
-  async handleRoomMessage(
+  async handleMessage(
     client: Socket,
-    { message, roomId }: { message: string; roomId: string },
+    { message, chatId }: { message: string; chatId: string },
   ) {
     try {
       const senderId = this.onlineClientsCTU.get(client.id);
-      //check if the room exist and the user has joined it
-      const room = await this.prisma.privateChat.findUnique({
+      if (!senderId) {
+        throw new BadRequestException("the sender id doesn't exist");
+      }
+      //check if the chat exist and the user has joined it //note that the chat will never be online if its user(s) are offline
+      const onlineClientsArray = this.onlineChats.get(chatId);
+      if (!onlineClientsArray || !onlineClientsArray.includes(client.id)) {
+        throw new BadRequestException(
+          "The room isn't online or the sender isn't associated with it  ",
+        );
+      }
+      // create a message, // This approach of creating through updating is beneficial because it will update "updateAt" attribute every time we create a new message; this is helpful when sorting the chats based on the latest chat that received a message
+      await this.prisma.chat.update({
         where: {
-          id: roomId,
-          Users: {
-            some: { id: senderId },
+          id: chatId,
+        },
+        data: {
+          Messages: {
+            create: {
+              content: message,
+              sender_id: senderId,
+            },
           },
         },
       });
-      if (!room) {
-        throw new BadRequestException("the room doesn't exist");
-      }
-      // create a message
-      await this.prisma.message.create({
-        data: {
-          content: message,
-          sender_id: senderId,
-          privateChat_id: roomId,
-        },
-      });
 
-      //emitting the message to the room, the sender will also receive it (front end will check the roomId and sender(to arrange the message to right if the sender is the same as user))
-      this.server.to(room.id).emit('Message', {
-        roomId: room.id,
+      //emitting the message to the chat, the sender will also receive it (front end will check the chatId and senderId to arrange the message bubble to the right place )
+      this.server.to(chatId).emit('Message', {
+        chatId,
         senderId,
         content: message,
       });
 
       //check if the client has joined this room
     } catch (err) {
-      client.emit(events.Error, err.message);
+      client.emit(ClientEvents.Error, err.message);
+    }
+  }
+  //If the chat is online, then no need to register the online users because the will be registered once the chat is selected(means the chat goes from offline to onlie)
+  @SubscribeMessage('SelectChat')
+  async handleSelectChat(client: Socket, { chatId }: { chatId: string }) {
+    try {
+      if (!chatId) {
+        throw new BadRequestException('Please provide chatId');
+      }
+      const userId = this.onlineClientsCTU.get(client.id);
+      if (!userId) {
+        throw new BadRequestException("the sender id doesn't exist");
+      }
+      //retrieve chat messages and users (with execluding to the client)
+      const chat = await this.prisma.chat.findUnique({
+        where: {
+          id: chatId,
+          Users: {
+            some: {
+              id: userId, //ensure that the sender is among the chat's users
+            },
+          },
+        },
+        select: {
+          id: true,
+          Users: {
+            //check for all events that the sender is execluded from the retrieved users. When previewing the members of an eventChat the sender's data will be added to the list by the frontend
+            where: { id: { not: userId } },
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              username: true,
+              profilePictureUrl: true,
+            },
+          },
+          Messages: {
+            select: { content: true, sender_id: true, createdAt: true }, //you could also provide the full sender info. (e.g. image, name, etc..) to put it in every message (see suggested Figma design)
+            orderBy: { createdAt: 'desc' }, //latest message first
+          },
+        },
+      });
+      if (!chat) {
+        throw new NotFoundException("The chat doesn't exist");
+      }
+      const isChatOnline = this.onlineChats.get(chatId);
+      if (!isChatOnline) {
+        this.onlineChats.set(chatId, []);
+        const chatUsersArray = this.onlineChats.get(chatId);
+        //register the user first
+        chatUsersArray.push(client.id);
+        client.join(chatId);
+        //joinning other users to the chat
+        chat.Users.map((user) => {
+          const currClientId = this.onlineClientsUTC.get(user.id);
+          if (currClientId) {
+            //Check if the user is online
+            chatUsersArray.push(currClientId);
+            const currSocket = this.server.sockets.sockets.get(currClientId);
+            currSocket.join(chatId);
+          }
+        });
+        this.server.emit(
+          ClientEvents.server,
+          `You now have joined the chat with the id: ${chatId}`,
+        );
+      }
+      client.emit(ClientEvents.Chat, chat);
+    } catch (err) {
+      client.emit(ClientEvents.Error, err.message);
     }
   }
 
@@ -255,12 +466,15 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
     client: Socket,
 
     error: HttpException,
+    disconnect?: boolean,
   ) {
-    client.emit('server', {
-      name: error.name || 'undefined',
+    client.emit(ClientEvents.Error, {
+      name: error.name || 'Error',
       message: error.message,
     });
-    this.handleDisconnect(client);
+    if (disconnect) {
+      this.handleDisconnect(client);
+    }
   }
   private extractTokenFromHeader(request: any): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
@@ -268,3 +482,100 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
     return type === 'Bearer' ? token : undefined;
   }
 }
+//------------------------------
+
+//creating a new event room and join the events's members
+// } else {
+//   //if the chat is group (means eventId has provided as an argument)
+
+//   //check if there's already a private chat between the users, if so, join both of them in it
+//   let room = await this.prisma.chat.findFirst({
+//     where: {
+//       category: ChatCategory.Group_Message_Chat,
+//       Event: {
+//         id: eventId,
+//         OR: [
+//           //will ensures that the sender does partcipate in the event
+//           { eventCreatorId: senderId },
+//           {
+//             joinedUsers: {
+//               some: {
+//                 id: senderId,
+//               },
+//             },
+//           },
+//           {
+//             moderators: {
+//               some: { id: senderId },
+//             },
+//           },
+//           { presenters: { some: { id: senderId } } },
+//         ],
+//       },
+//     },
+//     select: {
+//       id: true,
+//     },
+//   });
+//   //if the users haven't a chat between them, then create a new one
+//   if (!room?.id) {
+//     //retrieve users'ids in order to connect them with the new PrivateChat
+//     const usersIds = await this.prisma.user.findMany({
+//       where: {
+//         id: {
+//           in: [senderId, receiverId],
+//         },
+//       },
+//       select: { id: true },
+//     });
+//     //creating a new PrivateChat and connect users to it
+//     room = await this.prisma.chat.create({
+//       data: {
+//         Users: { connect: usersIds },
+//         category: ChatCategory.Direct_Message_Chat,
+//       },
+//       select: {
+//         id: true,
+//       },
+//     });
+//   }
+//   //add the chat to online chats' map
+//   if (!this.onlineChats.get(room.id)) {
+//     //check if the room isn't registered yet
+//     this.onlineChats.set(room.id, []);
+//     //register the room
+//   }
+//   ///TODO: make a online status that is handled by the front-end
+//   //check if the receiver is online
+//   const receiverClientId = this.onlineClientsUTC.get(receiverId);
+//   if (receiverClientId) {
+//     //joining the sender to the private chat (i.e. room)
+//     client.join(room.id);
+//     //Telling the user that you've joined successfully
+//     client.emit(
+//       ClientEvents.server,
+//       `You've joined the room with the id: "${room.id}" successfully`,
+//     );
+//     //joining the receiver to the room by getting its socket via server and join
+//     const receiverClient =
+//       this.server.sockets.sockets.get(receiverClientId);
+//     receiverClient.join(room.id);
+//     receiverClient.emit(
+//       ClientEvents.server,
+//       `You've joined the room with the id: "${room.id}" successfully`,
+//     );
+//     const onlineClientsArray = this.onlineChats.get(room.id);
+//     onlineClientsArray.push(client.id, receiverClientId);
+//   } else {
+//     //only join the sender to the room
+//     client.join(room.id);
+//     client.emit(
+//       ClientEvents.server,
+//       `You've joined the room with the id: "${room.id}" successfully`,
+//     );
+//     const onlineClientsArray = this.onlineChats.get(room.id);
+//     onlineClientsArray.push(client.id);
+//   }
+//   ///TODO: try to make it generic, meaning that also the group logic is handled by this event
+//   ///------------
+// }

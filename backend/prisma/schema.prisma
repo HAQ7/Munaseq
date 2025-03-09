@@ -38,9 +38,8 @@ model User {
   TakeQuiz          TakeQuiz[]
   TakeAssignment    TakeAssignment[]
   GiveFeedback      GiveFeedback[]
-  sent_messages     Message[]        @relation("Sender")
-  received_messages Message[]        @relation("Receiver")
-  PrivateChats      PrivateChat[]    @relation("PrivateChat")
+  SentMessages      Message[]        @relation("Sender")
+  Chats             Chat[]           @relation("AssociatedWith")
 }
 
 model Event {
@@ -63,13 +62,14 @@ model Event {
   presenters     User[]         @relation("EventPresenters") // New: List of event presenters (many-to-many)
   moderators     User[]         @relation("EventModerators") // New: List of event moderators (many-to-many)
   joinedUsers    User[]         @relation("UserEventsJoined") // New: Users who have joined the event (many-to-many)
-  eventCreator   User           @relation("UserCreatedEvents", fields: [eventCreatorId], references: [id], onDelete: Cascade)
   eventCreatorId String
+  eventCreator   User           @relation("UserCreatedEvents", fields: [eventCreatorId], references: [id], onDelete: Cascade)
   Quizzes        Quiz[]
   Assignments    Assignment[]
   GivenFeedbacks GiveFeedback[]
   Materials      Material[]
-  GroupMessages  Message[]      @relation("GroupMessages")
+  chat_id        String?         @unique
+  EventChat      Chat?           @relation("EventChat", fields: [chat_id], references: [id],onDelete: Cascade) // one to one relationship
 }
 
 model Question {
@@ -165,41 +165,41 @@ model GiveFeedback {
   updatedAt DateTime @updatedAt
 }
 
-///CHATTING Models
+// -------------------------------------------------------------------------------------
+// The Following Model Is Chatting Related Models
+// -------------------------------------------------------------------------------------
 model Message {
-  id             String      @id @default(uuid())
+  id             String   @id @default(uuid())
   content        String
   //Sender id one-to-many 
   sender_id      String
-  Sender         User        @relation("Sender", fields: [sender_id], references: [id])
-  privateChat_id String
-  PrivateChat    PrivateChat @relation("BelongsTo", fields: [privateChat_id], references: [id])
-  //Check whether the beneath relations are feasible or not
-  //Receiver id (only for direct messages) one-to-many
-  receiver_id    String?
-  Receiver       User?       @relation("Receiver", fields: [receiver_id], references: [id])
-
-  //event id (only for event group message) one-to-many 
-  event_id String?
-  Event    Event?  @relation("GroupMessages", fields: [event_id], references: [id])
-
-  createdAt DateTime @default(now())
-
-  //St
+  Sender         User     @relation("Sender", fields: [sender_id], references: [id])
+  chat_id String
+  Chat           Chat     @relation("BelongsTo", fields: [chat_id], references: [id])
+  createdAt      DateTime @default(now())
 }
 
-model PrivateChat {
+model Chat {
   id       String    @id @default(uuid())
-  Users    User[]    @relation("PrivateChat")
-  Messages Message[] @relation("BelongsTo")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  Users    User[]    @relation("AssociatedWith") //Chat contains many users
+  Messages Message[] @relation("BelongsTo") //Chat contains many messages
+
+  Event     Event?       @relation("EventChat")//Chat 
+  category  ChatCategory
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  
 }
 
 enum Gender {
   MALE
   FEMALE
   BOTH
+}
+
+enum ChatCategory {
+  Direct_Message_Chat
+  Group_Message_Chat
 }
 
 enum QuestionType {

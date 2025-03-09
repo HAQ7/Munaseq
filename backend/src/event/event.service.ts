@@ -18,17 +18,19 @@ export class EventService {
   //THE FOLLOWING IS CREATING EVENT LOGIC
   //----------------------------------------------------------------------
 
-  createEvent(
+  async createEvent(
     createEventDto: CreateEventDto,
     eventCreatorId: string,
     imageUrl: any,
   ) {
-    return this.prisma.event.create({
+    const event = await this.prisma.event.create({
       data: {
         ...createEventDto,
         imageUrl,
+
         eventCreatorId,
       },
+
       omit: {
         eventCreatorId: true,
       },
@@ -45,6 +47,17 @@ export class EventService {
         },
       },
     });
+    const chat = await this.prisma.chat.create({
+      data: {
+        Event: { connect: { id: event.id } }, // Link the chat to the created event
+        category: 'Group_Message_Chat',
+        Users: { connect: { id: eventCreatorId } }, //Link the creator of the event to the chat
+      },
+    });
+    return {
+      ...event,
+      chatId: chat.id,
+    };
   }
   //--------------------------------------------------
   //THE FOLLOWING IS FOR UPDATING/DELETING AN EVENT LOGIC
@@ -1463,13 +1476,27 @@ export class EventService {
     const { eventId } = joinEventDto;
     const event = await this.prisma.event.findUnique({
       where: { id: eventId },
-      include: { joinedUsers: true },
+      include: {
+        joinedUsers: true,
+        moderators: true,
+        presenters: true,
+      },
     });
 
     if (!event) {
       throw new NotFoundException('Event not found');
     }
 
+    //To ensure that the user cannot join if he creator, moderator, or presenter of the event
+    const isAssigned =
+      event.eventCreatorId === userId ||
+      event.presenters.some((presenter) => presenter.id === userId) ||
+      event.moderators.some((moderator) => moderator.id === userId);
+    if (isAssigned) {
+      throw new NotFoundException(
+        'User is assigned as eventCreator, moderator, or presenter',
+      );
+    }
     // Fetch the user to get their gender
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -1502,13 +1529,15 @@ export class EventService {
         throw new BadRequestException('Event has reached its seat capacity');
       }
     }
-    // LOGICAL ERROR: The creator, moderator, and presenter of event can join the event as attendees
+    // LOGICAL ERROR: The creator, moderator, and presenter of event can join the event as attendees -> SOLVED
+    //Add the user to joined users as well as the EventChat
     await this.prisma.event.update({
       where: { id: eventId },
       data: {
         joinedUsers: {
           connect: { id: userId },
         },
+        EventChat: { connect: { id: userId } },
       },
     });
   }
@@ -1527,12 +1556,17 @@ export class EventService {
     if (!isUserJoined) {
       throw new BadRequestException('User is not joined to this event');
     }
-
+    //disconnect the user from the joinedUsers and the EventChat
     await this.prisma.event.update({
       where: { id: eventId },
       data: {
         joinedUsers: {
           disconnect: { id: userId },
+        },
+        EventChat: {
+          disconnect: {
+            id: userId,
+          },
         },
       },
     });
@@ -1680,6 +1714,7 @@ export class EventService {
       numberOfRatings,
     };
   }
+  //todo deassign role
   async assignRole(
     userId: string,
     eventId: string,
@@ -1718,8 +1753,80 @@ export class EventService {
         id: eventId,
       },
       data: {
+        EventChat: {
+          connect: {
+            id: assignedUserId,
+          },
+        },
         [role]: {
           connect: {
+            id: assignedUserId,
+          },
+        },
+      },
+      select: {
+        [role]: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+  }
+
+  //Add endpoint, also revise the logic and discuss if the unassigned user will be removed from the event or he will be considered as joinedUser(attendee)
+  async unAssignRole(
+    userId: string,
+    eventId: string,
+    assignedUserId: string,
+    role: string,
+  ) {
+    const eventIds = await this.prisma.event.findUnique({
+      where: {
+        id: eventId,
+      },
+      select: {
+        eventCreatorId: true,
+        moderators: {
+          select: {
+            id: true,
+          },
+        },
+        presenters: { select: { id: true } },
+      },
+    });
+    //Check wether the event exist or not
+    if (!eventIds) {
+      throw new NotFoundException('Event not found');
+    }
+
+    const isAuthorized =
+      eventIds.eventCreatorId === userId ||
+      eventIds.moderators.every((moderator) => moderator.id === userId);
+
+    if (!isAuthorized) {
+      throw new BadRequestException(
+        'User is not authorized to add materials to this event',
+      );
+    }
+    const isAssigned =
+      eventIds.presenters.some((presenter) => presenter.id === userId) ||
+      eventIds.moderators.some((moderator) => moderator.id === userId);
+    if (!isAssigned) {
+      throw new BadRequestException("The user isn't assigned");
+    }
+    return this.prisma.event.update({
+      where: {
+        id: eventId,
+      },
+      data: {
+        EventChat: {
+          disconnect: {
+            id: assignedUserId,
+          },
+        },
+        [role]: {
+          disconnect: {
             id: assignedUserId,
           },
         },
