@@ -186,6 +186,7 @@ model Chat {
 
   Event     Event?       @relation("EventChat")//Chat 
   category  ChatCategory
+  isAttendeesAllowed Boolean @default(true)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   

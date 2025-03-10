@@ -32,6 +32,11 @@ enum ChatCategory {
   Group_Message_Chat = 'Group_Message_Chat',
 }
 
+/* 
+The system shall allow the event creator to make the generated messaging group can be only messaged by the event creator, presenter(s), and moderator(s).
+
+*/
+
 //TODO WHEN APPLYING INVITATION FEATURE ADD THE USER IF HE ACCEPTS
 
 @WebSocketGateway()
@@ -96,6 +101,7 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
         select: {
           id: true,
           category: true,
+
           Users: {
             where: {
               id: { not: userId },
@@ -129,6 +135,7 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
         select: {
           id: true,
           category: true,
+          isAttendeesAllowed: true,
           Event: {
             select: {
               title: true,
@@ -348,19 +355,61 @@ export class ChatService implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('Message')
   async handleMessage(
     client: Socket,
-    { message, chatId }: { message: string; chatId: string },
+    {
+      message,
+      chatId,
+      category,
+    }: { message: string; chatId: string; category: ChatCategory },
   ) {
     try {
       const senderId = this.onlineClientsCTU.get(client.id);
       if (!senderId) {
         throw new BadRequestException("the sender id doesn't exist");
       }
+
       //check if the chat exist and the user has joined it //note that the chat will never be online if its user(s) are offline
       const onlineClientsArray = this.onlineChats.get(chatId);
       if (!onlineClientsArray || !onlineClientsArray.includes(client.id)) {
         throw new BadRequestException(
           "The room isn't online or the sender isn't associated with it  ",
         );
+      }
+      //check if the messaging feature is allowed or not for the attendees
+      if (category === ChatCategory.Group_Message_Chat) {
+        const chat = await this.prisma.chat.findUnique({
+          where: {
+            id: chatId,
+          },
+          select: {
+            category: true,
+            isAttendeesAllowed: true,
+            Event: {
+              select: {
+                eventCreatorId: true,
+                moderators: { select: { id: true } },
+                presenters: { select: { id: true } },
+              },
+            },
+          },
+        });
+        //check if the attendees isn't allowed
+        if (!chat.isAttendeesAllowed) {
+          //if the attendees isn't allowed then check if the sender is assigned
+          const isAssigned =
+            chat.Event.eventCreatorId === senderId ||
+            chat.Event.presenters.some(
+              (presenter) => presenter.id === senderId,
+            ) ||
+            chat.Event.moderators.some(
+              (moderator) => moderator.id === senderId,
+            );
+          //if the user is not assigned then throw an error
+          if (!isAssigned) {
+            throw new BadRequestException(
+              'You are not allowed to send a message',
+            );
+          }
+        }
       }
       // create a message, // This approach of creating through updating is beneficial because it will update "updateAt" attribute every time we create a new message; this is helpful when sorting the chats based on the latest chat that received a message
       await this.prisma.chat.update({
